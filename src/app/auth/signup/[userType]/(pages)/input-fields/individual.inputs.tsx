@@ -55,39 +55,39 @@ export default function IndividualInput() {
       console.log("clicked");
       setIsLoading(true);
       setIsLoading(true);
-     if(country){
-      authOBJ
-      .register(
-        {
-          accountCategory: "individual",
-          country: country,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          parkGeneralName: values.parkGeneralName,
-          email: values.email,
-          phoneNumber: values.phoneNumber,
-          deviceToken: "uefuefue23",
-          password: values.password,
-          retypePassword: values.confirmPassword,
-        },
-        "parkOwner"
-      )
-      .then((res: any) => {
-        toast.success(res?.data.message);
-        //get user info
-        authOBJ.currentUser()
-        //redirect to add park
-        router.push(routes.ADD_PARK.path)
+      if (country) {
+        authOBJ
+          .register(
+            {
+              accountCategory: "individual",
+              country: country,
+              firstName: values.firstName,
+              lastName: values.lastName,
+              parkGeneralName: values.parkGeneralName,
+              email: values.email,
+              phoneNumber: values.phoneNumber,
+              deviceToken: "uefuefue23",
+              password: values.password,
+              retypePassword: values.confirmPassword,
+            },
+            "parkOwner"
+          )
+          .then((res: any) => {
+            toast.success(res?.data.message);
+            //get user info
+            authOBJ.currentUser();
+            //redirect to add park
+            router.push(routes.ADD_PARK.path);
+            setIsLoading(false);
+          })
+          .catch((err: any) => {
+            toast.error(err?.response.data.message);
+            setIsLoading(false);
+          });
+      } else {
+        toast.error("fill all values");
         setIsLoading(false);
-      })
-      .catch((err: any) => {
-        toast.error(err?.response.data.message);
-        setIsLoading(false);
-      });
-     }else{
-      toast.error("fill all values");
-      setIsLoading(false);
-     }
+      }
     },
   });
 

@@ -12,14 +12,14 @@ import { GetUserData } from "@/common/hooks/token";
 
 export default function Header() {
   //get user info
-  const storedUser = GetUserData()
+  const storedUser = GetUserData();
   const router = useRouter();
-  console.log(storedUser,'user info')
+  console.log(storedUser, "user info");
   //function to logout user
   const logOut = () => {
-   authOBJ.logOut()
-   //redirect to home
-   router.push('./auth/login')
+    authOBJ.logOut();
+    //redirect to home
+    router.push("./auth/login");
   };
   console.log(storedUser, "store user");
   return (
@@ -51,7 +51,8 @@ export default function Header() {
           {/* <strong className='font-bold'>Warning!</strong> */}
           <AiFillInfoCircle size={24} />
           <span className="block sm:inline ml-2">
-            {storedUser?.verifiedAt === null && "Account has not been Verified "}
+            {storedUser?.verifiedAt === null &&
+              "Account has not been Verified "}
           </span>
         </div>
       </div>

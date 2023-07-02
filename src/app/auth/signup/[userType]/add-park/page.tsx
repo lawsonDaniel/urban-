@@ -34,10 +34,9 @@ export default function AddPark() {
   const [parkLocation, setParkLocation] = useState<string>("");
   const router: any = useRouter();
 
-  
   //get user info
-  let user = authOBJ.currentUser()
-  console.log(user,'auth')
+  let user = authOBJ.currentUser();
+  console.log(user, "auth");
 
   useEffect(() => {
     if ("geolocation" in navigator) {

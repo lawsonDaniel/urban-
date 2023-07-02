@@ -72,10 +72,10 @@ export default function CorporateInput() {
           )
           .then((res: any) => {
             toast.success(res?.data.message);
-             //get user info
-              authOBJ.currentUser()
+            //get user info
+            authOBJ.currentUser();
             //redirect to add park
-            router.push(routes.ADD_PARK.path)
+            router.push(routes.ADD_PARK.path);
             setIsLoading(false);
           })
           .catch((err: any) => {

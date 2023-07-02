@@ -36,7 +36,7 @@ function Sidebar() {
   const cookies = parseCookies();
   const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
   console.log("user::::", storedUser);
-  const userType =  GetUserType()
+  const userType = GetUserType();
 
   useEffect(() => {
     userType && setActiveRoutes(routes?.DASHBOARD[userType]);

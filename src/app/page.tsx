@@ -9,7 +9,7 @@ import { GetUserType } from "@/common/hooks/token";
 export default function Home() {
   const cookies = parseCookies();
   const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
-  const userType = GetUserType()
+  const userType = GetUserType();
   const router = useRouter();
 
   console.log("storedUser:::", storedUser, cookies);

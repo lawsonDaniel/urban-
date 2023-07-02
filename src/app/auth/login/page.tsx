@@ -72,16 +72,16 @@ export default function Login() {
           password: values.password,
         })
         .then((res: any) => {
-          console.log(res,'data form login')
+          console.log(res, "data form login");
           toast.success(res?.data.message);
           //get user info
-          authOBJ.currentUser()
+          authOBJ.currentUser();
           //redirect to dashboard
-          router.push("/")
+          router.push("/");
           setIsLoading(false);
         })
         .catch((err: any) => {
-          console.log(err,'data form login')
+          console.log(err, "data form login");
           toast.error(err?.response?.data?.message);
           setIsLoading(false);
         });

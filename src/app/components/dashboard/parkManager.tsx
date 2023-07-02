@@ -20,21 +20,21 @@ import { GetUserData } from "@/common/hooks/token";
 
 export default function ParkManager({ user }: any) {
   const userData = GetUserData();
-  const park = GetUserData()
+  const park = GetUserData();
   const [copySuccess, setCopySuccess] = useState(false);
 
   const handleCopyClick = () => {
-    const textField = document.createElement('textarea');
+    const textField = document.createElement("textarea");
     textField.innerText = userData?.urbanId;
     document.body.appendChild(textField);
     textField.select();
-    document.execCommand('copy');
+    document.execCommand("copy");
     textField.remove();
     setCopySuccess(true);
   };
 
   useEffect(() => {
-    let timer: string | number | NodeJS.Timeout | undefined
+    let timer: string | number | NodeJS.Timeout | undefined;
     if (copySuccess) {
       timer = setTimeout(() => {
         setCopySuccess(false);
@@ -122,8 +122,9 @@ export default function ParkManager({ user }: any) {
         <div className="flex text-sm items-center">
           <p>Manager ID:</p>
           <div className="text-primary flex ml-2" onClick={handleCopyClick}>
-      {userData?.urbanId} {copySuccess && <span>(Copied!)</span>} <BiCopy className="ml-1" />
-    </div>
+            {userData?.urbanId} {copySuccess && <span>(Copied!)</span>}{" "}
+            <BiCopy className="ml-1" />
+          </div>
         </div>
       </div>
 
