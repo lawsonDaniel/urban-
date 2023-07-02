@@ -1,7 +1,6 @@
 import api from "../API";
-import axios from "axios";
-import { StoreAuthToken,SetUserType } from "../hooks/token";
-import { useRouter } from "next/navigation";
+import { StoreAuthToken,SetUserType,SetUserData} from "../hooks/token";
+
 
 class AUTH {
   //login
@@ -20,7 +19,7 @@ class AUTH {
   //register
   register = async (data: any, user: String) => {
     try {
-      const response: any = await api.post(`/auth/register/${user}`, data);
+      const response: any = await api.post(`auth/register/${user}`, data);
       //store jwt
       if(data?.userType){
         SetUserType(data?.userType)
@@ -33,6 +32,19 @@ class AUTH {
       throw err;
     }
   };
+
+  //get currently user
+  currentUser = async ()=>{
+    try{
+      const response: any = await api.get('auth/me')
+      if(response?.data?.success){
+        SetUserData(JSON.stringify(response?.data?.data))
+      }
+      console.log(response?.data,'from currently stored user')
+    }catch (err){
+
+    }
+  }
 }
 
 const authOBJ = new AUTH();

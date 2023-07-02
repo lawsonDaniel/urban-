@@ -1,6 +1,7 @@
 import "../globals.css";
 import Sidebar from "@/app/components/sidebar";
 import Header from "@/app/components/headers/header";
+import authOBJ from "@/common/classes/auth.class";
 
 export const metadata = {
   title: "Urban",
@@ -12,6 +13,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  authOBJ.currentUser()
   return (
     <html lang="en">
       <body>
