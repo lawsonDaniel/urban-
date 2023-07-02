@@ -12,6 +12,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { parkOwnerData } from "@/common/data";
 import { AccountType, USER_TYPE } from "@/common/types";
 import authOBJ from "@/common/classes/auth.class";
+import countryList from 'react-select-country-list'
+import Dropdown from "@/app/components/dropdown";
+
+
 
 export default function CorporateInput() {
   const router = useRouter();
@@ -20,6 +24,7 @@ export default function CorporateInput() {
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [country,setCountry] = useState<string>()
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -54,7 +59,7 @@ export default function CorporateInput() {
       authOBJ
       .register({
         accountCategory: "company",
-        country: "nigeria",
+        country: country,
         companyName: values.companyName,
         companyAddress:values.companyAddress,
         email: values.email,
@@ -115,6 +120,9 @@ export default function CorporateInput() {
 
         // icon={<LockClosedIcon />}
       />
+       <Dropdown options={countryList().getData()} className={"w-full"} label="Select Country" placeholder={""} onSelect={(e:any)=>{
+           setCountry(e)
+          }}/>
       <Input
         label="Email Address"
         type="email"
