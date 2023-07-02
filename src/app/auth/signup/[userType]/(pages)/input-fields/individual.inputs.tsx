@@ -55,31 +55,36 @@ export default function IndividualInput() {
       console.log("clicked");
       setIsLoading(true);
       setIsLoading(true);
+     if(country){
       authOBJ
-        .register(
-          {
-            accountCategory: "individual",
-            country: country,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            parkGeneralName: values.parkGeneralName,
-            email: values.email,
-            phoneNumber: values.phoneNumber,
-            deviceToken: "uefuefue23",
-            password: values.password,
-            retypePassword: values.confirmPassword,
-          },
-          "parkOwner"
-        )
-        .then((res: any) => {
-          toast.success(res?.data.message);
-          //redirect to dashboard
-          setIsLoading(false);
-        })
-        .catch((err: any) => {
-          toast.error(err?.response.data.message);
-          setIsLoading(false);
-        });
+      .register(
+        {
+          accountCategory: "individual",
+          country: country,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          parkGeneralName: values.parkGeneralName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          deviceToken: "uefuefue23",
+          password: values.password,
+          retypePassword: values.confirmPassword,
+        },
+        "parkOwner"
+      )
+      .then((res: any) => {
+        toast.success(res?.data.message);
+        //redirect to dashboard
+        setIsLoading(false);
+      })
+      .catch((err: any) => {
+        toast.error(err?.response.data.message);
+        setIsLoading(false);
+      });
+     }else{
+      toast.error("fill all values");
+      setIsLoading(false);
+     }
     },
   });
 

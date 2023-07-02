@@ -81,6 +81,7 @@ export default function CorporateInput() {
           });
       } else {
         toast.error("fill all values");
+        setIsLoading(false);
       }
     },
   });

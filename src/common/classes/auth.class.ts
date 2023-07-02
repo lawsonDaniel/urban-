@@ -1,6 +1,8 @@
 import api from "../API";
 import axios from "axios";
 import { StoreAuthToken } from "../hooks/token";
+import { useRouter } from "next/navigation";
+
 class AUTH {
   //login
   login = async (data: any) => {
@@ -8,6 +10,8 @@ class AUTH {
       const response: any = await api.post("auth/login", data);
       //store jwt
       StoreAuthToken(response?.data.data.token);
+      const router = useRouter()
+      router.push('/')
       return response;
     } catch (err) {
       throw err;
@@ -20,6 +24,8 @@ class AUTH {
       const response: any = await api.post(`/auth/register/${user}`, data);
       //store jwt
       StoreAuthToken(response?.data.data.token);
+      const router = useRouter()
+      router.push('/')
       return response;
     } catch (err) {
       throw err;
