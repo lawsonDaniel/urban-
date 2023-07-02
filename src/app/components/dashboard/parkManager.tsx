@@ -16,24 +16,35 @@ import { getUserById } from "@/common/hooks/fireStore";
 import { useEffect, useState } from "react";
 import { parseCookies } from "nookies";
 import { useUser } from "@/common/hooks/useUser";
+import { GetUserData } from "@/common/hooks/token";
 
 export default function ParkManager({ user }: any) {
-  const userData = useUser();
-  const [park, setPark] = useState<any>(null);
-  //get park details
+  const userData = GetUserData();
+  const park = GetUserData()
+  const [copySuccess, setCopySuccess] = useState(false);
+
+  const handleCopyClick = () => {
+    const textField = document.createElement('textarea');
+    textField.innerText = userData?.urbanId;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+    setCopySuccess(true);
+  };
 
   useEffect(() => {
-    const getPark = async () => {
-      try {
-        console.log(userData, "park id");
-        const res = await getUserById("parks", userData?.parkToManage);
-        setPark(res);
-      } catch (err) {
-        console.log(err);
-      }
+    let timer: string | number | NodeJS.Timeout | undefined
+    if (copySuccess) {
+      timer = setTimeout(() => {
+        setCopySuccess(false);
+      }, 1000);
+    }
+    return () => {
+      clearTimeout(timer);
     };
-    getPark();
-  }, [userData]);
+  }, [copySuccess]);
+
   console.log(park, "park info");
   const router = useRouter();
   const columns = [
@@ -110,9 +121,9 @@ export default function ParkManager({ user }: any) {
         <p>{park?.parkName}</p>
         <div className="flex text-sm items-center">
           <p>Manager ID:</p>
-          <div className="text-primary flex ml-2">
-            {userData?.parkManagerIdentity} <BiCopy className="ml-1" />
-          </div>
+          <div className="text-primary flex ml-2" onClick={handleCopyClick}>
+      {userData?.urbanId} {copySuccess && <span>(Copied!)</span>} <BiCopy className="ml-1" />
+    </div>
         </div>
       </div>
 

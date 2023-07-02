@@ -51,7 +51,7 @@ export default function Header() {
           {/* <strong className='font-bold'>Warning!</strong> */}
           <AiFillInfoCircle size={24} />
           <span className="block sm:inline ml-2">
-            {!storedUser?.isAccountVerified && "Account has not been Verified "}
+            {storedUser?.verifiedAt === null && "Account has not been Verified "}
           </span>
         </div>
       </div>
