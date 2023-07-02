@@ -25,3 +25,9 @@ export const SetUserType = (data:string)=>{
     path: "/",
   });
 }
+
+export const GetUserType = ()=>{
+  const cookies = parseCookies();
+  const usetType: any = cookies.userType ? cookies.userType : null;
+  return usetType;
+}

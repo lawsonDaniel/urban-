@@ -5,10 +5,11 @@ import ParkOwner from "./components/dashboard/parkOwner";
 import ParkManager from "./components/dashboard/parkManager";
 import DispatchOfficer from "./components/dashboard/dispatchOfficer";
 import { useRouter } from "next/navigation";
+import { GetUserType } from "@/common/hooks/token";
 export default function Home() {
   const cookies = parseCookies();
   const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
-  const userType = storedUser?.userType;
+  const userType = GetUserType()
   const router = useRouter();
 
   console.log("storedUser:::", storedUser, cookies);

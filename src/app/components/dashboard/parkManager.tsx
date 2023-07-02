@@ -36,7 +36,6 @@ export default function ParkManager({ user }: any) {
   }, [userData]);
   console.log(park, "park info");
   const router = useRouter();
-  const { dispatchName } = user;
   const columns = [
     {
       id: "parkName",
