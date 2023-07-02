@@ -18,3 +18,10 @@ export const StoreAuthToken = (data: string) => {
 export const RemoveStoredAuthToken = () => {
   destroyCookie(null, "userToken", { path: "/" });
 };
+
+export const SetUserType = (data:string)=>{
+  setCookie(null, "userType", data, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+  });
+}
