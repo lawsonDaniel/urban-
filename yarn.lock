@@ -2639,6 +2639,11 @@ react-nextjs-toast@^1.2.5:
   resolved "https://registry.npmjs.org/react-nextjs-toast/-/react-nextjs-toast-1.2.5.tgz"
   integrity sha512-N79HUrZIbjyi50FD8w2cqi5qBz6QFX+4ZPHo0wT1w1ZZzLjbrqsxL0SH4Xv4TvXXfZyskADxpvg6lKmXyRZeuA==
 
+react-select-country-list@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.npmjs.org/react-select-country-list/-/react-select-country-list-2.2.3.tgz"
+  integrity sha512-eRgXL613dVyJiE99yKDYLvSBKDxvIlhkmvO2DVIjdKVyUQq6kBqoMUV/2zuRIAsbRXgBGmKjeL1dxjf7zTfszg==
+
 react-svg@^16.1.7:
   version "16.1.7"
   resolved "https://registry.npmjs.org/react-svg/-/react-svg-16.1.7.tgz"

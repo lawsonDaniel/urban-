@@ -27,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
     "react-nextjs-toast": "^1.2.5",
+    "react-select-country-list": "^2.2.3",
     "react-svg": "^16.1.7",
     "react-tabs": "^6.0.0",
     "react-toastify": "^9.1.3",

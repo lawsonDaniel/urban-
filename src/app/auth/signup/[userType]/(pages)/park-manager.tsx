@@ -2,19 +2,16 @@
 import Header from "../../(components)/header";
 import { useFormik } from "formik";
 import Button from "@/app/components/button";
-import { RadioButton } from "@/app/components/radio/auth.radio";
 import Input from "@/app/components/input";
 import { useRouter } from "next/navigation";
-import { routes } from "@/common/routes";
-import { setCookie } from "nookies";
 import React, { useState } from "react";
 import CheckBox from "@/app/components/checkbox";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { USER_TYPE } from "@/common/types";
-import { parkManagerDefaultData } from "@/common/data";
 import authOBJ from "@/common/classes/auth.class";
+import countryList from 'react-select-country-list'
+import Dropdown from "@/app/components/dropdown";
 
 export default function ParkManager() {
   const options = [
@@ -25,12 +22,12 @@ export default function ParkManager() {
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [country,setCountry] = useState<string>()
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
 
   const router = useRouter();
-
   const validationSchema = Yup.object({
     userType: Yup.string().required("User Type is required"),
     firstName: Yup.string().required("First Name is required"),
@@ -38,7 +35,6 @@ export default function ParkManager() {
     phoneNumber: Yup.string().required("Phone Number is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
     parkGeneralName: Yup.string().required("Park General Name is required"),
-    country: Yup.string().required("country is required"),
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters long"),
@@ -55,18 +51,18 @@ export default function ParkManager() {
       phoneNumber: "",
       email: "",
       parkGeneralName: "",
-      country: "",
       password: "",
       confirmPassword: "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true);
+      if(country){
+        setIsLoading(true);
       authOBJ
       .register({
         firstName: values.firstName,
         lastName: values.lastName,
-        country: values.country,
+        country: country,
         phoneNumber: values.phoneNumber,
         email: values.email,
         parkGeneralName:values.parkGeneralName,
@@ -84,6 +80,10 @@ export default function ParkManager() {
       toast.error(err?.response.data.message)
       setIsLoading(false);
     });
+      }else{
+        toast.error("fill all values")
+      }
+      
     },
   });
   return (
@@ -154,17 +154,9 @@ export default function ParkManager() {
             }
             // icon={<LockClosedIcon />}
           />
-          <Input
-            label="Country"
-            type="text"
-            id="country"
-            name="country"
-            value={formik.values.country}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.country && formik.errors.country}
-            // icon={<LockClosedIcon />}
-          />
+          <Dropdown options={countryList().getData()} className={"w-full"} label="Select Country" placeholder={""} onSelect={(e:any)=>{
+           setCountry(e)
+          }}/>
           <Input
             // containerStyle='mt-8'
             label="Password"
@@ -207,7 +199,7 @@ export default function ParkManager() {
           <Button
             type="submit"
             className="w-full mt-10 text-white"
-            disabled={isLoading}
+            disabled={isLoading || !country}
           >
             {isLoading ? "loading" : "sign up"}
           </Button>
