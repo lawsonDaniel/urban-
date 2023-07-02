@@ -10,6 +10,7 @@ import { BsArrowBarRight, BsArrowBarLeft } from "react-icons/bs";
 import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { BiChevronDown } from "react-icons/bi";
 import { activeLink } from "@/common/utils";
+import { GetUserType } from "@/common/hooks/token";
 
 // import SidebarLinkGroup from './SidebarLinkGroup'
 
@@ -35,7 +36,7 @@ function Sidebar() {
   const cookies = parseCookies();
   const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
   console.log("user::::", storedUser);
-  const userType = storedUser?.userType;
+  const userType =  GetUserType()
 
   useEffect(() => {
     userType && setActiveRoutes(routes?.DASHBOARD[userType]);
