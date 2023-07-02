@@ -33,7 +33,7 @@ class AUTH {
     }
   };
 
-  //get currently user
+  //set currently user
   currentUser = async ()=>{
     try{
       const response: any = await api.get('auth/me')

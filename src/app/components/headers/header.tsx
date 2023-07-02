@@ -8,12 +8,13 @@ import { destroyCookie, parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
+import { GetUserData } from "@/common/hooks/token";
 
 export default function Header() {
   //get user info
-  const cookies = parseCookies();
-  const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
+  const storedUser = GetUserData()
   const router = useRouter();
+  console.log(storedUser,'user info')
   //function to logout user
   const logOut = () => {
    authOBJ.logOut()
