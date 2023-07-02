@@ -74,8 +74,10 @@ export default function IndividualInput() {
       )
       .then((res: any) => {
         toast.success(res?.data.message);
-        //redirect to dashboard
-        router.push("/")
+        //get user info
+        authOBJ.currentUser()
+        //redirect to add park
+        router.push(routes.ADD_PARK.path)
         setIsLoading(false);
       })
       .catch((err: any) => {

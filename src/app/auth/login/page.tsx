@@ -74,6 +74,8 @@ export default function Login() {
         .then((res: any) => {
           console.log(res,'data form login')
           toast.success(res?.data.message);
+          //get user info
+          authOBJ.currentUser()
           //redirect to dashboard
           router.push("/")
           setIsLoading(false);

@@ -630,6 +630,11 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-select-country-list@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.npmjs.org/@types/react-select-country-list/-/react-select-country-list-2.2.1.tgz"
+  integrity sha512-Ixc9Vk+X+7P5KEEOK22ASf3y2McupLTfjQwhCUYUzlj00AgkDiERxT3t6Iv9MYkXQxkNx3pi+w8z/u7hdT3khg==
+
 "@types/react@*", "@types/react@18.0.33":
   version "18.0.33"
   resolved "https://registry.npmjs.org/@types/react/-/react-18.0.33.tgz"

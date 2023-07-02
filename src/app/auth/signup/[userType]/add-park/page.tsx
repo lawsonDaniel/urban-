@@ -13,6 +13,7 @@ import { savePark } from "../../../../../common/hooks/fireStore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
+import authOBJ from "@/common/classes/auth.class";
 
 interface ParkCoordinate {
   latitude: number;
@@ -33,8 +34,10 @@ export default function AddPark() {
   const [parkLocation, setParkLocation] = useState<string>("");
   const router: any = useRouter();
 
-  // Retrieve the user ID from the query parameters
-  const userId = useSearchParams().get("user");
+  
+  //get user info
+  let user = authOBJ.currentUser()
+  console.log(user,'auth')
 
   useEffect(() => {
     if ("geolocation" in navigator) {

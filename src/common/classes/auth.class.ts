@@ -1,5 +1,5 @@
 import api from "../API";
-import { StoreAuthToken,SetUserType,SetUserData} from "../hooks/token";
+import { StoreAuthToken,SetUserType,SetUserData,RemoveAllToken} from "../hooks/token";
 
 
 class AUTH {
@@ -44,6 +44,10 @@ class AUTH {
     }catch (err){
 
     }
+  }
+
+  logOut = ()=>{
+    RemoveAllToken()
   }
 }
 

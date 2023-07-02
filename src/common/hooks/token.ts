@@ -44,3 +44,9 @@ export const GetUserType = ()=>{
   const usetType: any = cookies.userType ? cookies.userType : null;
   return usetType;
 }
+
+export const RemoveAllToken = () => {
+  destroyCookie(null, "userToken", { path: "/" });
+  destroyCookie(null, "userData", { path: "/" });
+  destroyCookie(null, "userType", { path: "/" });
+};

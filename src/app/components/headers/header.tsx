@@ -5,26 +5,20 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { AiFillInfoCircle, AiOutlineLogout } from "react-icons/ai";
 import Link from "next/link";
 import { destroyCookie, parseCookies } from "nookies";
-import { useAuth } from "../../../common/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
+import authOBJ from "@/common/classes/auth.class";
 
 export default function Header() {
   //get user info
   const cookies = parseCookies();
   const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
-  const { signOut } = useAuth();
   const router = useRouter();
   //function to logout user
   const logOut = () => {
-    signOut()
-      .then(() => {
-        destroyCookie(null, "user");
-        router.replace(routes.LOGIN.path);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+   authOBJ.logOut()
+   //redirect to home
+   router.push('./auth/login')
   };
   console.log(storedUser, "store user");
   return (
