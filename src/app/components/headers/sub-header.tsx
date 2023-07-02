@@ -18,7 +18,8 @@ export default function SubHeader({
   boxType = "input",
   dropDownOptions,
   showButton,
-  buttonText, setSelectedOption
+  buttonText,
+  setSelectedOption,
 }: {
   header: string;
   inputContainerStyle?: string;
@@ -32,7 +33,7 @@ export default function SubHeader({
   vertical?: boolean;
   boxType?: "input" | "dropdown";
   dropDownOptions?: any;
-  setSelectedOption?: any
+  setSelectedOption?: any;
 }) {
   const [search, setSearch] = useState("");
 
@@ -84,7 +85,6 @@ export default function SubHeader({
                 className="w-[285px]"
                 containerStyle=""
                 setSelectedOption={setSelectedOption}
-
               />
             )
           )}

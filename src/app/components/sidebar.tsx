@@ -34,7 +34,7 @@ function Sidebar() {
   // const activeRoutes: any =
   const cookies = parseCookies();
   const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
-  console.log("user::::",storedUser)
+  console.log("user::::", storedUser);
   const userType = storedUser?.userType;
 
   useEffect(() => {

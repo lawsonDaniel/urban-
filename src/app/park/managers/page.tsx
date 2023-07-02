@@ -1,13 +1,13 @@
-'use client'
-import React, {useEffect, useState} from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import SubHeader from "../../components/headers/sub-header";
 import QuickAction from "../../components/parkowner/quick-button";
 import Table from "../../components/table";
 import { routes } from "@/common/routes";
 import Button from "../../components/button";
-import {getAll} from "@/common/hooks/fireStore";
-import {DocumentSnapshot} from "@firebase/firestore";
-import {useUser} from "@/common/hooks/useUser";
+import { getAll } from "@/common/hooks/fireStore";
+import { DocumentSnapshot } from "@firebase/firestore";
+import { useUser } from "@/common/hooks/useUser";
 
 export default function Managers() {
   const columns = [
@@ -78,12 +78,10 @@ export default function Managers() {
   const userData = useUser();
   const [parks, setParks] = useState<any[]>([]);
 
-  const getAllParks = async () => {
-   
-  };
+  const getAllParks = async () => {};
 
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       // getAllDispatchOfficers();
       getAllParks();
     }

@@ -33,7 +33,6 @@ export default function ManagerForm({ openModal }: { openModal: () => void }) {
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
-      
     },
   });
 

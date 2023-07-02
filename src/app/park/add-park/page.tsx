@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {GenerateID} from "@/common/utils";
+import { GenerateID } from "@/common/utils";
 
 export default function AddPark() {
   const options = [
@@ -46,7 +46,7 @@ export default function AddPark() {
     setIsOpen(false);
   };
 
-  console.log("parkID::::",GenerateID("UB"))
+  console.log("parkID::::", GenerateID("UB"));
 
   const formik = useFormik({
     initialValues: {
@@ -56,7 +56,6 @@ export default function AddPark() {
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
-     
 
       // router.push(routes.ADD_PARK.path)
     },

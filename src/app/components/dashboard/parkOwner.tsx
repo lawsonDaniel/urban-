@@ -8,9 +8,9 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "firebase/firestore";
-import {parseCookies} from "nookies";
-import {useUser} from "@/common/hooks/useUser";
-import {useAuth} from "@/common/hooks/useAuth";
+import { parseCookies } from "nookies";
+import { useUser } from "@/common/hooks/useUser";
+import { useAuth } from "@/common/hooks/useAuth";
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function ParkOwner({ user }: any) {
@@ -22,7 +22,7 @@ export default function ParkOwner({ user }: any) {
   const [mainParks, setMainParks] = useState<any[]>([]);
   const getAllParks = async () => {
     try {
-      const res = await getAll("parks",["=="],["ownerId"], [userData.uid]);
+      const res = await getAll("parks", ["=="], ["ownerId"], [userData.uid]);
 
       const parks: any[] = [];
       res.forEach((doc: DocumentSnapshot) => {
@@ -35,10 +35,10 @@ export default function ParkOwner({ user }: any) {
     }
   };
   useEffect(() => {
-      if(userData) {
-        getAllParks();
-      }
-  }, [getAll,userData]);
+    if (userData) {
+      getAllParks();
+    }
+  }, [getAll, userData]);
 
   const columns = [
     {
@@ -63,31 +63,35 @@ export default function ParkOwner({ user }: any) {
     },
   ];
 
-  const options =mainParks&& mainParks.map((park) => {
-    return {
-      value: park.parkId,
-      label: park.parkName,
-    };
-  });
+  const options =
+    mainParks &&
+    mainParks.map((park) => {
+      return {
+        value: park.parkId,
+        label: park.parkName,
+      };
+    });
 
   options?.unshift({
     value: "all",
     label: "All",
   });
 
-  const [selectedOption,setSelectedOption]=useState<any>()
+  const [selectedOption, setSelectedOption] = useState<any>();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     // Function to filter and update parks
     // const filterParks = () => {
-    if(parks) {
-      const filteredParks = selectedOption && selectedOption.value !== 'all'? mainParks.filter((park) => {
-        // Add your condition here
-          return park.parkId === selectedOption.value;
-      }) : mainParks
+    if (parks) {
+      const filteredParks =
+        selectedOption && selectedOption.value !== "all"
+          ? mainParks.filter((park) => {
+              // Add your condition here
+              return park.parkId === selectedOption.value;
+            })
+          : mainParks;
 
-      console.log("my filteredParks::::",filteredParks,selectedOption)
+      console.log("my filteredParks::::", filteredParks, selectedOption);
 
       setParks(filteredParks);
     }
@@ -95,10 +99,9 @@ export default function ParkOwner({ user }: any) {
 
     // filterParks()
 
-    console.log("my parks::::",parks)
-
-  },[selectedOption])
-  console.log("my parks11::::",parks)
+    console.log("my parks::::", parks);
+  }, [selectedOption]);
+  console.log("my parks11::::", parks);
 
   return (
     <div className="">

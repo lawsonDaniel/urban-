@@ -7,14 +7,14 @@ import Modal from "@/app/components/modal";
 import SuccessModal from "@/app/components/modal/sucess-modal";
 import { useFormik } from "formik";
 import { parseCookies } from "nookies";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineCelebration } from "react-icons/md";
-import {getAll, getOne, updateOne} from "@/common/hooks/fireStore";
-import {DocumentSnapshot} from "firebase/firestore";
-import {useUser} from "@/common/hooks/useUser";
-import {toast, ToastContainer} from "react-toastify";
+import { getAll, getOne, updateOne } from "@/common/hooks/fireStore";
+import { DocumentSnapshot } from "firebase/firestore";
+import { useUser } from "@/common/hooks/useUser";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function AddParkManager() {
   const userData = useUser();
@@ -22,21 +22,21 @@ export default function AddParkManager() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getAllParks = async () => {
-  
-  };
+  const getAllParks = async () => {};
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       getAllParks();
     }
-  }, [getAll,userData]);
+  }, [getAll, userData]);
 
-  const options =parks&& parks.map((park) => {
-    return {
-      value: park.parkId,
-      label: park.parkName,
-    };
-  });
+  const options =
+    parks &&
+    parks.map((park) => {
+      return {
+        value: park.parkId,
+        label: park.parkName,
+      };
+    });
 
   const [selectedPark, setSelectedPark] = useState<any>();
 
@@ -55,12 +55,11 @@ export default function AddParkManager() {
       parkManagerId: "",
       park: "",
     },
-    onSubmit: async(values: any) => {
+    onSubmit: async (values: any) => {
       setIsLoading(true);
       // router.push(routes.ADD_PARK.path)
-     
+
       setIsLoading(false);
-      
     },
   });
 
@@ -99,7 +98,7 @@ export default function AddParkManager() {
         desc="You have successfully added a new park manager."
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        onClose={()=>router.push("/")}
+        onClose={() => router.push("/")}
       />
       <ToastContainer />
     </div>

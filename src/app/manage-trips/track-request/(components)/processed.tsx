@@ -28,9 +28,7 @@ export default function Processed() {
     },
   ];
 
-  const getAllprocessedRequest = async () => {
-    
-  };
+  const getAllprocessedRequest = async () => {};
   useEffect(() => {
     getAllprocessedRequest();
   }, [getAll]);

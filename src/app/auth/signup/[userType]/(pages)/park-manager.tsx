@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
-import countryList from 'react-select-country-list'
+import countryList from "react-select-country-list";
 import Dropdown from "@/app/components/dropdown";
 
 export default function ParkManager() {
@@ -18,11 +18,10 @@ export default function ParkManager() {
     { label: "Individual", value: "individual" },
     { label: "Corporate", value: "corporate" },
   ];
- 
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [country,setCountry] = useState<string>()
+  const [country, setCountry] = useState<string>();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -56,34 +55,35 @@ export default function ParkManager() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      if(country){
+      if (country) {
         setIsLoading(true);
-      authOBJ
-      .register({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        country: country,
-        phoneNumber: values.phoneNumber,
-        email: values.email,
-        parkGeneralName:values.parkGeneralName,
-        deviceToken:"12345",
-        password:values.password,
-        retypePassword: values.confirmPassword
-    
-    },"parkManager")
-    .then((res: any) => {
-      toast.success(res?.data.message)
-      //redirect to dashboard
-      setIsLoading(false);
-    })
-    .catch((err: any) => {
-      toast.error(err?.response.data.message)
-      setIsLoading(false);
-    });
-      }else{
-        toast.error("fill all values")
+        authOBJ
+          .register(
+            {
+              firstName: values.firstName,
+              lastName: values.lastName,
+              country: country,
+              phoneNumber: values.phoneNumber,
+              email: values.email,
+              parkGeneralName: values.parkGeneralName,
+              deviceToken: "12345",
+              password: values.password,
+              retypePassword: values.confirmPassword,
+            },
+            "parkManager"
+          )
+          .then((res: any) => {
+            toast.success(res?.data.message);
+            //redirect to dashboard
+            setIsLoading(false);
+          })
+          .catch((err: any) => {
+            toast.error(err?.response.data.message);
+            setIsLoading(false);
+          });
+      } else {
+        toast.error("fill all values");
       }
-      
     },
   });
   return (
@@ -154,9 +154,15 @@ export default function ParkManager() {
             }
             // icon={<LockClosedIcon />}
           />
-          <Dropdown options={countryList().getData()} className={"w-full"} label="Select Country" placeholder={""} onSelect={(e:any)=>{
-           setCountry(e)
-          }}/>
+          <Dropdown
+            options={countryList().getData()}
+            className={"w-full"}
+            label="Select Country"
+            placeholder={""}
+            onSelect={(e: any) => {
+              setCountry(e);
+            }}
+          />
           <Input
             // containerStyle='mt-8'
             label="Password"

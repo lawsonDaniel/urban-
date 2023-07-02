@@ -9,14 +9,14 @@ function Dropdown({
   placeholder,
   className,
   label,
-  containerStyle = "mt-8", setSelectedOption : setOption
-
+  containerStyle = "mt-8",
+  setSelectedOption: setOption,
 }: DropDownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<RadioOption>();
 
   function handleOptionClick(option: RadioOption) {
-      setOption?.(option);
+    setOption?.(option);
     setSelectedOption(option);
     setIsOpen(false);
     if (onSelect) onSelect(option.value);

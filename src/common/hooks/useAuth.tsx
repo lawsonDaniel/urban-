@@ -114,5 +114,5 @@ export const useAuth = () => {
     return unsubscribe;
   }, []);
 
-  return { user, loading, signUp, signIn, signOut,getLoginUser };
+  return { user, loading, signUp, signIn, signOut, getLoginUser };
 };

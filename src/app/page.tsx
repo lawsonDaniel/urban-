@@ -11,7 +11,7 @@ export default function Home() {
   const userType = storedUser?.userType;
   const router = useRouter();
 
-  console.log("storedUser:::", storedUser,cookies);
+  console.log("storedUser:::", storedUser, cookies);
 
   // if (!storedUser) return router.push("/auth/login");
 

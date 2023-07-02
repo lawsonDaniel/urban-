@@ -42,7 +42,7 @@ export default function Records() {
 
   const getAllParks = async () => {
     try {
-      const res = await getAll("parks",["=="],["manager_id"],["UB62333968"]);
+      const res = await getAll("parks", ["=="], ["manager_id"], ["UB62333968"]);
       console.log(res);
       const parks: any[] = [];
       res.forEach((doc: DocumentSnapshot) => {
@@ -73,7 +73,12 @@ export default function Records() {
           value: selectedPark,
         });
 
-        const res = await getAll("trips",["=="],["vehicleType"],[selectedVehicle] );
+        const res = await getAll(
+          "trips",
+          ["=="],
+          ["vehicleType"],
+          [selectedVehicle]
+        );
         const trips: any[] = [];
         res.forEach((doc: DocumentSnapshot) => {
           trips.push(doc.data());

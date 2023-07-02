@@ -9,7 +9,7 @@ export default function SuccessModal({
   title,
   desc,
   customButton,
-    onClose
+  onClose,
 }: any) {
   const openModal = () => {
     setIsOpen(true);
@@ -17,7 +17,7 @@ export default function SuccessModal({
 
   const closeModal = () => {
     setIsOpen(false);
-    onClose()
+    onClose();
   };
 
   return (

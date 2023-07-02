@@ -19,13 +19,9 @@ export default function ManagerStatements() {
     { value: "van", label: "Van" },
     { value: "others", label: "Others" },
   ];
-  const getAllParks = async () => {
-    
-  };
+  const getAllParks = async () => {};
   console.log(selectedPark, "parks");
-  const getAllManager = async () => {
-    
-  };
+  const getAllManager = async () => {};
   useEffect(() => {
     getAllParks();
   }, [getAll]);

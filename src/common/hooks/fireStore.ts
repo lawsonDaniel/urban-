@@ -77,7 +77,6 @@ export const getUser = async (userId: any, role: string) => {
   }
 };
 
-
 export const getAll = async (
   collectionName: string,
   operation?: ("==" | "!=")[],
@@ -87,7 +86,11 @@ export const getAll = async (
   try {
     let q: Query<DocumentData> = query(collection(db, collectionName));
 
-    if (whereFields && whereValues && whereFields.length === whereValues.length) {
+    if (
+      whereFields &&
+      whereValues &&
+      whereFields.length === whereValues.length
+    ) {
       for (let i = 0; i < whereFields.length; i++) {
         const field = whereFields[i];
         const value = whereValues[i];
@@ -106,17 +109,20 @@ export const getAll = async (
   }
 };
 
-
 export const getOne = async (
-    collectionName: string,
-    operation?: ("==" | "!=")[],
-    whereFields?: string[],
-    whereValues?: any[]
+  collectionName: string,
+  operation?: ("==" | "!=")[],
+  whereFields?: string[],
+  whereValues?: any[]
 ): Promise<DocumentData | null> => {
   try {
     let q: Query<DocumentData> = query(collection(db, collectionName));
 
-    if (whereFields && whereValues && whereFields.length === whereValues.length) {
+    if (
+      whereFields &&
+      whereValues &&
+      whereFields.length === whereValues.length
+    ) {
       for (let i = 0; i < whereFields.length; i++) {
         const field = whereFields[i];
         const value = whereValues[i];
@@ -138,7 +144,6 @@ export const getOne = async (
     throw error;
   }
 };
-
 
 export const getUserById = async (collectionName: string, userId: any) => {
   try {
@@ -209,6 +214,3 @@ export const updateTrip = async (tripId: string, values: any) => {
     throw error;
   }
 };
-
-
-

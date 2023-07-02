@@ -45,43 +45,43 @@ export default function Login() {
 
   const router = useRouter();
   // Define the validation schema
-const validationSchema = Yup.object({
-  emailOrUsername: Yup.string().required("Email or username is required"),
-  password: Yup.string().required("Password is required"),
-});
+  const validationSchema = Yup.object({
+    emailOrUsername: Yup.string().required("Email or username is required"),
+    password: Yup.string().required("Password is required"),
+  });
 
-// Define the login form values interface
-interface LoginFormValues {
-  emailOrUsername: string;
-  password: string;
-}
+  // Define the login form values interface
+  interface LoginFormValues {
+    emailOrUsername: string;
+    password: string;
+  }
 
-// Initialize the form using useFormik hook
-const formik = useFormik<LoginFormValues>({
-  initialValues: {
-    emailOrUsername: "",
-    password: "",
-  },
-  validationSchema: validationSchema,
-  onSubmit: (values) => {
-    setIsLoading(true);
-    authOBJ
-      .login({
-        userType:userType,
-        email:values.emailOrUsername,
-        password:values.password,
-      })
-      .then((res: any) => {
-        toast.success(res?.data.message)
-        //redirect to dashboard
-        setIsLoading(false);
-      })
-      .catch((err: any) => {
-        toast.error(err?.response.data.message)
-        setIsLoading(false);
-      });
-  },
-});
+  // Initialize the form using useFormik hook
+  const formik = useFormik<LoginFormValues>({
+    initialValues: {
+      emailOrUsername: "",
+      password: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      setIsLoading(true);
+      authOBJ
+        .login({
+          userType: userType,
+          email: values.emailOrUsername,
+          password: values.password,
+        })
+        .then((res: any) => {
+          toast.success(res?.data.message);
+          //redirect to dashboard
+          setIsLoading(false);
+        })
+        .catch((err: any) => {
+          toast.error(err?.response.data.message);
+          setIsLoading(false);
+        });
+    },
+  });
   return (
     <main>
       <RadioButton

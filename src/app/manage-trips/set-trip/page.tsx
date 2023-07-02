@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
 import { useRouter } from "next/navigation";
-import {parseCookies, setCookie} from "nookies";
+import { parseCookies, setCookie } from "nookies";
 
 export default function SetTrip() {
   const lugage = [
@@ -27,9 +27,7 @@ export default function SetTrip() {
 
   const cookies = parseCookies();
 
-
   const stored = cookies.trip ? JSON.parse(cookies.trip) : null;
-
 
   const [selectedPark, setSelectedPark] = useState();
   const [selectedLuggage, setSelectedLuggage] = useState();
@@ -37,9 +35,7 @@ export default function SetTrip() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [Park, setPark] = useState<any[]>([]);
   const router = useRouter();
-  const getAllParks = async () => {
-    
-  };
+  const getAllParks = async () => {};
 
   useEffect(() => {
     getAllParks();
@@ -60,15 +56,14 @@ export default function SetTrip() {
     priceKg: Yup.string(),
   });
 
-
   const formik = useFormik({
     initialValues: {
-      departureTime: stored?.departureTime||"",
-      departureCity: stored?.departureCity||"",
-      tripCode: stored?.tripCode|| "",
-      fare:  stored?.fare|| "",
-      date:  stored?.date|| "",
-      priceKg:  stored?.priceKg|| "",
+      departureTime: stored?.departureTime || "",
+      departureCity: stored?.departureCity || "",
+      tripCode: stored?.tripCode || "",
+      fare: stored?.fare || "",
+      date: stored?.date || "",
+      priceKg: stored?.priceKg || "",
     },
     validationSchema,
     onSubmit: async (values: any) => {
@@ -86,19 +81,19 @@ export default function SetTrip() {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
         });
-        router.push('/manage-trips/set-trip/preview');
+        router.push("/manage-trips/set-trip/preview");
         // setIsLoading(true);
         // try {
-          // const res = await saveTrip(values);
-          // console.log(res, "trip");
-          // toast.success("Trip succesfully added");
-          // router.push("/manage-trips/");
-          // setIsLoading(false);
+        // const res = await saveTrip(values);
+        // console.log(res, "trip");
+        // toast.success("Trip succesfully added");
+        // router.push("/manage-trips/");
+        // setIsLoading(false);
         // } catch (error: any) {
-          // console.error(error, "trip");
-          // // @ts-ignore
-          // toast.error(error);
-          // setIsLoading(false);
+        // console.error(error, "trip");
+        // // @ts-ignore
+        // toast.error(error);
+        // setIsLoading(false);
         // }
       } else {
         toast.error("fill all the form fields");
@@ -135,7 +130,10 @@ export default function SetTrip() {
             value={formik.values.departureTime}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={(formik.touched.departureTime && formik.errors.departureTime)as boolean}
+            error={
+              (formik.touched.departureTime &&
+                formik.errors.departureTime) as boolean
+            }
           />
           <Input
             label="Date"
@@ -145,7 +143,7 @@ export default function SetTrip() {
             value={formik.values.date}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={(formik.touched.date && formik.errors.date)as boolean}
+            error={(formik.touched.date && formik.errors.date) as boolean}
           />
           <Input
             label="Departure City"
@@ -155,7 +153,10 @@ export default function SetTrip() {
             value={formik.values.departureCity}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={(formik.touched.departureCity && formik.errors.departureCity)as boolean}
+            error={
+              (formik.touched.departureCity &&
+                formik.errors.departureCity) as boolean
+            }
           />
           <Input
             label="Trip Code"
@@ -165,7 +166,9 @@ export default function SetTrip() {
             value={formik.values.tripCode}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={(formik.touched.tripCode && formik.errors.tripCode)as boolean}
+            error={
+              (formik.touched.tripCode && formik.errors.tripCode) as boolean
+            }
           />
           <Input
             label="Fare"
@@ -175,14 +178,14 @@ export default function SetTrip() {
             value={formik.values.fare}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={(formik.touched.fare && formik.errors.fare)as boolean}
+            error={(formik.touched.fare && formik.errors.fare) as boolean}
           />
           <Dropdown
-              options={carType}
-              placeholder="Type of Vehicle"
-              label="Type of Vehicle"
-              onSelect={(e: any) => setSelectedCar(e)}
-              className="w-[510px]"
+            options={carType}
+            placeholder="Type of Vehicle"
+            label="Type of Vehicle"
+            onSelect={(e: any) => setSelectedCar(e)}
+            className="w-[510px]"
           />
           {/*<Input*/}
           {/*  label="Type of Vehicle"*/}
@@ -221,7 +224,9 @@ export default function SetTrip() {
               value={formik.values.priceKg}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={(formik.touched.priceKg && formik.errors.priceKg)as boolean}
+              error={
+                (formik.touched.priceKg && formik.errors.priceKg) as boolean
+              }
               containerStyle="ml-3 mt-9"
             />
           )}

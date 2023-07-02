@@ -38,7 +38,6 @@ export default function OwnerForm({ openModal }: { openModal: () => void }) {
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
-      
 
       // router.push(routes.ADD_PARK.path)
     },

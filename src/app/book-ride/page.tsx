@@ -41,7 +41,7 @@ export default function BookRide() {
   const closeModal = () => {
     setIsOpen(false);
   };
-const router = useRouter()
+  const router = useRouter();
   const columns = [
     {
       id: "tripCode",
@@ -91,7 +91,7 @@ const router = useRouter()
         selectedVehicle: selectedVehicle,
         ...values,
       };
-      
+
       if (
         selectedVehicle &&
         DestinationCity &&
@@ -104,7 +104,7 @@ const router = useRouter()
           console.log(res, "trip");
           toast.success("Ride succesfully booked");
           openModal();
-          router.push(routes.ADD_PARK.path)
+          router.push(routes.ADD_PARK.path);
           setIsLoading(false);
         } catch (error: any) {
           console.error(error, "trip");
@@ -184,8 +184,7 @@ const router = useRouter()
         <p className="mt-[53px] mb-2">Select Vehicle Type</p>
         <RadioButton
           name="selectedVehicle"
-          options=
-          {options}
+          options={options}
           data={selectedVehicle}
           onSelect={setSelectedVehicle}
           className="grid grid-cols-4 rounded-none gap-x-4 bg-white p-0 w-[540px]"

@@ -12,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { parkOwnerData } from "@/common/data";
 import { AccountType, USER_TYPE } from "@/common/types";
 import authOBJ from "@/common/classes/auth.class";
+import countryList from "react-select-country-list";
+import Dropdown from "@/app/components/dropdown";
 
 export default function IndividualInput() {
   const router = useRouter();
@@ -20,6 +22,7 @@ export default function IndividualInput() {
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [country, setCountry] = useState<string>();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -53,28 +56,30 @@ export default function IndividualInput() {
       setIsLoading(true);
       setIsLoading(true);
       authOBJ
-      .register({
-        accountCategory: "individual",
-        country: "nigeria",
-        firstName: values.firstName,
-        lastName:values.lastName,
-        parkGeneralName: values.parkGeneralName,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-        deviceToken:"uefuefue23",
-        password:values.password,
-        retypePassword:values.confirmPassword
-    
-    },"parkOwner")
-    .then((res: any) => {
-      toast.success(res?.data.message)
-      //redirect to dashboard
-      setIsLoading(false);
-    })
-    .catch((err: any) => {
-      toast.error(err?.response.data.message)
-      setIsLoading(false);
-    });
+        .register(
+          {
+            accountCategory: "individual",
+            country: country,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            parkGeneralName: values.parkGeneralName,
+            email: values.email,
+            phoneNumber: values.phoneNumber,
+            deviceToken: "uefuefue23",
+            password: values.password,
+            retypePassword: values.confirmPassword,
+          },
+          "parkOwner"
+        )
+        .then((res: any) => {
+          toast.success(res?.data.message);
+          //redirect to dashboard
+          setIsLoading(false);
+        })
+        .catch((err: any) => {
+          toast.error(err?.response.data.message);
+          setIsLoading(false);
+        });
     },
   });
 
@@ -114,6 +119,15 @@ export default function IndividualInput() {
         onBlur={formik.handleBlur}
         error={formik.touched.phoneNumber && formik.errors.phoneNumber}
         // icon={<LockClosedIcon />}
+      />
+      <Dropdown
+        options={countryList().getData()}
+        className={"w-full"}
+        label="Select Country"
+        placeholder={""}
+        onSelect={(e: any) => {
+          setCountry(e);
+        }}
       />
       <Input
         label="Email"

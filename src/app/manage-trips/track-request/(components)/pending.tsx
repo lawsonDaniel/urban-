@@ -27,9 +27,7 @@ export default function Pending() {
       header: "Time",
     },
   ];
-  const getAllPendingRequest = async () => {
-    
-  };
+  const getAllPendingRequest = async () => {};
   useEffect(() => {
     getAllPendingRequest();
   }, [getAll]);

@@ -26,7 +26,7 @@ export default function Header() {
         console.error(err);
       });
   };
-  console.log(storedUser,'store user')
+  console.log(storedUser, "store user");
   return (
     <div className="pt-10 flex items-center justify-between ">
       <div className="flex items-center">

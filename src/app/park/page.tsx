@@ -17,15 +17,11 @@ export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
   const [Park, setPark] = useState<any[]>([]);
   const userData = useUser();
-  const getAllDispatchOfficers = async () => {
-    
-  };
-  const getAllParks = async () => {
-   
-  };
+  const getAllDispatchOfficers = async () => {};
+  const getAllParks = async () => {};
 
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       getAllDispatchOfficers();
       getAllParks();
     }

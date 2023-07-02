@@ -24,7 +24,7 @@ export const useUser = () => {
       const cookies = parseCookies();
       const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
       console.log("userrrrr:::", storedUser);
-      const user:any = await getLoginUser();
+      const user: any = await getLoginUser();
       setUser({ ...storedUser, ...user });
     };
 

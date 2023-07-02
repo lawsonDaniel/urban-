@@ -27,12 +27,8 @@ export default function Assign() {
   const [Driver, setDriver] = useState<any[]>([]);
   const [Trip, setTrip] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const getAllDriver = async () => {
-   
-  };
-  const getAllTrips = async () => {
-   
-  };
+  const getAllDriver = async () => {};
+  const getAllTrips = async () => {};
   useEffect(() => {
     getAllDriver();
     getAllTrips();
@@ -51,7 +47,7 @@ export default function Assign() {
       label: a?.data?.tripCode,
     };
   });
-console.log(Driver,'driver option')
+  console.log(Driver, "driver option");
   const formik = useFormik({
     initialValues: {},
     onSubmit: async (values: any) => {
@@ -60,7 +56,6 @@ console.log(Driver,'driver option')
         values = {
           Driver: selectedDriver,
         };
-        
       } else {
         toast.error("fill all the form fields");
       }

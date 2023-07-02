@@ -21,12 +21,10 @@ const Input = ({
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
-    console.log("showPassword::::",showPassword)
+    console.log("showPassword::::", showPassword);
 
     setShowPassword((prevState) => !prevState);
-
   };
-
 
   const renderIcon = () => {
     if (icon) {
@@ -42,7 +40,11 @@ const Input = ({
 
       return (
         <>
-          <button className="absolute inset-y-0 right-0 pr-3 flex items-center" type="button" onClick={()=>togglePasswordVisibility()}>
+          <button
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            type="button"
+            onClick={() => togglePasswordVisibility()}
+          >
             <Icon className="h-5 w-5 text-gray-500" />
           </button>
         </>
@@ -68,7 +70,7 @@ const Input = ({
           </span>
         )}
         <input
-            type={!showPassword ? type : "text"}
+          type={!showPassword ? type : "text"}
           name={name}
           id={id}
           value={value}

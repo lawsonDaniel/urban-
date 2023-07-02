@@ -12,10 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { parkOwnerData } from "@/common/data";
 import { AccountType, USER_TYPE } from "@/common/types";
 import authOBJ from "@/common/classes/auth.class";
-import countryList from 'react-select-country-list'
+import countryList from "react-select-country-list";
 import Dropdown from "@/app/components/dropdown";
-
-
 
 export default function CorporateInput() {
   const router = useRouter();
@@ -24,7 +22,7 @@ export default function CorporateInput() {
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [country,setCountry] = useState<string>()
+  const [country, setCountry] = useState<string>();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -56,29 +54,34 @@ export default function CorporateInput() {
     onSubmit: async (values) => {
       setIsLoading(true);
       // alert(JSON.stringify(values, null, 2))
-      authOBJ
-      .register({
-        accountCategory: "company",
-        country: country,
-        companyName: values.companyName,
-        companyAddress:values.companyAddress,
-        email: values.email,
-        phoneNumber: values.phoneNumber,
-        deviceToken:"uefuefue23",
-        password:values.password,
-        retypePassword:values.confirmPassword
-    
-    },"parkOwner")
-    .then((res: any) => {
-      toast.success(res?.data.message)
-      //redirect to dashboard
-      setIsLoading(false);
-    })
-    .catch((err: any) => {
-      toast.error(err?.response.data.message)
-      setIsLoading(false);
-    });
-     
+      if (country) {
+        authOBJ
+          .register(
+            {
+              accountCategory: "company",
+              country: country,
+              companyName: values.companyName,
+              companyAddress: values.companyAddress,
+              email: values.email,
+              phoneNumber: values.phoneNumber,
+              deviceToken: "uefuefue23",
+              password: values.password,
+              retypePassword: values.confirmPassword,
+            },
+            "parkOwner"
+          )
+          .then((res: any) => {
+            toast.success(res?.data.message);
+            //redirect to dashboard
+            setIsLoading(false);
+          })
+          .catch((err: any) => {
+            toast.error(err?.response.data.message);
+            setIsLoading(false);
+          });
+      } else {
+        toast.error("fill all values");
+      }
     },
   });
 
@@ -120,9 +123,15 @@ export default function CorporateInput() {
 
         // icon={<LockClosedIcon />}
       />
-       <Dropdown options={countryList().getData()} className={"w-full"} label="Select Country" placeholder={""} onSelect={(e:any)=>{
-           setCountry(e)
-          }}/>
+      <Dropdown
+        options={countryList().getData()}
+        className={"w-full"}
+        label="Select Country"
+        placeholder={""}
+        onSelect={(e: any) => {
+          setCountry(e);
+        }}
+      />
       <Input
         label="Email Address"
         type="email"
@@ -186,7 +195,7 @@ export default function CorporateInput() {
       <Button
         type="submit"
         className="w-full mt-10 text-white"
-        disabled={isLoading}
+        disabled={isLoading || !country}
         // disabled={!formik.values['userType'] ? true : undefined}
       >
         {isLoading ? "loading" : "Sign Up"}

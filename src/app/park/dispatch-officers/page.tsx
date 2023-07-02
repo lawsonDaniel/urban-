@@ -8,15 +8,13 @@ import Button from "../../components/button";
 import { getAll } from "@/common/hooks/fireStore";
 import { USER_TYPE } from "@/common/types";
 import { DocumentSnapshot } from "firebase/firestore";
-import {useUser} from "@/common/hooks/useUser";
+import { useUser } from "@/common/hooks/useUser";
 
 export default function DispatchOfficers() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
   const userData = useUser();
 
-  const getAllDispatchOfficers = async () => {
-    
-  };
+  const getAllDispatchOfficers = async () => {};
   useEffect(() => {
     getAllDispatchOfficers();
   }, [getAll]);

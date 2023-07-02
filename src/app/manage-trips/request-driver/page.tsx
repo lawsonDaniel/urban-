@@ -26,12 +26,8 @@ export default function RequestDriver() {
   const [allPark, setAllPark] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allProviderAgency, setAllProviderAgency] = useState<any>([]);
-  const getAllPark = async () => {
-    
-  };
-  const getAllProviderAgency = async () => {
-    
-  };
+  const getAllPark = async () => {};
+  const getAllProviderAgency = async () => {};
   useEffect(() => {
     getAllPark();
     getAllProviderAgency();
@@ -81,7 +77,6 @@ export default function RequestDriver() {
           requestStatus: "pending",
           ...values,
         };
-       
       } else {
         toast.error("fill all the form fields");
       }

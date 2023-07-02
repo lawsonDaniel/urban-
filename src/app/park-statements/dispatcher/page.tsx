@@ -20,11 +20,8 @@ export default function DispatcherStatements() {
     { value: "van", label: "Van" },
     { value: "others", label: "Others" },
   ];
-  const getAllParks = async () => {
-  }
-  const getAllManager = async () => {
-   
-  };
+  const getAllParks = async () => {};
+  const getAllManager = async () => {};
   useEffect(() => {
     getAllParks();
   }, [getAll]);

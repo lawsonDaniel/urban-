@@ -9,7 +9,7 @@ import Button from "../components/button";
 import Link from "next/link";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
-import {useUser} from "@/common/hooks/useUser";
+import { useUser } from "@/common/hooks/useUser";
 
 export default function ManageTrips() {
   // const router = useRouter()
@@ -18,7 +18,12 @@ export default function ManageTrips() {
   const [Trip, setTrip] = useState<any[]>([]);
   const getAllTrips = async () => {
     try {
-      const res = await getAll("trips",["=="],["parkOwnerId"], [userData.uid]);
+      const res = await getAll(
+        "trips",
+        ["=="],
+        ["parkOwnerId"],
+        [userData.uid]
+      );
       const trips: any[] = [];
       res.forEach((doc: DocumentSnapshot) => {
         trips.push(doc.data());
@@ -29,11 +34,11 @@ export default function ManageTrips() {
     }
   };
   useEffect(() => {
-    if(userData) {
+    if (userData) {
       getAllTrips();
       getAllTrips();
     }
-  }, [getAll,userData]);
+  }, [getAll, userData]);
   console.log(Trip, "trip");
   const columns = [
     {

@@ -28,9 +28,7 @@ export default function Cancelled() {
     },
   ];
 
-  const getAllcancelRequest = async () => {
-   
-  };
+  const getAllcancelRequest = async () => {};
   useEffect(() => {
     getAllcancelRequest();
   }, [getAll]);
