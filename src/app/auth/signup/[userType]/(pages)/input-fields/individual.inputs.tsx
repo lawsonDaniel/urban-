@@ -75,6 +75,7 @@ export default function IndividualInput() {
       .then((res: any) => {
         toast.success(res?.data.message);
         //redirect to dashboard
+        router.push("/")
         setIsLoading(false);
       })
       .catch((err: any) => {

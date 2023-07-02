@@ -72,12 +72,15 @@ export default function Login() {
           password: values.password,
         })
         .then((res: any) => {
+          console.log(res,'data form login')
           toast.success(res?.data.message);
           //redirect to dashboard
+          router.push("/")
           setIsLoading(false);
         })
         .catch((err: any) => {
-          toast.error(err?.response.data.message);
+          console.log(err,'data form login')
+          toast.error(err?.response?.data?.message);
           setIsLoading(false);
         });
     },
