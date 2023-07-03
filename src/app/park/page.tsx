@@ -12,6 +12,8 @@ import { USER_TYPE } from "@/common/types";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
+import { GetUserType } from "@/common/hooks/token";
+import CTA from "../components/dashboard/comp/cta";
 
 export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
@@ -19,13 +21,6 @@ export default function Park() {
   const userData = useUser();
   const getAllDispatchOfficers = async () => {};
   const getAllParks = async () => {};
-
-  useEffect(() => {
-    if (userData) {
-      getAllDispatchOfficers();
-      getAllParks();
-    }
-  }, [getAll, userData]);
 
   console.log(Park, "park");
   const router = useRouter();
@@ -66,7 +61,7 @@ export default function Park() {
     },
   ];
 
-  const userType = useUserType();
+  const userType = GetUserType();
 
   return (
     <div>
@@ -104,14 +99,28 @@ export default function Park() {
             <div></div>
           </div>
           <div className="mt-[53px]">
-            <Table
+            {
+              Park.length >=1 ? <Table
               columns={columns}
               data={Park}
               action={{
                 viewLabel: "View statement",
                 type: ["view"],
               }}
-            />
+            /> : <div className="flex-col gap-7">
+            <div className="grid grid-cols-3 mt-[32px] gap-8">
+          <div className="col-span-1 ">
+          <CTA
+          text="Veiw achieve"
+          type="green"
+          onClick={() => router.push("#")}
+        /></div>
+        </div>
+        <div className="mt-[10rem] text-center">
+          <p className="text-xl capitalize">Sorry, No information yet, Add a Park to start</p>
+        </div>
+          </div>
+            }
           </div>
         </>
       ) : (
@@ -124,14 +133,28 @@ export default function Park() {
               icon={routes.PARK[2].icon}
             />
             <div className="mt-[53px]">
-              <Table
+              {
+                DispactchRider.length >=1 ? <Table
                 columns={disColumns}
                 data={DispactchRider}
                 action={{
                   label: "",
                   type: ["view", "edit", "delete"],
                 }}
-              />
+              /> :  <div className="flex-col gap-7">
+                <div className="grid grid-cols-3 mt-[32px] gap-8">
+              <div className="col-span-1 ">
+              <CTA
+              text="Veiw achieve"
+              type="green"
+              onClick={() => router.push("#")}
+            /></div>
+            </div>
+            <div className="mt-[10rem] text-center">
+              <p className="text-xl capitalize">Sorry, No information yet, Add a dispatch Rider to start</p>
+            </div>
+              </div>
+              }
             </div>
           </div>
         )

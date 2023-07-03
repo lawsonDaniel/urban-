@@ -117,20 +117,23 @@ export default function ParkManager({ user }: any) {
     <div className="">
       {/* <div className='p-14 min-h-full mt-10 rounded-xl bg-white'> */}
       <SubHeader header="Dashboard" hideBack hideRight />
-      <div className="mt-4 flex justify-between"> 
+      <div className="mt-4 flex justify-between">
         <div className="flex-col gap-4">
-        <div className="flex text-sm items-center">
-         <p>Park Name: </p>
-         <p className="text-lg capitalize">park one</p>
-        </div>
-        <div className="flex text-sm items-center">
-         <p>Manager Name: </p>
-         <p className="text-lg capitalize">james park</p>
-        </div>
+          <div className="flex text-sm items-center">
+            <p>Park Name: </p>
+            <p className="text-lg capitalize">park one</p>
+          </div>
+          <div className="flex text-sm items-center">
+            <p>Manager Name: </p>
+            <p className="text-lg capitalize">james park</p>
+          </div>
         </div>
         <div className="flex text-sm items-center">
           <p>Manager ID:</p>
-          <div className="text-primary flex ml-2 text-lg" onClick={handleCopyClick}>
+          <div
+            className="text-primary flex ml-2 text-lg"
+            onClick={handleCopyClick}
+          >
             {userData?.urbanId} {copySuccess && <span>(Copied!)</span>}{" "}
             <BiCopy className="ml-1" />
           </div>
