@@ -130,7 +130,7 @@ export default function ParkManager({ user }: any) {
         </div>
         <div className="flex text-sm items-center">
           <p>Manager ID:</p>
-          <div className="text-primary flex ml-2" onClick={handleCopyClick}>
+          <div className="text-primary flex ml-2 text-lg" onClick={handleCopyClick}>
             {userData?.urbanId} {copySuccess && <span>(Copied!)</span>}{" "}
             <BiCopy className="ml-1" />
           </div>
