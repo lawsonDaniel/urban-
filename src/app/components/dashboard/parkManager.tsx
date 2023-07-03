@@ -137,8 +137,8 @@ export default function ParkManager({ user }: any) {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 mt-[32px]">
-        <div className="col-span-1 gap-8">
+      <div className="grid grid-cols-3 mt-[32px] gap-8">
+        <div className="col-span-1 ">
           <CTA
             text="View park Statement"
             type="green"
