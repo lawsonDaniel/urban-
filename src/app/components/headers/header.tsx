@@ -52,7 +52,7 @@ export default function Header() {
           <AiFillInfoCircle size={24} />
           <span className="block sm:inline ml-2">
             {storedUser?.verifiedAt === null &&
-              "Account has not been Verified "}
+              "Account is yet to be approved"}
           </span>
         </div>
       </div>
