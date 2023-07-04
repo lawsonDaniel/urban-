@@ -10,7 +10,7 @@ export const TableDropDown = ({ action }: any) => {
       {openDropDown && <ul className="flex flex-col gap-2 p-absolute shadow-lg bg-white p-2 rounded-md absolute w-[200px] lg:ml-[75px] md:ml-[auto] ml-[auto]">
         {
           action?.type.map((a: any, i: number) => {
-            return <li key={i} className={`${a == "delete"||"archive" ? 'text-red-500' : "text-green-500"} capitalize`}>{a}</li>;
+            return <li key={i} className={`${a == "delete" ? 'text-red-500' : "text-green-500"} capitalize`}>{a}</li>;
           })}
       </ul>}
     </>
