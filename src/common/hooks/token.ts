@@ -26,7 +26,7 @@ export const SetUserType = (data: string) => {
   });
 };
 
-export const SetUserData = (data: string) => {
+export const SetUserData:any = (data: string) => {
   setCookie(null, "userData", data, {
     maxAge: 30 * 24 * 60 * 60,
     path: "/",
@@ -49,4 +49,12 @@ export const RemoveAllToken = () => {
   destroyCookie(null, "userToken", { path: "/" });
   destroyCookie(null, "userData", { path: "/" });
   destroyCookie(null, "userType", { path: "/" });
+};
+
+
+export const SetAllParkData:any = (data: string) => {
+  setCookie(null, "AllPark", data, {
+    maxAge: 30 * 24 * 60 * 60,
+    path: "/",
+  });
 };

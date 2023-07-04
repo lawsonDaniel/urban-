@@ -35,7 +35,7 @@ export const TableDropDown = ({ action }: any) => {
             return (
               <li
                 key={i}
-                className={`${a === "delete" ? "text-red-500" : "text-green-500"} capitalize`}
+                className={`${a === "delete" ? "text-red-500" : "text-green-500"} capitalize text-md`}
                 onClick={() => setOpenDropDown(false)}
               >
                 {a}
