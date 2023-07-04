@@ -78,6 +78,7 @@ export default function Login() {
           authOBJ.currentUser();
           //redirect to dashboard
           router.push("/");
+
           setIsLoading(false);
         })
         .catch((err: any) => {

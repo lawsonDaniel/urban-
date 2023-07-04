@@ -62,7 +62,27 @@ export default function Park() {
   ];
 
   const userType = GetUserType();
-
+  const disData = [
+    {
+      id: 1,
+      dispatchName: "John Doe",
+      email: "test@gmail.com",
+      phoneNo: "09103456789",
+    },
+    {
+      id: 2,
+      dispatchName: "oshodi Doe",
+      email: "test@gmail.com",
+      phoneNo: "09103456789",
+    },
+    {
+      id: 3,
+      dispatchName: "oshodi Doe",
+      email: "test@gmail.com",
+      phoneNo: "09103456789",
+    },
+  ];
+  console.log(disData, "data for rider");
   return (
     <div>
       <SubHeader header="Park" hideBack inputText="Search park" />
@@ -99,28 +119,33 @@ export default function Park() {
             <div></div>
           </div>
           <div className="mt-[53px]">
-            {
-              Park.length >=1 ? <Table
-              columns={columns}
-              data={Park}
-              action={{
-                viewLabel: "View statement",
-                type: ["view"],
-              }}
-            /> : <div className="flex-col gap-7">
-            <div className="grid grid-cols-3 mt-[32px] gap-8">
-          <div className="col-span-1 ">
-          <CTA
-          text="Veiw achieve"
-          type="green"
-          onClick={() => router.push("#")}
-        /></div>
-        </div>
-        <div className="mt-[10rem] text-center">
-          <p className="text-xl capitalize">Sorry, No information yet, Add a Park to start</p>
-        </div>
-          </div>
-            }
+            {disData ? (
+              <Table
+                columns={columns}
+                data={disData}
+                action={{
+                  viewLabel: "View statement",
+                  type: ["view"],
+                }}
+              />
+            ) : (
+              <div className="flex-col gap-7">
+                <div className="grid grid-cols-3 mt-[32px] gap-8">
+                  <div className="col-span-1 ">
+                    <CTA
+                      text="Veiw achieve"
+                      type="green"
+                      onClick={() => router.push("#")}
+                    />
+                  </div>
+                </div>
+                <div className="mt-[10rem] text-center">
+                  <p className="text-xl capitalize">
+                    Sorry, No information yet, Add a Park to start
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </>
       ) : (
@@ -133,28 +158,33 @@ export default function Park() {
               icon={routes.PARK[2].icon}
             />
             <div className="mt-[53px]">
-              {
-                DispactchRider.length >=1 ? <Table
-                columns={disColumns}
-                data={DispactchRider}
-                action={{
-                  label: "",
-                  type: ["view", "edit", "delete"],
-                }}
-              /> :  <div className="flex-col gap-7">
-                <div className="grid grid-cols-3 mt-[32px] gap-8">
-              <div className="col-span-1 ">
-              <CTA
-              text="Veiw achieve"
-              type="green"
-              onClick={() => router.push("#")}
-            /></div>
-            </div>
-            <div className="mt-[10rem] text-center">
-              <p className="text-xl capitalize">Sorry, No information yet, Add a dispatch Rider to start</p>
-            </div>
-              </div>
-              }
+              {DispactchRider ? (
+                <Table
+                  columns={disColumns}
+                  data={disData}
+                  action={{
+                    label: "",
+                    type: ["view", "edit", "delete"],
+                  }}
+                />
+              ) : (
+                <div className="flex-col gap-7">
+                  <div className="grid grid-cols-3 mt-[32px] gap-8">
+                    <div className="col-span-1 ">
+                      <CTA
+                        text="Veiw achieve"
+                        type="green"
+                        onClick={() => router.push("#")}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-[10rem] text-center">
+                    <p className="text-xl capitalize">
+                      Sorry, No information yet, Add a dispatch Rider to start
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )

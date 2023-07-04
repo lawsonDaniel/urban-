@@ -5,20 +5,15 @@ import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import CheckBox from "@/app/components/checkbox";
-import { useAuth } from "@/common/hooks/useAuth";
 import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { parkOwnerData } from "@/common/data";
-import { AccountType, USER_TYPE } from "@/common/types";
-import authOBJ from "@/common/classes/auth.class";
 import countryList from "react-select-country-list";
 import Dropdown from "@/app/components/dropdown";
+import { setCookie } from "nookies";
 
 export default function IndividualInput() {
   const router = useRouter();
-
-  const { signUp, user } = useAuth();
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -52,38 +47,28 @@ export default function IndividualInput() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log("clicked");
-      setIsLoading(true);
       setIsLoading(true);
       if (country) {
-        authOBJ
-          .register(
-            {
-              accountCategory: "individual",
-              country: country,
-              firstName: values.firstName,
-              lastName: values.lastName,
-              parkGeneralName: values.parkGeneralName,
-              email: values.email,
-              phoneNumber: values.phoneNumber,
-              deviceToken: "uefuefue23",
-              password: values.password,
-              retypePassword: values.confirmPassword,
-            },
-            "parkOwner"
-          )
-          .then((res: any) => {
-            toast.success(res?.data.message);
-            //get user info
-            authOBJ.currentUser();
-            //redirect to add park
-            router.push(routes.ADD_PARK.path);
-            setIsLoading(false);
-          })
-          .catch((err: any) => {
-            toast.error(err?.response.data.message);
-            setIsLoading(false);
-          });
+        //save info for step one
+        let data = {
+          accountCategory: "individual",
+          country: country,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          parkGeneralName: values.parkGeneralName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          deviceToken: "uefuefue23",
+          password: values.password,
+          retypePassword: values.confirmPassword,
+        };
+        setCookie(null, "ParkOwner", JSON.stringify(data), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+        });
+        //redirect to add park
+        router.push(routes.ADD_PARK.path);
+        setIsLoading(false);
       } else {
         toast.error("fill all values");
         setIsLoading(false);
@@ -203,7 +188,7 @@ export default function IndividualInput() {
         disabled={isLoading}
         // disabled={!formik.values['userType'] ? true : undefined}
       >
-        {isLoading ? "loading" : "Sign Up"}
+        {isLoading ? "loading" : "Add Park"}
       </Button>
       <ToastContainer />
     </form>

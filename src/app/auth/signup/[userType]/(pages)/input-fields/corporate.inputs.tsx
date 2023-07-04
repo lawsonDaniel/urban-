@@ -14,6 +14,7 @@ import { AccountType, USER_TYPE } from "@/common/types";
 import authOBJ from "@/common/classes/auth.class";
 import countryList from "react-select-country-list";
 import Dropdown from "@/app/components/dropdown";
+import { setCookie } from "nookies";
 
 export default function CorporateInput() {
   const router = useRouter();
@@ -52,36 +53,27 @@ export default function CorporateInput() {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true);
       // alert(JSON.stringify(values, null, 2))
       if (country) {
-        authOBJ
-          .register(
-            {
-              accountCategory: "company",
-              country: country,
-              companyName: values.companyName,
-              companyAddress: values.companyAddress,
-              email: values.email,
-              phoneNumber: values.phoneNumber,
-              deviceToken: "uefuefue23",
-              password: values.password,
-              retypePassword: values.confirmPassword,
-            },
-            "parkOwner"
-          )
-          .then((res: any) => {
-            toast.success(res?.data.message);
-            //get user info
-            authOBJ.currentUser();
-            //redirect to add park
-            router.push(routes.ADD_PARK.path);
-            setIsLoading(false);
-          })
-          .catch((err: any) => {
-            toast.error(err?.response.data.message);
-            setIsLoading(false);
-          });
+        setIsLoading(true);
+        let data = {
+          accountCategory: "company",
+          country: country,
+          companyName: values.companyName,
+          companyAddress: values.companyAddress,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          deviceToken: "uefuefue23",
+          password: values.password,
+          retypePassword: values.confirmPassword,
+        };
+        setCookie(null, "ParkOwner", JSON.stringify(data), {
+          maxAge: 30 * 24 * 60 * 60,
+          path: "/",
+        });
+        //redirect to add park
+        router.push(routes.ADD_PARK.path);
+        setIsLoading(false);
       } else {
         toast.error("fill all values");
         setIsLoading(false);
@@ -139,8 +131,8 @@ export default function CorporateInput() {
       <Input
         label="Email Address"
         type="email"
-        id="email_"
-        name="email_"
+        id="email"
+        name="email"
         value={formik.values.email}
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
@@ -202,7 +194,7 @@ export default function CorporateInput() {
         disabled={isLoading || !country}
         // disabled={!formik.values['userType'] ? true : undefined}
       >
-        {isLoading ? "loading" : "Sign Up"}
+        {isLoading ? "loading" : "Add"}
       </Button>
       <ToastContainer />
     </form>

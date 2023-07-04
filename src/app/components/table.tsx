@@ -7,6 +7,7 @@ import { BsFileEarmark } from "react-icons/bs";
 import { AiOutlinePicture } from "react-icons/ai";
 import RequestDetails from "./manage/details";
 import { useRouter } from "next/navigation";
+import { TableDropDown } from "./tableDropDown";
 
 type Column = {
   id: string;
@@ -151,7 +152,8 @@ const Table = ({
                 <td className="whitespace-nowrap text-center text-sm font-medium">
                   {!noAction && (
                     <>
-                      {action?.type.includes("download") && (
+                      <TableDropDown action={action} />
+                      {/* {action?.type.includes("download") && (
                         <MenuDropdown
                           label="Menu"
                           items={menuItems}
@@ -193,7 +195,7 @@ const Table = ({
                       )}
                       {action?.type.includes("completed") && (
                         <p className="text-primary">Completed</p>
-                      )}
+                      )} */}
                     </>
                   )}
                 </td>
