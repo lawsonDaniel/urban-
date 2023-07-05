@@ -1,7 +1,7 @@
 import api from "../API";
 import { SetAllParkData } from "../hooks/token";
 
-class parkOBJ {
+class ParkOBJ {
   //create park
   create = async (data: any) => {
     try {
@@ -17,7 +17,7 @@ class parkOBJ {
       const response:any = await api.get("park")
       if(response?.data?.success){
         //store response in redux
-        return response
+        return response.data.data
       }else{
         throw new Error('something went wrong')
       }
@@ -25,8 +25,8 @@ class parkOBJ {
       throw err
     }
   }
-  //get one park 
-  getOne = async (id:string)=>{
+  //get one park
+  getPark = async (id:string)=>{
     try{
       const response:any = await api.get(`park/${id}`)
       if(response?.data?.success){
@@ -41,3 +41,5 @@ class parkOBJ {
   }
 }
 
+const parkOBJ = new ParkOBJ();
+export default parkOBJ;

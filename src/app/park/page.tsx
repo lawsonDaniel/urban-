@@ -14,19 +14,19 @@ import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
 import { GetUserType } from "@/common/hooks/token";
 import CTA from "../components/dashboard/comp/cta";
+import parkOBJ from "@/common/classes/park.class";
 
 export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
   const [Park, setPark] = useState<any[]>([]);
   const userData = useUser();
   const getAllDispatchOfficers = async () => {};
-  const getAllParks = async () => {};
 
   console.log(Park, "park");
   const router = useRouter();
   const columns = [
     {
-      id: "parkName",
+      id: "name",
       header: "Park Name",
     },
     {
@@ -82,7 +82,28 @@ export default function Park() {
       phoneNo: "09103456789",
     },
   ];
-  console.log(disData, "data for rider");
+  const [parks, setParks] = useState<any[]>([]);
+
+  const getAllParks = async () => {
+    try {
+      const res = await parkOBJ.getAllPark();
+      console.log("park ress::", res)
+      const parks: any[] = [];
+      // res.forEach((doc: DocumentSnapshot) => {
+      //   parks.push(doc.data());
+      // });
+      setParks(res);
+      // setMainParks(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    if (userData) {
+      getAllParks();
+    }
+  }, [userData]);
+
   return (
     <div>
       <SubHeader header="Park" hideBack inputText="Search park" />
@@ -119,10 +140,10 @@ export default function Park() {
             <div></div>
           </div>
           <div className="mt-[53px]">
-            {disData ? (
+            {parks ? (
               <Table
                 columns={columns}
-                data={disData}
+                data={parks}
                 action={{
                   viewLabel: "View statement",
                   type: ["view"],
