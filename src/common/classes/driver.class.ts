@@ -1,7 +1,8 @@
-import api from "../API"
+import api from "../API";
+
 
 class driverOBJ {
-   //create driver
+  //create driver
   create = async (data: any) => {
     try {
       const response:any = await api.post("driver",data);
@@ -10,14 +11,13 @@ class driverOBJ {
       throw err;
     }
   };
-
-   //get all driver
-   getAll = async () =>{
+  //get all driver
+  getAll = async () =>{
     try{
       const response:any = await api.get("driver")
       if(response?.data?.success){
         //store response in redux
-        return response
+        return response.data.data
       }else{
         throw new Error('something went wrong')
       }
@@ -25,10 +25,10 @@ class driverOBJ {
       throw err
     }
   }
-  //get one 
-  getOne = async (id:string)=>{
+  //get one driver
+  getdriver = async (id:string)=>{
     try{
-      const response:any = await api.get(`park/${id}`)
+      const response:any = await api.get(`driver/${id}`)
       if(response?.data?.success){
         //store response in redux
         return response
@@ -40,3 +40,6 @@ class driverOBJ {
     }
   }
 }
+
+const driverOBJs = new driverOBJ();
+export default driverOBJs;
