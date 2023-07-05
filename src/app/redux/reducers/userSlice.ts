@@ -9,20 +9,27 @@ const initialState: UserState = {
   value: null,
 }
 
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
     onLoginSuccess: (state, action: PayloadAction<string>) =>{
-        state.value = action.payload
+      return {
+        ...state,
+        user: action.payload,
+      };
     },
     onLogout: (state, action: PayloadAction<any>) => {
-      state.value = action.payload
+      return {
+        ...state,
+        user: action.payload,
+      };
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { onLoginSuccess,onLogout } = counterSlice.actions
+export const { onLoginSuccess,onLogout } = userSlice.actions
 
-export default counterSlice.reducer
+const userSliceReducer = userSlice.reducer
+export default userSliceReducer

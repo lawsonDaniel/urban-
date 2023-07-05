@@ -6,7 +6,7 @@ import ParkManager from "./components/dashboard/parkManager";
 import DispatchOfficer from "./components/dashboard/dispatchOfficer";
 import { useRouter } from "next/navigation";
 import { GetUserType } from "@/common/hooks/token";
-import { store } from "./store";
+import { store } from "./redux/store";
 import { Provider } from 'react-redux'
 
 export default function Home() {
