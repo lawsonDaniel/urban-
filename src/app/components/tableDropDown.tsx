@@ -1,15 +1,13 @@
 import { useState, useRef, useEffect } from "react";
+import { BiDotsVerticalRounded } from "react-icons/all";
 
 export const TableDropDown = ({ action }: any) => {
   const [openDropDown, setOpenDropDown] = useState(false);
-  const dropdownRef:any = useRef(null);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpenDropDown(false);
       }
     };
@@ -22,28 +20,28 @@ export const TableDropDown = ({ action }: any) => {
   }, []);
 
   return (
-    <>
-      <button onClick={() => setOpenDropDown(!openDropDown)}>
-        {!openDropDown ? "Open" : "Close"}
-      </button>
-      {openDropDown && (
-        <ul
-          ref={dropdownRef}
-          className="flex flex-col gap-2 absolute z-10 shadow-lg bg-white p-2 rounded-md w-[200px] lg:ml-[75px] md:ml-[auto] ml-[auto]"
-        >
-          {action?.type.map((a: any, i: number) => {
-            return (
-              <li
-                key={i}
-                className={`${a === "delete" ? "text-red-500" : "text-green-500"} capitalize text-md`}
-                onClick={() => setOpenDropDown(false)}
-              >
-                {a}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </>
+      <div style={{ position: "relative" }}>
+        <button onClick={() => setOpenDropDown(!openDropDown)}>
+          <BiDotsVerticalRounded />
+        </button>
+        {openDropDown && (
+            <ul
+                ref={dropdownRef}
+                className="flex flex-col gap-2 absolute z-10 shadow-lg bg-white p-2 rounded-md w-[200px] top-0 transform translate-y-8"
+            >
+              {action?.type.map((a: any, i: number) => {
+                return (
+                    <li
+                        key={i}
+                        className={`${a === "delete" ? "text-red-500" : "text-green-500"} capitalize text-md`}
+                        onClick={() => setOpenDropDown(false)}
+                    >
+                      {a}
+                    </li>
+                );
+              })}
+            </ul>
+        )}
+      </div>
   );
 };

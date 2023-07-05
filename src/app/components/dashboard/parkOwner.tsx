@@ -11,6 +11,7 @@ import { DocumentSnapshot } from "firebase/firestore";
 import { parseCookies } from "nookies";
 import { useUser } from "@/common/hooks/useUser";
 import { useAuth } from "@/common/hooks/useAuth";
+import parkOBJ from "@/common/classes/park.class";
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function ParkOwner({ user }: any) {
@@ -22,14 +23,14 @@ export default function ParkOwner({ user }: any) {
   const [mainParks, setMainParks] = useState<any[]>([]);
   const getAllParks = async () => {
     try {
-      const res = await getAll("parks", ["=="], ["ownerId"], [userData.uid]);
-
+      const res = await parkOBJ.getAllPark();
+      console.log("park ress::", res)
       const parks: any[] = [];
-      res.forEach((doc: DocumentSnapshot) => {
-        parks.push(doc.data());
-      });
-      setParks(parks);
-      setMainParks(parks);
+      // res.forEach((doc: DocumentSnapshot) => {
+      //   parks.push(doc.data());
+      // });
+      setParks(res);
+      setMainParks(res);
     } catch (err) {
       console.log(err);
     }
@@ -42,7 +43,7 @@ export default function ParkOwner({ user }: any) {
 
   const columns = [
     {
-      id: "parkName",
+      id: "name",
       header: "Park Name",
     },
     {
@@ -68,7 +69,7 @@ export default function ParkOwner({ user }: any) {
     mainParks.map((park) => {
       return {
         value: park.parkId,
-        label: park.parkName,
+        label: park.name,
       };
     });
 
