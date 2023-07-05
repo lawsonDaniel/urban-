@@ -3,11 +3,11 @@ import { BiDotsVerticalRounded } from "react-icons/all";
 
 export const TableDropDown = ({ action }: any) => {
   const [openDropDown, setOpenDropDown] = useState(false);
-  const dropdownRef = useRef(null);
+  const dropdownRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setOpenDropDown(false);
       }
     };
