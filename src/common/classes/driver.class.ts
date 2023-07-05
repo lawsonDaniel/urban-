@@ -1,20 +1,20 @@
-import api from "../API";
-import { SetAllParkData } from "../hooks/token";
+import api from "../API"
 
-class parkOBJ {
-  //create park
+class driverOBJ {
+   //create driver
   create = async (data: any) => {
     try {
-      const response:any = await api.post("park",data);
+      const response:any = await api.post("driver",data);
       return response
     } catch (err) {
       throw err;
     }
   };
-  //get all park
-  getAll = async () =>{
+
+   //get all driver
+   getAll = async () =>{
     try{
-      const response:any = await api.get("park")
+      const response:any = await api.get("driver")
       if(response?.data?.success){
         //store response in redux
         return response
@@ -25,7 +25,7 @@ class parkOBJ {
       throw err
     }
   }
-  //get one park 
+  //get one 
   getOne = async (id:string)=>{
     try{
       const response:any = await api.get(`park/${id}`)
@@ -40,4 +40,3 @@ class parkOBJ {
     }
   }
 }
-

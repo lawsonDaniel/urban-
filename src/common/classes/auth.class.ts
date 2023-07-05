@@ -43,6 +43,7 @@ class AUTH {
       const response: any = await api.get("auth/me");
       if (response?.data?.success) {
         SetUserData(JSON.stringify(response?.data?.data));
+        //save data in redux
       }
       console.log(response?.data, "from currently stored user");
     } catch (err) {}
