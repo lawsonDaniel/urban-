@@ -1,3 +1,6 @@
+import api from "@/common/API";
+import axios from "axios";
+
 export function activeLink(path: string, pathname: string) {
   const regex = new RegExp(`^${path}(\/.*)?$`);
   return regex.test(pathname);
@@ -17,5 +20,4 @@ export const convertCamelCaseToNormal = (camelCaseString: string) => {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 };
-
 

@@ -28,16 +28,16 @@ export default function AddPark() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
-  const auth = getAuth();
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log(uid, "user id");
-        setUser(uid);
-      }
-    });
-  }, [auth]);
+  // const auth = getAuth();
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       const uid = user.uid;
+  //       console.log(uid, "user id");
+  //       setUser(uid);
+  //     }
+  //   });
+  // }, [auth]);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -61,7 +61,9 @@ export default function AddPark() {
     },
   });
 
-  const [selectedPark, setSelectedPark] = useState();
+  const [selectedCity, setSelectedCity] = useState();
+  const [selectedState, setSelectedState] = useState();
+  const [selectedRegion, setSelectedRegion] = useState();
 
   return (
     <div>
@@ -84,13 +86,28 @@ export default function AddPark() {
           onSelect={(e: any) => setSelectedPark(e)}
           className="w-[510px]"
         />
+        */}
+        <Dropdown
+          options={options}
+          placeholder="State"
+          label="Select State"
+          onSelect={(e: any) => setSelectedState(e)}
+          className="w-[510px]"
+        />
+        <Dropdown
+          options={options}
+          placeholder="Region"
+          label="Select Region"
+          onSelect={(e: any) => setSelectedRegion(e)}
+          className="w-[510px]"
+        />
         <Dropdown
           options={options}
           placeholder="City"
           label="Select City"
-          onSelect={(e: any) => setSelectedPark(e)}
+          onSelect={(e: any) => setSelectedCity(e)}
           className="w-[510px]"
-        /> */}
+        />
         <Input
           label="Full Address"
           type="text"
@@ -101,18 +118,18 @@ export default function AddPark() {
           onBlur={formik.handleBlur}
           error={formik.touched.fullAddress && formik.errors.fullAddress}
         />
-        <Input
-          label="Park Phone Number"
-          type="phone"
-          id="parkPhoneNumber"
-          name="parkPhoneNumber"
-          value={formik.values.parkPhoneNumber}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={
-            formik.touched.parkPhoneNumber && formik.errors.parkPhoneNumber
-          }
-        />
+        {/*<Input*/}
+        {/*  label="Park Phone Number"*/}
+        {/*  type="phone"*/}
+        {/*  id="parkPhoneNumber"*/}
+        {/*  name="parkPhoneNumber"*/}
+        {/*  value={formik.values.parkPhoneNumber}*/}
+        {/*  onChange={formik.handleChange}*/}
+        {/*  onBlur={formik.handleBlur}*/}
+        {/*  error={*/}
+        {/*    formik.touched.parkPhoneNumber && formik.errors.parkPhoneNumber*/}
+        {/*  }*/}
+        {/*/>*/}
         <Button type="submit" className="w-full mt-10 text-white">
           {isLoading ? "loading" : "Add Park"}
         </Button>
