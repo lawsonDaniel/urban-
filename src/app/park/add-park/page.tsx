@@ -15,6 +15,9 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { GenerateID } from "@/common/utils";
+import parkOBJ from "@/common/classes/park.class";
+import { GetUserData } from "@/common/hooks/token";
+import { routes } from "@/common/routes";
 
 export default function AddPark() {
   const options = [
@@ -23,21 +26,21 @@ export default function AddPark() {
     { value: "van", label: "Van" },
     { value: "others", label: "Others" },
   ];
+  const parkRegion = [
+    { value: "NORTH_CENTRAL", label: "NORTH_CENTRAL" },
+    { value: "NORTH_EAST", label: "NORTH_EAST" },
+    { value: "SOUTH_EAST", label: "SOUTH_EAST" },
+    { value: "SOUTH_WEST", label: "SOUTH_WEST" },
+    { value: "SOUTH_SOUTH", label: "SOUTH_SOUTH" },
+  ];
   const [isOpen, setIsOpen] = useState(false);
   const [userId, setUser] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [selectedCity, setSelectedCity] = useState();
+  const [selectedState, setSelectedState] = useState();
+  const [selectedRegion, setSelectedRegion] = useState();
   const router = useRouter();
 
-  // const auth = getAuth();
-  // useEffect(() => {
-  //   onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       const uid = user.uid;
-  //       console.log(uid, "user id");
-  //       setUser(uid);
-  //     }
-  //   });
-  // }, [auth]);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -47,7 +50,7 @@ export default function AddPark() {
   };
 
   console.log("parkID::::", GenerateID("UB"));
-
+console.log(selectedState,selectedRegion,selectedCity,'values')
   const formik = useFormik({
     initialValues: {
       parkName: "",
@@ -56,14 +59,33 @@ export default function AddPark() {
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
-
-      // router.push(routes.ADD_PARK.path)
+      const data = {
+        name: values.parkName,
+        parkOwnerId: GetUserData().id,
+        state: selectedState,
+        city: selectedCity,
+        region: selectedRegion,
+        fullAddress: values.fullAddress,
+      };
+      if (selectedState && selectedRegion && selectedCity) {
+        console.log(data)
+        parkOBJ
+          .create(data)
+          .then((res) => {
+            toast.success(res?.data.message);
+            router.push("/park");
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err?.message);
+            toast.error(err?.response?.data?.message);
+            setIsLoading(false);
+          });
+      } else {
+        toast.error("fill all values");
+      }
     },
   });
-
-  const [selectedCity, setSelectedCity] = useState();
-  const [selectedState, setSelectedState] = useState();
-  const [selectedRegion, setSelectedRegion] = useState();
 
   return (
     <div>
@@ -95,7 +117,7 @@ export default function AddPark() {
           className="w-[510px]"
         />
         <Dropdown
-          options={options}
+          options={parkRegion}
           placeholder="Region"
           label="Select Region"
           onSelect={(e: any) => setSelectedRegion(e)}

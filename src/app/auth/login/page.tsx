@@ -17,6 +17,8 @@ import CheckBox from "@/app/components/checkbox";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
+import { onLoginSuccess } from "@/app/redux/reducers/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -35,7 +37,7 @@ const options = [
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState(options[0].value);
-  // const [user, setUser] = useLocalStorage<string>('userType', '')
+ const dispatch = useDispatch()
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -55,7 +57,6 @@ export default function Login() {
     emailOrUsername: string;
     password: string;
   }
-
   // Initialize the form using useFormik hook
   const formik = useFormik<LoginFormValues>({
     initialValues: {
@@ -75,9 +76,12 @@ export default function Login() {
           console.log(res, "data form login");
           toast.success(res?.data.message);
           //get user info
-          authOBJ.currentUser();
+          authOBJ.currentUser().then((res)=>{
+            //store user info in redux
+            dispatch(onLoginSuccess(res))
+          })
           //redirect to dashboard
-          router.push("/");
+           router.push("/");
 
           setIsLoading(false);
         })

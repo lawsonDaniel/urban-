@@ -87,11 +87,8 @@ export default function Park() {
   const getAllParks = async () => {
     try {
       const res = await parkOBJ.getAll();
-      console.log("park ress::", res)
+      console.log("park ress::", res);
       const parks: any[] = [];
-      // res.forEach((doc: DocumentSnapshot) => {
-      //   parks.push(doc.data());
-      // });
       setParks(res);
       // setMainParks(res);
     } catch (err) {

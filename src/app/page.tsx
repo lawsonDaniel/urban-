@@ -6,8 +6,7 @@ import ParkManager from "./components/dashboard/parkManager";
 import DispatchOfficer from "./components/dashboard/dispatchOfficer";
 import { useRouter } from "next/navigation";
 import { GetUserType } from "@/common/hooks/token";
-import { store } from "./redux/store";
-import { Provider } from 'react-redux'
+
 
 export default function Home() {
   const cookies = parseCookies();
@@ -24,16 +23,16 @@ export default function Home() {
   // },[])
 
   return (
-    <Provider store={store}>
-    <div className="">
-      {userType === "parkOwner" ? (
-        <ParkOwner user={storedUser} />
-      ) : userType === "dispatchOfficer" ? (
-        <DispatchOfficer user={storedUser} />
-      ) : (
-        userType === "parkManager" && <ParkManager user={storedUser} />
-      )}
-    </div>
-    </Provider>
+  
+      <div className="">
+        {userType === "parkOwner" ? (
+          <ParkOwner user={storedUser} />
+        ) : userType === "dispatchOfficer" ? (
+          <DispatchOfficer user={storedUser} />
+        ) : (
+          userType === "parkManager" && <ParkManager user={storedUser} />
+        )}
+      </div>
+    
   );
 }

@@ -1,41 +1,48 @@
 "use client";
-import { useState, useEffect } from "react";
-import Header from "../../(components)/header";
+import { useState } from "react";
 import { useFormik } from "formik";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { routes } from "@/common/routes";
-import Input from "@/app/components/input";
-import Dropdown from "@/app/components/dropdown";
-import Button from "@/app/components/button";
+import { useRouter } from "next/navigation";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
+
+import Header from "../../(components)/header";
+import Input from "@/app/components/input";
+import Dropdown from "@/app/components/dropdown";
+import Button from "@/app/components/button";
+import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
 
 export default function AddPark() {
-  const router: any = useRouter();
-  //get user info
-  let user = authOBJ.currentUser();
+  const router = useRouter();
+
   const cookies = parseCookies();
-  const ParkOwner: any = cookies.ParkOwner
-    ? JSON.parse(cookies.ParkOwner)
-    : null;
+  const ParkOwner = cookies.ParkOwner ? JSON.parse(cookies.ParkOwner) : null;
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [parkLocation, setParkLocation] = useState("");
+  const [parkCity, setParkCity] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
+
   const options = [
     { label: "Abuja", value: "abuja" },
     { label: "Lagos", value: "lagos" },
   ];
 
-  // const [user, setUser] = useLocalStorage<string>('userType', '')
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [parkLocation, setParkLocation] = useState<string>("");
+  const parkRegion = [
+    { value: "NORTH_CENTRAL", label: "NORTH_CENTRAL" },
+    { value: "NORTH_EAST", label: "NORTH_EAST" },
+    { value: "SOUTH_EAST", label: "SOUTH_EAST" },
+    { value: "SOUTH_WEST", label: "SOUTH_WEST" },
+    { value: "SOUTH_SOUTH", label: "SOUTH_SOUTH" },
+  ];
 
   const validationSchema = Yup.object({
     parkName: Yup.string().required("Name of park is required"),
     parkFullAddress: Yup.string().required("Full address is required"),
-    parkCity: Yup.string().required("Park city is required"),
-    parkRegion: Yup.string().required("Park region is required"),
   });
+
   const formik = useFormik({
     initialValues: {
       parkName: "",
@@ -47,32 +54,40 @@ export default function AddPark() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       values.parkState = parkLocation;
+      values.parkRegion = selectedRegion;
+      values.parkCity = parkCity;
       values = {
         ...values,
         ...ParkOwner,
       };
-      if (parkLocation) {
+
+      if (parkLocation && parkCity && selectedRegion) {
         setIsLoading(true);
+
         console.log(values, "from the park");
+
         authOBJ
           .register(values, "parkOwner")
-          .then((res: any) => {
+          .then((res) => {
             toast.success(res?.data.message);
-            //get user info
-            authOBJ.currentUser();
-            //delect stored value from cookie
+            authOBJ
+              .currentUser()
+              .then((res) => {
+                router.push("/");
+              })
+              .catch((err) => {
+                router.push("/auth/login");
+              });
             destroyCookie(null, "ParkOwner", { path: "/" });
-            //redirect to dashboard
-            router.push("/");
             setIsLoading(false);
           })
-          .catch((err: any) => {
+          .catch((err) => {
             console.log(err?.message);
             toast.error(err?.response?.data?.message);
             setIsLoading(false);
           });
       } else {
-        toast.error("fill all values");
+        toast.error("Fill all values");
         setIsLoading(false);
       }
     },
@@ -81,6 +96,7 @@ export default function AddPark() {
   return (
     <div>
       <Header heading="Add Park" desc="Add at least one park" step={2} />
+
       <div>
         <form className="mt-10" onSubmit={formik.handleSubmit}>
           <Input
@@ -92,37 +108,32 @@ export default function AddPark() {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.parkName && formik.errors.parkName}
-            // icon={<LockClosedIcon />}
           />
+
           <Dropdown
             options={options}
             placeholder="State"
             label="Select State"
-            onSelect={(e: any) => setParkLocation(e)}
+            onSelect={(e) => setParkLocation(e)}
             className="w-[510px]"
           />
-          <Input
-            label="park City"
-            type="text"
-            id="parkCity"
-            name="parkCity"
-            value={formik.values.parkCity}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.parkCity && formik.errors.parkCity}
-            // icon={<LockClosedIcon />}
+
+          <Dropdown
+            options={parkRegion}
+            placeholder="park city"
+            label="Select city"
+            onSelect={(e) => setParkCity(e)}
+            className="w-[510px]"
           />
-          <Input
-            label="park Region"
-            type="text"
-            id="parkRegion"
-            name="parkRegion"
-            value={formik.values.parkRegion}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.parkRegion && formik.errors.parkRegion}
-            // icon={<LockClosedIcon />}
+
+          <Dropdown
+            options={parkRegion}
+            placeholder="Region"
+            label="Select Region"
+            onSelect={(e) => setSelectedRegion(e)}
+            className="w-[510px]"
           />
+
           <Input
             label="Full Address"
             type="tel"
@@ -134,19 +145,18 @@ export default function AddPark() {
             error={
               formik.touched.parkFullAddress && formik.errors.parkFullAddress
             }
-            // icon={<LockClosedIcon />}
           />
 
           <Button
             type="submit"
             className="w-full mt-10 text-white"
             disabled={isLoading}
-            // disabled={!formik.errors ? true : false}
           >
-            {isLoading ? "loading" : "sign up"}
+            {isLoading ? "Loading" : "Sign up"}
           </Button>
         </form>
       </div>
+
       <ToastContainer />
     </div>
   );

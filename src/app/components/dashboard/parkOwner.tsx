@@ -24,7 +24,7 @@ export default function ParkOwner({ user }: any) {
   const getAllParks = async () => {
     try {
       const res = await parkOBJ.getAll();
-      console.log("park ress::", res)
+      console.log("park ress::", res);
       const parks: any[] = [];
       // res.forEach((doc: DocumentSnapshot) => {
       //   parks.push(doc.data());

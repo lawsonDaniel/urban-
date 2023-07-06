@@ -1,5 +1,6 @@
 import "./globals.css";
 import Layout from "@/app/layouts";
+import { Providers } from "./redux/provider";
 
 export const metadata = {
   title: "Urban",
@@ -11,5 +12,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <Layout>{children}</Layout>;
+  return (
+  <Providers>
+    <Layout>{children}</Layout>
+  </Providers>
+  );
 }

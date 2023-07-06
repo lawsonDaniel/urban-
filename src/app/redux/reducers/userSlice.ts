@@ -1,19 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+"use client";
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserState {
-  value: any
+  value: any;
 }
 
 const initialState: UserState = {
   value: null,
-}
+};
 
 export const userSlice = createSlice({
-  name: 'user',
+  name: "user",
   initialState,
   reducers: {
-    onLoginSuccess: (state, action: PayloadAction<string>) =>{
+    onLoginSuccess: (state, action: PayloadAction<string>) => {
       return {
         ...state,
         user: action.payload,
@@ -26,10 +27,10 @@ export const userSlice = createSlice({
       };
     },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { onLoginSuccess,onLogout } = userSlice.actions
+export const { onLoginSuccess, onLogout } = userSlice.actions;
 
-const userSliceReducer = userSlice.reducer
-export default userSliceReducer
+const userSliceReducer = userSlice.reducer;
+export default userSliceReducer;
