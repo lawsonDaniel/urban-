@@ -17,3 +17,5 @@ export const convertCamelCaseToNormal = (camelCaseString: string) => {
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 };
+
+
