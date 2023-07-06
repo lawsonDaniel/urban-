@@ -23,7 +23,7 @@ export default function ParkOwner({ user }: any) {
   const [mainParks, setMainParks] = useState<any[]>([]);
   const getAllParks = async () => {
     try {
-      const res = await parkOBJ.getAllPark();
+      const res = await parkOBJ.getAll();
       console.log("park ress::", res)
       const parks: any[] = [];
       // res.forEach((doc: DocumentSnapshot) => {
