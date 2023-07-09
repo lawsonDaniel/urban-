@@ -22,7 +22,6 @@ export default function ParkManager({ user }: any) {
   const userData = GetUserData();
   const park = GetUserData();
   const [copySuccess, setCopySuccess] = useState(false);
-
   const handleCopyClick = () => {
     const textField = document.createElement("textarea");
     textField.innerText = userData?.urbanId;
@@ -32,7 +31,6 @@ export default function ParkManager({ user }: any) {
     textField.remove();
     setCopySuccess(true);
   };
-
   useEffect(() => {
     let timer: string | number | NodeJS.Timeout | undefined;
     if (copySuccess) {
@@ -45,7 +43,6 @@ export default function ParkManager({ user }: any) {
     };
   }, [copySuccess]);
 
-  console.log(park, "park info");
   const router = useRouter();
   const columns = [
     {

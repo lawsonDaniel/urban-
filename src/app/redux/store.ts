@@ -5,7 +5,10 @@ import persistedReducer from "./rootReducer";
 
 export const store = configureStore({
   reducer: persistedReducer,
+  devTools: process.env.NODE_ENV !== "production",
+  // Add any additional configuration options here
 });
+
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

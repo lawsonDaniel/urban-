@@ -31,11 +31,11 @@ export default function AddPark() {
   ];
 
   const parkRegion = [
-    { value: "NORTH_CENTRAL", label: "NORTH_CENTRAL" },
-    { value: "NORTH_EAST", label: "NORTH_EAST" },
-    { value: "SOUTH_EAST", label: "SOUTH_EAST" },
-    { value: "SOUTH_WEST", label: "SOUTH_WEST" },
-    { value: "SOUTH_SOUTH", label: "SOUTH_SOUTH" },
+    { value: "NORTH_CENTRAL", label: "NORTH CENTRAL" },
+    { value: "NORTH_EAST", label: "NORTH EAST" },
+    { value: "SOUTH_EAST", label: "SOUTH EAST" },
+    { value: "SOUTH_WEST", label: "SOUTH WEST" },
+    { value: "SOUTH_SOUTH", label: "SOUTH SOUTH" },
   ];
 
   const validationSchema = Yup.object({

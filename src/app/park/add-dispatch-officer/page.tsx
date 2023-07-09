@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import OwnerForm from "./(comp)/ownerForm";
 import ManagerForm from "./(comp)/managerForm";
 import { parseCookies } from "nookies";
-import { useUserType } from "@/common/hooks/useUserType";
-
+import { GetUserType } from "@/common/hooks/token";
 export default function AddDispatchOfficer() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,8 +18,8 @@ export default function AddDispatchOfficer() {
   };
 
   const [selectedPark, setSelectedPark] = useState();
-  const userType = useUserType();
-  // console.log(userType)
+  const userType = GetUserType();
+   console.log(userType,'user type')
 
   return (
     <div>

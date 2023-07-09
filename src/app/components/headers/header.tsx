@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
 import { GetUserData } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
 
 export default function Header() {
   //get user info

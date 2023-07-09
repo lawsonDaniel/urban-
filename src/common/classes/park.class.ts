@@ -39,6 +39,16 @@ class ParkOBJ {
       throw err;
     }
   };
+  //create manager
+  parkManager = async (data: any) => {
+    try {
+      const response: any = await api.post("park/add-manager", data);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
+  
 }
 
 const parkOBJ = new ParkOBJ();

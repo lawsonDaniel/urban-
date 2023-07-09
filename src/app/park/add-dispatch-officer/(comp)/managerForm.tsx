@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useUser } from "@/common/hooks/useUser";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import authOBJ from "@/common/classes/auth.class";
 
 export default function ManagerForm({ openModal }: { openModal: () => void }) {
   const options = [
@@ -32,7 +33,28 @@ export default function ManagerForm({ openModal }: { openModal: () => void }) {
       confirmPassword: "",
     },
     onSubmit: async (values: any) => {
-      setIsLoading(true);
+      setIsLoading(true)
+      const data = {
+        dispatcherName: values.dispatcherName,
+        email: values.email,
+        phoneNumber:values.phoneNumber,
+        deviceToken:"uefuefue23",
+        password:values.password,
+        retypePassword: values.confirmPassword
+    }
+    authOBJ
+    .register(data,"dispatchOfficer")
+    .then((res: any) => {
+      console.log(res, "data form dispatch");
+      toast.success(res?.data.message)
+      //redirect to park
+       router.push("/park");
+      setIsLoading(false);
+    })
+    .catch((err: any) => {
+      toast.error(err?.response?.data?.message);
+      setIsLoading(false);
+    });
     },
   });
 
@@ -104,7 +126,7 @@ export default function ManagerForm({ openModal }: { openModal: () => void }) {
         <Button
           type="submit"
           className="w-full mt-10 text-white"
-          // disabled={!formik.values['userType'] ? true : undefined}
+         //disabled={isLoading && formik.errors}
         >
           {isLoading ? "loading" : "Add Dispatch officer"}
         </Button>

@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { USER_TYPE } from "@/common/types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import authOBJ from "@/common/classes/auth.class";
 
 export default function OwnerForm({ openModal }: { openModal: () => void }) {
   const options = [
@@ -37,9 +38,28 @@ export default function OwnerForm({ openModal }: { openModal: () => void }) {
       confirmPassword: "",
     },
     onSubmit: async (values: any) => {
-      setIsLoading(true);
-
-      // router.push(routes.ADD_PARK.path)
+      setIsLoading(true)
+      const data = {
+        dispatcherName: values.dispatcherName,
+        email: values.email,
+        phoneNumber:values.phoneNumber,
+        deviceToken:"uefuefue23",
+        password:values.password,
+        retypePassword: values.confirmPassword
+    }
+    authOBJ
+    .register(data,"dispatchOfficer")
+    .then((res: any) => {
+      console.log(res, "data form dispatch");
+      toast.success(res?.data.message)
+      //redirect to park
+       router.push("/park");
+      setIsLoading(false);
+    })
+    .catch((err: any) => {
+      toast.error(err?.response?.data?.message);
+      setIsLoading(false);
+    });
     },
   });
 

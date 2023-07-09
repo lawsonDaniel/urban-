@@ -15,6 +15,8 @@ import { useUser } from "@/common/hooks/useUser";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import parkOBJ from "@/common/classes/park.class";
+import { CgFormatStrike } from "react-icons/cg";
 
 export default function AddParkManager() {
   const userData = useUser();
@@ -22,19 +24,26 @@ export default function AddParkManager() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const getAllParks = async () => {};
-  useEffect(() => {
-    if (userData) {
-      getAllParks();
+  const getAllParks = async () => {
+    try {
+      const res = await parkOBJ.getAll();
+      console.log("park ress::", res);
+      const parks: any[] = [];
+      setParks(res);
+      // setMainParks(res);
+    } catch (err) {
+      console.log(err);
     }
-  }, [getAll, userData]);
-
+  };
+useEffect(()=>{
+  getAllParks()
+},[])
   const options =
     parks &&
     parks.map((park) => {
       return {
-        value: park.parkId,
-        label: park.parkName,
+        value: park.id,
+        label: park.name,
       };
     });
 
@@ -53,16 +62,33 @@ export default function AddParkManager() {
   const formik = useFormik({
     initialValues: {
       parkManagerId: "",
-      park: "",
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
       // router.push(routes.ADD_PARK.path)
-
-      setIsLoading(false);
+      console.log(values.parkManagerId ,"selectedparkId")
+      if(selectedPark){
+        parkOBJ.parkManager({
+          parkId: selectedPark,
+          parkManagerId: values.parkManagerId 
+      }).then((res: any) => {
+        toast.success(res?.data.message);
+        //redirect to dashboard
+         router.push("/park")
+        setIsLoading(false);
+      })
+      .catch((err: any) => {
+        toast.error(err?.response?.data?.message);
+        setIsLoading(false);
+      });
+      }else{
+        toast('fill all fields')
+        setIsLoading(false);
+      }
+     
     },
   });
-
+{formik.errors,'error form'}
   return (
     <div>
       <SubHeader header="Add Park Manager" hideRight />
@@ -83,7 +109,7 @@ export default function AddParkManager() {
           label="Select Park"
           onSelect={(e: any) => setSelectedPark(e)}
           className="w-[510px]"
-          error={formik.touched.park && formik.errors.park}
+          
         />
         <Button
           type="submit"

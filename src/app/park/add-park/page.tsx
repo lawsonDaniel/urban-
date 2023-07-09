@@ -21,17 +21,15 @@ import { routes } from "@/common/routes";
 
 export default function AddPark() {
   const options = [
-    { value: "bus", label: "Bus" },
-    { value: "sedan", label: "Sedan" },
-    { value: "van", label: "Van" },
-    { value: "others", label: "Others" },
+    { label: "Abuja", value: "abuja" },
+    { label: "Lagos", value: "lagos" },
   ];
   const parkRegion = [
-    { value: "NORTH_CENTRAL", label: "NORTH_CENTRAL" },
-    { value: "NORTH_EAST", label: "NORTH_EAST" },
-    { value: "SOUTH_EAST", label: "SOUTH_EAST" },
-    { value: "SOUTH_WEST", label: "SOUTH_WEST" },
-    { value: "SOUTH_SOUTH", label: "SOUTH_SOUTH" },
+    { value: "NORTH_CENTRAL", label: "NORTH CENTRAL" },
+    { value: "NORTH_EAST", label: "NORTH EAST" },
+    { value: "SOUTH_EAST", label: "SOUTH EAST" },
+    { value: "SOUTH_WEST", label: "SOUTH WEST" },
+    { value: "SOUTH_SOUTH", label: "SOUTH SOUTH" },
   ];
   const [isOpen, setIsOpen] = useState(false);
   const [userId, setUser] = useState<any>();
@@ -83,6 +81,7 @@ console.log(selectedState,selectedRegion,selectedCity,'values')
           });
       } else {
         toast.error("fill all values");
+        setIsLoading(false);
       }
     },
   });

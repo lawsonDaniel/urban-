@@ -25,10 +25,12 @@ class AUTH {
     try {
       const response: any = await api.post(`auth/register/${user}`, data);
       //store jwt
-      if (data?.userType) {
-        SetUserType(data?.userType);
-      } else {
-        SetUserType("parkOwner");
+      if(user != "dispatchOfficer" ){
+        if (data?.userType) {
+          SetUserType(data?.userType);
+        } else {
+          SetUserType("parkOwner");
+        }
       }
       StoreAuthToken(response?.data?.data?.token);
       return response;
@@ -56,6 +58,8 @@ class AUTH {
   logOut = () => {
     RemoveAllToken();
   };
+
+  
 }
 
 const authOBJ = new AUTH();
