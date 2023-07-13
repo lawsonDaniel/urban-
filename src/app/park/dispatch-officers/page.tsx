@@ -9,6 +9,7 @@ import { getAll } from "@/common/hooks/fireStore";
 import { USER_TYPE } from "@/common/types";
 import { DocumentSnapshot } from "firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
+import dispatch from "@/common/classes/dispatch.class";
 
 export default function DispatchOfficers() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
@@ -21,7 +22,7 @@ export default function DispatchOfficers() {
   console.log(DispactchRider, "riders");
   const columns = [
     {
-      id: "dispatcherName",
+      id: "fullName",
       header: "Dispatch Name",
     },
     {
@@ -33,6 +34,20 @@ export default function DispatchOfficers() {
       header: "Phone No",
     },
   ];
+  const getAllRiders = async()=>{
+    try{
+      const res = await dispatch.getAll();
+      console.log("rider ress::", res);
+      setDispatchRider(res)
+      
+    }catch(err){
+      console.error(err)
+    }
+  }
+
+  useEffect(()=>{
+    getAllRiders()
+  },[])
 
   return (
     <main>

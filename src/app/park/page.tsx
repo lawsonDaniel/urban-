@@ -15,6 +15,7 @@ import { useUser } from "@/common/hooks/useUser";
 import { GetUserType } from "@/common/hooks/token";
 import CTA from "../components/dashboard/comp/cta";
 import parkOBJ from "@/common/classes/park.class";
+import dispatch from "@/common/classes/dispatch.class";
 
 export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
@@ -48,7 +49,7 @@ export default function Park() {
   ];
   const disColumns = [
     {
-      id: "dispatcherName",
+      id: "fullName",
       header: "Dispatch Name",
     },
     {
@@ -62,26 +63,7 @@ export default function Park() {
   ];
 
   const userType = GetUserType();
-  const disData = [
-    {
-      id: 1,
-      dispatchName: "John Doe",
-      email: "test@gmail.com",
-      phoneNo: "09103456789",
-    },
-    {
-      id: 2,
-      dispatchName: "oshodi Doe",
-      email: "test@gmail.com",
-      phoneNo: "09103456789",
-    },
-    {
-      id: 3,
-      dispatchName: "oshodi Doe",
-      email: "test@gmail.com",
-      phoneNo: "09103456789",
-    },
-  ];
+  
   const [parks, setParks] = useState<any[]>([]);
 
   const getAllParks = async () => {
@@ -95,12 +77,25 @@ export default function Park() {
       console.log(err);
     }
   };
+  const getAllRiders = async()=>{
+    try{
+      const res = await dispatch.getAll();
+      console.log("rider ress::", res);
+      setDispatchRider(res)
+      
+    }catch(err){
+      console.error(err)
+    }
+  }
   useEffect(() => {
     if (userData) {
       getAllParks();
     }
   }, [userData]);
 
+  useEffect(()=>{
+    getAllRiders()
+  },[])
   return (
     <div>
       <SubHeader header="Park" hideBack inputText="Search park" />
@@ -179,7 +174,7 @@ export default function Park() {
               {DispactchRider ? (
                 <Table
                   columns={disColumns}
-                  data={disData}
+                  data={DispactchRider}
                   action={{
                     label: "",
                     type: ["view", "edit", "delete"],
