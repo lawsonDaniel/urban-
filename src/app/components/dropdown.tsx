@@ -45,7 +45,7 @@ function Dropdown({
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute left-0 mt-2 w-full  overflow-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+        <div className="origin-top-right absolute left-0 mt-2 w-full max-h-[200px] overflow-auto rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
           <div
             className="py-1"
             role="menu"

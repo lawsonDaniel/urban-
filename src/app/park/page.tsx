@@ -20,6 +20,7 @@ import dispatch from "@/common/classes/dispatch.class";
 export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
   const [Park, setPark] = useState<any[]>([]);
+  const [inputField,setInputField] = useState<any>('')
   const userData = useUser();
   const getAllDispatchOfficers = async () => {};
 
@@ -66,39 +67,42 @@ export default function Park() {
   
   const [parks, setParks] = useState<any[]>([]);
 
-  const getAllParks = async () => {
-    try {
-      const res = await parkOBJ.getAll();
-      console.log("park ress::", res);
-      const parks: any[] = [];
-      setParks(res);
-      // setMainParks(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  
+  
   const getAllRiders = async()=>{
     try{
       const res = await dispatch.getAll();
       console.log("rider ress::", res);
       setDispatchRider(res)
-      
+      if(inputField){
+        console.log(inputField,DispactchRider,'dispatinfo')
+      }
     }catch(err){
       console.error(err)
     }
   }
   useEffect(() => {
     if (userData) {
-      getAllParks();
+      parkOBJ.getAll().then((res)=>{
+        console.log("park ress::", res);
+      // Restrict the number of parks to 10
+      const limitedParks = res.slice(0, 10);
+      setParks(limitedParks);
+      // if(inputField){
+      //   console.log(inputField,Park,'info')
+      // }
+      }).catch((err)=>{
+        console.log(err)
+      })
     }
-  }, [userData]);
+  }, [Park, inputField,  userData]);
 
   useEffect(()=>{
     getAllRiders()
   },[])
   return (
     <div>
-      <SubHeader header="Park" hideBack inputText="Search park" />
+      <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField}/>
       {userType === USER_TYPE.PARK_OWNER ? (
         <>
           <div className="grid grid-cols-3 gap-4 mt-8">

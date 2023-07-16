@@ -20,6 +20,8 @@ export default function SubHeader({
   showButton,
   buttonText,
   setSelectedOption,
+  inputField,
+  setInputField
 }: {
   header: string;
   inputContainerStyle?: string;
@@ -34,6 +36,8 @@ export default function SubHeader({
   boxType?: "input" | "dropdown";
   dropDownOptions?: any;
   setSelectedOption?: any;
+  setInputField?:any;
+  inputField?:any
 }) {
   const [search, setSearch] = useState("");
 
@@ -60,8 +64,8 @@ export default function SubHeader({
                 type={"text"}
                 id="search"
                 name="search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                value={inputField}
+                onChange={(e) => setInputField(e.target.value)}
                 // onBlur={formik.handleBlur}
                 // error={formik.touched.password && formik.errors.password}
               />
