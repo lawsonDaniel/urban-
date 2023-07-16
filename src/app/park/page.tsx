@@ -68,23 +68,9 @@ export default function Park() {
   const [parks, setParks] = useState<any[]>([]);
 
   
-  
-  const getAllRiders = async()=>{
-    try{
-      const res = await dispatch.getAll();
-      console.log("rider ress::", res);
-      setDispatchRider(res)
-      if(inputField){
-        console.log(inputField,DispactchRider,'dispatinfo')
-      }
-    }catch(err){
-      console.error(err)
-    }
-  }
   useEffect(() => {
     if (userData) {
       parkOBJ.getAll().then((res)=>{
-        console.log("park ress::", res);
       // Restrict the number of parks to 10
       const limitedParks = res.slice(0, 10);
       setParks(limitedParks);
@@ -98,8 +84,22 @@ export default function Park() {
   }, [Park, inputField,  userData]);
 
   useEffect(()=>{
-    getAllRiders()
-  },[])
+    dispatch.getAll().then((res)=>{
+      console.log("rider ress::", res);
+      const limitedRider = res.slice(0, 10);
+      setDispatchRider(limitedRider)
+      if (inputField.trim().length >= 1) {
+        const searchFilter = res.filter((rider:any) =>
+          rider.fullName.toLowerCase().includes(inputField.toLowerCase())
+        );
+        setDispatchRider(searchFilter)
+      } else {
+        setDispatchRider(limitedRider);
+      }
+    }).catch((err)=>{
+      console.log(err,'err from dispatch')
+    })
+  },[DispactchRider, inputField])
   return (
     <div>
       <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField}/>
