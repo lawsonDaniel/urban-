@@ -74,6 +74,14 @@ export default function Park() {
       // Restrict the number of parks to 10
       const limitedParks = res.slice(0, 10);
       setParks(limitedParks);
+      if (inputField.trim().length >= 1) {
+        const searchFilter = res.filter((rider:any) =>
+          rider.fullName.toLowerCase().includes(inputField.toLowerCase())
+        );
+        setDispatchRider(searchFilter)
+      } else {
+        setDispatchRider(limitedParks);
+      }
       // if(inputField){
       //   console.log(inputField,Park,'info')
       // }

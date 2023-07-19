@@ -21,7 +21,12 @@ export const TableDropDown = ({ action }: any) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
+//function to handle click 
+const onFunctionClick = (a:string)=>{
+  console.log(a,'clicked function')
+  setOpenDropDown(false)
+  //call function to triger event here
+}
   return (
     <div style={{ position: "relative" }}>
       <button onClick={() => setOpenDropDown(!openDropDown)}>
@@ -36,10 +41,13 @@ export const TableDropDown = ({ action }: any) => {
             return (
               <li
                 key={i}
+                style={{
+                  cursor:'pointer'
+                }}
                 className={`${
                   a === "delete" ? "text-red-500" : "text-green-500"
                 } capitalize text-md`}
-                onClick={() => setOpenDropDown(false)}
+                onClick={() => onFunctionClick(a)}
               >
                 {a}
               </li>

@@ -43,6 +43,7 @@ type Props = {
   type?: string;
   path?: string;
   modalBody?: React.ReactNode;
+  
 };
 
 const Table = ({
@@ -153,49 +154,7 @@ const Table = ({
                   {!noAction && (
                     <>
                       <TableDropDown action={action} />
-                      {/* {action?.type.includes("download") && (
-                        <MenuDropdown
-                          label="Menu"
-                          items={menuItems}
-                          customButton={
-                            <button
-                              className="text-primary  hover:text-primary_dark border border-primary text-xs  rounded-full px-10 py-1"
-                              onClick={() => handleSelect(row)}
-                            >
-                              {action?.label}
-                            </button>
-                          }
-                        />
-                      )}
-                      {action?.type.includes("view") && (
-                        <button
-                          className="text-primary  hover:text-primary_dark border border-primary text-xs  rounded-full px-10 py-1"
-                          onClick={() => handleSelect(row)}
-                        >
-                          {action?.viewLabel || "View"}
-                        </button>
-                      )}
-
-                      {action?.type.includes("edit") && (
-                        <button
-                          className="text-primary_blue ml-2  hover:text-primary_dark border border-primary_blue text-xs  rounded-full px-10 py-1"
-                          onClick={() => handleSelect(row)}
-                        >
-                          {action?.editLabel || "Edit"}
-                        </button>
-                      )}
-
-                      {action?.type.includes("delete") && (
-                        <button
-                          className="text-primary_red ml-2  hover:text-primary_dark border border-primary_red text-xs  rounded-full px-10 py-1"
-                          onClick={() => handleSelect(row)}
-                        >
-                          {action?.deleteLabel || "Delete"}
-                        </button>
-                      )}
-                      {action?.type.includes("completed") && (
-                        <p className="text-primary">Completed</p>
-                      )} */}
+                     
                     </>
                   )}
                 </td>
