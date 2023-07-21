@@ -2,13 +2,17 @@ import { useState } from "react";
 
 interface SwitchProps {
   label: string;
+  checked?: any;
+  setchecked?: any
 }
 
-const Switch = ({ label }: SwitchProps) => {
+const Switch = ({ label,checked,setchecked }: SwitchProps) => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const handleToggle = () => {
     setIsChecked(!isChecked);
+    setchecked && setchecked(!checked)
+    
   };
 
   return (
@@ -17,7 +21,7 @@ const Switch = ({ label }: SwitchProps) => {
       <input
         type="checkbox"
         className="absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-full"
-        checked={isChecked}
+        checked={!checked ? isChecked : checked}
         onChange={handleToggle}
       />
       <span

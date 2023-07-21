@@ -7,13 +7,13 @@ import Input from "@/app/components/input";
 import Button from "@/app/components/button";
 import Switch from "@/app/components/switch";
 import * as Yup from "yup";
-import { saveTrip } from "@/common/hooks/fireStore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getAll } from "@/common/hooks/fireStore";
-import { DocumentSnapshot } from "@firebase/firestore";
 import { useRouter } from "next/navigation";
 import { parseCookies, setCookie } from "nookies";
+import parkOBJ from "@/common/classes/park.class";
+import { useUserInfo } from "@/common/hooks/getUserInfo";
 
 export default function SetTrip() {
   const lugage = [
@@ -26,31 +26,37 @@ export default function SetTrip() {
   ];
 
   const cookies = parseCookies();
-
   const stored = cookies.trip ? JSON.parse(cookies.trip) : null;
 
-  const [selectedPark, setSelectedPark] = useState();
-  const [selectedLuggage, setSelectedLuggage] = useState();
+  const [selectedPark, setSelectedPark] = useState('');
+  const [selectedLuggage, setSelectedLuggage] = useState(stored?.lugage || '');
   const [selectedCar, setSelectedCar] = useState();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [Park, setPark] = useState<any[]>([]);
+  const [isPublic,setIsPublic] = useState<boolean>(false)
+
   const router = useRouter();
-  const getAllParks = async () => {};
+  const getAllParks = async () => {
+    parkOBJ.getAll().then((res)=>{
+      setPark(res)
+    })
+  };
 
   useEffect(() => {
     getAllParks();
   }, [getAll]);
   const parkOption = Park.map((a: any) => {
     return {
-      value: a?.parkName,
-      label: a?.parkName,
+      value: a?.id,
+      label: a?.name,
     };
   });
-
+  const userData:any = useUserInfo()
   const validationSchema = Yup.object().shape({
     departureTime: Yup.string().required("Please enter the departure time."),
     departureCity: Yup.string().required("Please enter the departure city."),
-    tripCode: Yup.string().required("Please enter the trip code."),
+    arivalCity: Yup.string().required("Please enter the arival city."),
+    // tripCode: Yup.string().required("Please enter the trip code."),
     fare: Yup.string().required("Please enter the fare."),
     date: Yup.string().required("Please enter the date."),
     priceKg: Yup.string(),
@@ -58,9 +64,10 @@ export default function SetTrip() {
 
   const formik = useFormik({
     initialValues: {
-      departureTime: stored?.departureTime || "",
-      departureCity: stored?.departureCity || "",
-      tripCode: stored?.tripCode || "",
+      departureTime: stored?.time || "",
+      departureCity: stored?.startLocation || "",
+      arivalCity: stored?.endLocation || "",
+      // tripCode: stored?.tripCode || "",
       fare: stored?.fare || "",
       date: stored?.date || "",
       priceKg: stored?.priceKg || "",
@@ -68,39 +75,29 @@ export default function SetTrip() {
     validationSchema,
     onSubmit: async (values: any) => {
       if (selectedLuggage && selectedPark) {
-        values = {
-          departurePark: selectedPark,
-          luggageType: selectedLuggage,
-          postingType: "",
-          Driver: "",
-          requestStatus: "pending",
-          vehicleType: selectedCar,
-          ...values,
-        };
-        setCookie(null, "trip", JSON.stringify(values), {
+        const currentDate = new Date()
+        const data = {
+          parkId: userData?.id,
+          startLocation: values.departureCity,
+           endLocation: values.arivalCity,
+           fare:values.fare,
+           lugage:selectedLuggage,
+           isPublic: isPublic,
+           date:values.date,
+           time:values.departureTime,
+           priceKg:values.priceKg
+        }
+        console.log(data,'data')
+        setCookie(null, "trip", JSON.stringify(data), {
           maxAge: 30 * 24 * 60 * 60,
           path: "/",
         });
         router.push("/manage-trips/set-trip/preview");
-        // setIsLoading(true);
-        // try {
-        // const res = await saveTrip(values);
-        // console.log(res, "trip");
-        // toast.success("Trip succesfully added");
-        // router.push("/manage-trips/");
-        // setIsLoading(false);
-        // } catch (error: any) {
-        // console.error(error, "trip");
-        // // @ts-ignore
-        // toast.error(error);
-        // setIsLoading(false);
-        // }
+       
       } else {
         toast.error("fill all the form fields");
       }
-      // router.push(routes.ADD_PARK.path)
-
-      // openModal()
+      
     },
   });
   console.log(formik.errors, "error");
@@ -109,6 +106,10 @@ export default function SetTrip() {
   const handleToggle = (isChecked: boolean) => {
     setIsToggled(isChecked);
   };
+
+  console.log(useUserInfo(),'user info from the user')
+
+
 
   return (
     <>
@@ -159,6 +160,19 @@ export default function SetTrip() {
             }
           />
           <Input
+            label="Arival City"
+            type="text"
+            id="arivalCity"
+            name="arivalCity"
+            value={formik.values.arivalCity}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              (formik.touched.arivalCity &&
+                formik.errors.arivalCity) as boolean
+            }
+          />
+          {/* <Input
             label="Trip Code"
             type="text"
             id="tripCode"
@@ -169,7 +183,7 @@ export default function SetTrip() {
             error={
               (formik.touched.tripCode && formik.errors.tripCode) as boolean
             }
-          />
+          /> */}
           <Input
             label="Fare"
             type="text"
@@ -180,13 +194,13 @@ export default function SetTrip() {
             onBlur={formik.handleBlur}
             error={(formik.touched.fare && formik.errors.fare) as boolean}
           />
-          <Dropdown
+          {/* <Dropdown
             options={carType}
             placeholder="Type of Vehicle"
             label="Type of Vehicle"
             onSelect={(e: any) => setSelectedCar(e)}
             className="w-[510px]"
-          />
+          /> */}
           {/*<Input*/}
           {/*  label="Type of Vehicle"*/}
           {/*  type="text"*/}
@@ -199,10 +213,10 @@ export default function SetTrip() {
           {/*    formik.touched.typeOfVechicle && formik.errors.typeOfVechicle*/}
           {/*  }*/}
           {/*/>*/}
-          <div className="flex justify-between mt-2">
+          {/* <div className="flex justify-between mt-2">
             <p className="text-sm text-gray-500">Number of seats</p>
             <p className="text-sm text-gray-500">15</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="flex  mt-2">
@@ -234,7 +248,7 @@ export default function SetTrip() {
         <div className=" w-[510px]">
           <div className="flex justify-between mt-10 w-[510px]">
             <p className="text-sm text-gray-500">Posting Type</p>
-            <Switch label="Public" />
+            <Switch label="Public" checked={isPublic} setchecked={setIsPublic}/>
           </div>
           <ToastContainer />
           <Button

@@ -2,9 +2,9 @@ import api from "../API";
 
 class dispatchOBJ {
      //get all driver
-  getAll = async () => {
+  getAll = async (pageNu?:Number) => {
     try {
-      const response: any = await api.get("dispatch-officer");
+      const response: any = await api.get(`dispatch-officer?Page=${pageNu}`);
       if (response?.data?.success) {
         //store response in redux
         return response.data.data;

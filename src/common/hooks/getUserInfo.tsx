@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { parseCookies } from "nookies";
-import { useSelector } from "react-redux";
 import authOBJ from "../classes/auth.class"
 
 export const useUserInfo = () => {

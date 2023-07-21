@@ -10,36 +10,21 @@ import Link from "next/link";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
+import tripOBJs from "@/common/classes/trip.class";
 
 export default function ManageTrips() {
   // const router = useRouter()
   const userData = useUser();
 
   const [Trip, setTrip] = useState<any[]>([]);
-  const getAllTrips = async () => {
-    try {
-      const res = await getAll(
-        "trips",
-        ["=="],
-        ["parkOwnerId"],
-        [userData.uid]
-      );
-      const trips: any[] = [];
-      res.forEach((doc: DocumentSnapshot) => {
-        trips.push(doc.data());
-      });
-      setTrip(trips);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  
   useEffect(() => {
-    if (userData) {
-      getAllTrips();
-      getAllTrips();
-    }
-  }, [getAll, userData]);
-  console.log(Trip, "trip");
+    //getAllTrips
+    tripOBJs.getAll().then((res)=>{
+      setTrip(res)
+    })
+  }, []);
+ 
   const columns = [
     {
       id: "departurePark",

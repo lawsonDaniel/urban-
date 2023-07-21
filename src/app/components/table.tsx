@@ -162,9 +162,7 @@ const Table = ({
             ))}
         </tbody>
       </table>
-      <p className="mt-3 text-sm text-primary underline flex text-center justify-center hover:cursor-pointer">
-        View all
-      </p>
+
       <Modal isOpen={isOpen} onClose={closeModal}>
         {!hideDefaultBody && type && type === "booking" ? (
           <BookingStatus data={selected} />

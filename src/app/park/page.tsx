@@ -21,10 +21,10 @@ export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
   const [Park, setPark] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
+  const [paginaton,setPagination] = useState(1)
   const userData = useUser();
   const getAllDispatchOfficers = async () => {};
 
-  console.log(Park, "park");
   const router = useRouter();
   const columns = [
     {
@@ -66,7 +66,8 @@ export default function Park() {
   const userType = GetUserType();
   
   const [parks, setParks] = useState<any[]>([]);
-
+  
+    const [currentPage, setCurrentPage] = useState(1);
   
   useEffect(() => {
     if (userData) {
@@ -92,22 +93,20 @@ export default function Park() {
   }, [Park, inputField,  userData]);
 
   useEffect(()=>{
-    dispatch.getAll().then((res)=>{
-      console.log("rider ress::", res);
-      const limitedRider = res.slice(0, 10);
-      setDispatchRider(limitedRider)
+    dispatch.getAll(paginaton).then((res)=>{
+      setDispatchRider(res)
       if (inputField.trim().length >= 1) {
         const searchFilter = res.filter((rider:any) =>
           rider.fullName.toLowerCase().includes(inputField.toLowerCase())
         );
         setDispatchRider(searchFilter)
       } else {
-        setDispatchRider(limitedRider);
+        setDispatchRider(res);
       }
     }).catch((err)=>{
       console.log(err,'err from dispatch')
     })
-  },[DispactchRider, inputField])
+  },[DispactchRider, inputField, paginaton])
   return (
     <div>
       <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField}/>
@@ -145,7 +144,8 @@ export default function Park() {
           </div>
           <div className="mt-[53px]">
             {parks ? (
-              <Table
+             <>
+               <Table
                 columns={columns}
                 data={parks}
                 action={{
@@ -153,6 +153,19 @@ export default function Park() {
                   type: ["view"],
                 }}
               />
+               <div className="flex gap-4 items-center justify-center">
+                 {
+               Array.from({ length: 5 }, (_, index) => index + 1).map((a,i)=>(
+                 <button onClick={()=>{
+                  console.log(paginaton,i+1,'pagination')
+                  setPagination((a)=>{
+                    return a=i+1
+                  })
+                 }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
+               ))
+             }
+                 </div>
+             </>
             ) : (
               <div className="flex-col gap-7">
                 <div className="grid grid-cols-3 mt-[32px] gap-8">
@@ -184,14 +197,29 @@ export default function Park() {
             />
             <div className="mt-[53px]">
               {DispactchRider ? (
-                <Table
-                  columns={disColumns}
-                  data={DispactchRider}
-                  action={{
-                    label: "",
-                    type: ["view", "edit", "delete"],
-                  }}
-                />
+               <>
+                 <Table
+                     columns={disColumns}
+                     data={DispactchRider}
+                     action={{
+                       label: "",
+                       type: ["view", "edit", "delete"],
+                     }}
+                 />
+                 <div className="flex gap-4 items-center justify-center">
+                 {
+               Array.from({ length: 5 }, (_, index) => index + 1).map((a,i)=>(
+                 <button onClick={()=>{
+                  console.log(paginaton,i+1,'pagination')
+                  setPagination((a)=>{
+                    return a=i+1
+                  })
+                 }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
+               ))
+             }
+                 </div>
+                
+               </>
               ) : (
                 <div className="flex-col gap-7">
                   <div className="grid grid-cols-3 mt-[32px] gap-8">

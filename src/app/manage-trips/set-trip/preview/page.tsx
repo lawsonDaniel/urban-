@@ -11,6 +11,9 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import { tripObject } from "@/common/data";
 import { useUser } from "@/common/hooks/useUser";
+import tripOBJs from "@/common/classes/trip.class";
+
+
 export default function Preview() {
   const userData = useUser();
 
@@ -23,6 +26,16 @@ export default function Preview() {
 
   const onSubmit = async () => {
     setIsLoading(true);
+    tripOBJs.create(stored).then((res)=>{
+      console.log(res,'res from create park')
+      toast.success('trip create successfully')
+      setIsLoading(false);
+    }).catch((err)=>{
+      console.log(err)
+      toast.error(err?.message)
+      setIsLoading(false);
+    })
+
   };
 
   return (
@@ -33,6 +46,7 @@ export default function Preview() {
         // inputText="Search Trips"
         // allowFilter
       />
+      <ToastContainer/>
       <table className="table-auto mt-8">
         <tbody>
           {stored &&
