@@ -71,7 +71,7 @@ export default function Park() {
   
   useEffect(() => {
     if (userData) {
-      parkOBJ.getAll().then((res)=>{
+      parkOBJ.getAll(paginaton).then((res)=>{
       // Restrict the number of parks to 10
       const limitedParks = res.slice(0, 10);
       setParks(limitedParks);
@@ -106,7 +106,7 @@ export default function Park() {
     }).catch((err)=>{
       console.log(err,'err from dispatch')
     })
-  },[DispactchRider, inputField, paginaton])
+  },[inputField, paginaton])
   return (
     <div>
       <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField}/>

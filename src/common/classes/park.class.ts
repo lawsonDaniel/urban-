@@ -12,11 +12,18 @@ class ParkOBJ {
     }
   };
   //get all park
-  getAll = async () => {
+  getAll = async (pageNu?:any) => {
     try {
-      const response: any = await api.get("park");
+      let response: any
+      if(pageNu){
+         response = await api.get(`park?Page=${pageNu}`);
+      }else{
+        response = await api.get(`park`);
+      }
+    
       if (response?.data?.success) {
         //store response in redux
+        console.log(response.data,'from park api ')
         return response.data.data;
       } else {
         throw new Error("something went wrong");

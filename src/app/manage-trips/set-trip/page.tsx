@@ -38,19 +38,21 @@ export default function SetTrip() {
   const router = useRouter();
   const getAllParks = async () => {
     parkOBJ.getAll().then((res)=>{
+      console.log(res,'park from option')
       setPark(res)
     })
   };
 
   useEffect(() => {
     getAllParks();
-  }, [getAll]);
-  const parkOption = Park.map((a: any) => {
+  }, []);
+  const parkOption = Park[0]?.map((a: any) => {
     return {
       value: a?.id,
       label: a?.name,
     };
   });
+  console.log(parkOption,'optio')
   const userData:any = useUserInfo()
   const validationSchema = Yup.object().shape({
     departureTime: Yup.string().required("Please enter the departure time."),
@@ -85,7 +87,7 @@ export default function SetTrip() {
            isPublic: isPublic,
            date:values.date,
            time:values.departureTime,
-           priceKg:values.priceKg
+          
         }
         console.log(data,'data')
         setCookie(null, "trip", JSON.stringify(data), {

@@ -21,25 +21,10 @@ export default function ParkOwner({ user }: any) {
 
   const [parks, setParks] = useState<any[]>([]);
   const [mainParks, setMainParks] = useState<any[]>([]);
-  const getAllParks = async () => {
-    try {
-      const res = await parkOBJ.getAll();
-      console.log("park ress::", res);
-      const parks: any[] = [];
-      // res.forEach((doc: DocumentSnapshot) => {
-      //   parks.push(doc.data());
-      // });
-      setParks(res);
-      setMainParks(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  useEffect(() => {
-    if (userData) {
-      getAllParks();
-    }
-  }, [getAll, userData]);
+  const [paginaton,setPagination] = useState(1)
+  const [pageLength,setPageLength] = useState<any>(0)
+
+  
 
   const columns = [
     {
@@ -66,9 +51,9 @@ export default function ParkOwner({ user }: any) {
 
   const options =
     mainParks &&
-    mainParks.map((park) => {
+    mainParks[0]?.map((park: { id: any; name: any; }) => {
       return {
-        value: park.parkId,
+        value: park.id,
         label: park.name,
       };
     });
@@ -79,31 +64,32 @@ export default function ParkOwner({ user }: any) {
   });
 
   const [selectedOption, setSelectedOption] = useState<any>();
-
-  useEffect(() => {
-    // Function to filter and update parks
-    // const filterParks = () => {
-    if (parks) {
-      const filteredParks =
-        selectedOption && selectedOption.value !== "all"
-          ? mainParks.filter((park) => {
-              // Add your condition here
-              return park.parkId === selectedOption.value;
-            })
-          : mainParks;
-
-      console.log("my filteredParks::::", filteredParks, selectedOption);
-
-      setParks(filteredParks);
+  const getAllParks = async () => {
+    try {
+      const res = await parkOBJ.getAll();
+      setParks(res[0]);
+      setPageLength(res[1])
+      setMainParks(res);
+      if (selectedOption) {
+    
+        const filteredParks =
+          selectedOption && selectedOption.value !== "all" ?
+        res[0].filter((a:any)=> a.id === selectedOption.value)
+          : res[0]
+            
+              console.log(filteredParks,'filter')
+        setParks(filteredParks);
+      }
+    } catch (err) {
+      console.log(err);
     }
-    // };
-
-    // filterParks()
-
-    console.log("my parks::::", parks);
-  }, [selectedOption]);
-  console.log("my parks11::::", parks);
-
+  };
+  useEffect(() => {
+    if (userData) {
+      getAllParks();
+    }
+  }, [ userData,paginaton,selectedOption]);
+ console.log(parks,'page kk')
   return (
     <div className="">
       {/* <div className='p-14 min-h-full mt-10 rounded-xl bg-white'> */}
@@ -143,6 +129,18 @@ export default function ParkOwner({ user }: any) {
           action={{ viewLabel: "View Statement", type: ["view"] }}
         />
       </div>
+      <div className="flex gap-4 items-center justify-center mt-[10px]">
+                 {
+             parks &&  Array.from({ length: pageLength}, (_, index) => index + 1).map((a,i)=>(
+                 <button onClick={()=>{
+                  console.log(paginaton,i+1,'pagination')
+                  setPagination((a)=>{
+                    return a=i+1
+                  })
+                 }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
+               ))
+             }
+                 </div>
       {/* <div className=' h-40 flex flex-col mt-10 items-center justify-center'>
 				<ReactSVG src='./img/svg/stars.svg' />
 				<p>Sorry, No information yet, Select Vehicle Type to start</p>
