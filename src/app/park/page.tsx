@@ -22,6 +22,9 @@ export default function Park() {
   const [Park, setPark] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
   const [paginaton,setPagination] = useState(1)
+  const [pageLength,setPageLength] = useState<any>(0)
+
+  
   const userData = useUser();
   const getAllDispatchOfficers = async () => {};
 
@@ -71,17 +74,17 @@ export default function Park() {
   
   useEffect(() => {
     if (userData) {
-      parkOBJ.getAll(paginaton).then((res)=>{
-      // Restrict the number of parks to 10
-      const limitedParks = res.slice(0, 10);
-      setParks(limitedParks);
+      parkOBJ.getAll().then((res)=>{
+      setParks(res[0])
+      setPageLength(res[1])
       if (inputField.trim().length >= 1) {
-        const searchFilter = res.filter((rider:any) =>
-          rider.fullName.toLowerCase().includes(inputField.toLowerCase())
+        const searchFilter = res[0].filter((parkfiltername:any) =>
+        parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
         );
-        setDispatchRider(searchFilter)
+        console.log(searchFilter,'swae')
+       setParks(searchFilter)
       } else {
-        setDispatchRider(limitedParks);
+       setParks(res[0])
       }
       // if(inputField){
       //   console.log(inputField,Park,'info')
@@ -107,64 +110,119 @@ export default function Park() {
       console.log(err,'err from dispatch')
     })
   },[inputField, paginaton])
+  console.log(parks,'parlllsss')
   return (
     <div>
-      <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField}/>
-      {userType === USER_TYPE.PARK_OWNER ? (
-        <>
-          <div className="grid grid-cols-3 gap-4 mt-8">
-            {routes.PARK.map((park: any, index: any) => (
-              <div key={index} className="">
-                <QuickAction
-                  path={park.path}
-                  title={park.title}
-                  iconClassName={park.iconClassName}
-                  icon={park.icon}
-                />
-              </div>
-            ))}
-          </div>
+    <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField} />
+    {userType === USER_TYPE.PARK_OWNER ? (
+      <>
+        <div className="grid grid-cols-3 gap-4 mt-8">
+          {routes.PARK.map((park: any, index: any) => (
+            <div key={index} className="">
+              <QuickAction
+                path={park.path}
+                title={park.title}
+                iconClassName={park.iconClassName}
+                icon={park.icon}
+              />
+            </div>
+          ))}
+        </div>
 
-          <div className="grid grid-cols-3 gap-4 mt-[32px]">
-            <Button
-              type="button"
-              onClick={() => router.push("/park/managers")}
-              className="w-full text-primary bg-primary bg-opacity-20 hover:bg-primary hover:text-white"
-            >
-              See All Park Managers
-            </Button>
-            <Button
-              type="button"
-              onClick={() => router.push("/park/dispatch-officers")}
-              className="w-full bg-primary_blue text-primary_blue bg-opacity-20 hover:bg-primary_blue hover:text-white"
-            >
-              See All Dispatch Officers
-            </Button>
-            <div></div>
-          </div>
+        <div className="grid grid-cols-3 gap-4 mt-[32px]">
+          <Button
+            type="button"
+            onClick={() => router.push("/park/managers")}
+            className="w-full text-primary bg-primary bg-opacity-20 hover:bg-primary hover:text-white"
+          >
+            See All Park Managers
+          </Button>
+          <Button
+            type="button"
+            onClick={() => router.push("/park/dispatch-officers")}
+            className="w-full bg-primary_blue text-primary_blue bg-opacity-20 hover:bg-primary_blue hover:text-white"
+          >
+            See All Dispatch Officers
+          </Button>
+          <div></div>
+        </div>
+        <div className="mt-[53px]">
+          {parks.length >=1 ? (
+           <>
+             <Table
+              columns={columns}
+              data={parks}
+              action={{
+                viewLabel: "View statement",
+                type: ["view"],
+              }}
+            />
+             <div className="flex gap-4 items-center justify-center mt-[10px]">
+               {
+             parks.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
+               <button onClick={()=>{
+                console.log(paginaton,i+1,'pagination')
+                setPagination((a)=>{
+                  return a=i+1
+                })
+               }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
+             ))
+           }
+               </div>
+           </>
+          ) : (
+            <div className="flex-col gap-7">
+              <div className="grid grid-cols-3 mt-[32px] gap-8">
+                <div className="col-span-1 ">
+                  <CTA
+                    text="Veiw achieve"
+                    type="green"
+                    onClick={() => router.push("#")}
+                  />
+                </div>
+              </div>
+              <div className="mt-[10rem] text-center">
+                <p className="text-xl capitalize">
+                  Sorry, No information yet, Add a Park to start
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </>
+    ) : (
+      userType === USER_TYPE.PARK_MANAGER && (
+        <div className="mt-8">
+          <QuickAction
+            path={routes.PARK[2].path}
+            title={routes.PARK[2].title}
+            iconClassName={routes.PARK[2].iconClassName}
+            icon={routes.PARK[2].icon}
+          />
           <div className="mt-[53px]">
-            {parks ? (
+            {DispactchRider.length >=1 ? (
              <>
                <Table
-                columns={columns}
-                data={parks}
-                action={{
-                  viewLabel: "View statement",
-                  type: ["view"],
-                }}
-              />
+                   columns={disColumns}
+                   data={DispactchRider}
+                   action={{
+                     label: "",
+                     type: ["view", "edit", "delete"],
+                   }}
+               />
                <div className="flex gap-4 items-center justify-center">
-                 {
-               Array.from({ length: 5 }, (_, index) => index + 1).map((a,i)=>(
-                 <button onClick={()=>{
-                  console.log(paginaton,i+1,'pagination')
-                  setPagination((a)=>{
-                    return a=i+1
-                  })
-                 }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
-               ))
-             }
-                 </div>
+               {
+            DispactchRider.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
+               <button onClick={()=>{
+                console.log(paginaton,i+1,'pagination')
+                setPagination((a)=>{
+                  return a=i+1
+                })
+               }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
+             ))
+           }
+               </div>
+              
              </>
             ) : (
               <div className="flex-col gap-7">
@@ -179,69 +237,15 @@ export default function Park() {
                 </div>
                 <div className="mt-[10rem] text-center">
                   <p className="text-xl capitalize">
-                    Sorry, No information yet, Add a Park to start
+                    Sorry, No information yet, Add a dispatch Rider to start
                   </p>
                 </div>
               </div>
             )}
           </div>
-        </>
-      ) : (
-        userType === USER_TYPE.PARK_MANAGER && (
-          <div className="mt-8">
-            <QuickAction
-              path={routes.PARK[2].path}
-              title={routes.PARK[2].title}
-              iconClassName={routes.PARK[2].iconClassName}
-              icon={routes.PARK[2].icon}
-            />
-            <div className="mt-[53px]">
-              {DispactchRider ? (
-               <>
-                 <Table
-                     columns={disColumns}
-                     data={DispactchRider}
-                     action={{
-                       label: "",
-                       type: ["view", "edit", "delete"],
-                     }}
-                 />
-                 <div className="flex gap-4 items-center justify-center">
-                 {
-               Array.from({ length: 5 }, (_, index) => index + 1).map((a,i)=>(
-                 <button onClick={()=>{
-                  console.log(paginaton,i+1,'pagination')
-                  setPagination((a)=>{
-                    return a=i+1
-                  })
-                 }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
-               ))
-             }
-                 </div>
-                
-               </>
-              ) : (
-                <div className="flex-col gap-7">
-                  <div className="grid grid-cols-3 mt-[32px] gap-8">
-                    <div className="col-span-1 ">
-                      <CTA
-                        text="Veiw achieve"
-                        type="green"
-                        onClick={() => router.push("#")}
-                      />
-                    </div>
-                  </div>
-                  <div className="mt-[10rem] text-center">
-                    <p className="text-xl capitalize">
-                      Sorry, No information yet, Add a dispatch Rider to start
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )
-      )}
-    </div>
+        </div>
+      )
+    )}
+  </div>
   );
 }

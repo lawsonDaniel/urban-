@@ -3,16 +3,13 @@ import React, { useState, useEffect } from "react";
 import SubHeader from "../../components/headers/sub-header";
 import { useFormik } from "formik";
 import Dropdown from "@/app/components/dropdown";
-import Input from "@/app/components/input";
 import Button from "@/app/components/button";
-import Switch from "@/app/components/switch";
 import { getAll } from "@/common/hooks/fireStore";
-import { USER_TYPE } from "@/common/types";
-import { DocumentSnapshot } from "firebase/firestore";
-import { updateOne } from "@/common/hooks/fireStore";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import driverOBJs from "@/common/classes/driver.class";
+import tripOBJs from "@/common/classes/trip.class";
 
 export default function Assign() {
   const router = useRouter();
@@ -27,8 +24,18 @@ export default function Assign() {
   const [Driver, setDriver] = useState<any[]>([]);
   const [Trip, setTrip] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const getAllDriver = async () => {};
-  const getAllTrips = async () => {};
+  const getAllDriver = async () => {
+    driverOBJs.getAll().then((res)=>{
+      console.log(res?.data,"driver")
+      setDriver(res?.data)
+    })
+  };
+  const getAllTrips = async () => {
+  tripOBJs.getAll().then((res)=>{
+    console.log(res,"trips")
+    setTrip(res)
+  })
+  };
   useEffect(() => {
     getAllDriver();
     getAllTrips();
@@ -38,26 +45,34 @@ export default function Assign() {
   const DriverOption = Driver.map((a: any) => {
     return {
       value: a?.id,
-      label: a?.data?.full_name,
+      label: a?.fullName,
     };
   });
   const TripOption = Trip.map((a: any) => {
     return {
       value: a?.id,
-      label: a?.data?.tripCode,
+      label: a?.tripCode,
     };
   });
-  console.log(Driver, "driver option");
+ 
   const formik = useFormik({
     initialValues: {},
     onSubmit: async (values: any) => {
       setIsLoading(true);
       if (selectedPark && selectedDriver) {
         values = {
-          Driver: selectedDriver,
+          driverId: selectedDriver,
         };
+        tripOBJs.assignVechicle(values).then((res)=>{
+          toast.success('successfully assigned vechicle')
+          setIsLoading(false)
+        }).catch((err)=>{
+          toast.error(err?.message)
+          setIsLoading(false)
+        })
       } else {
         toast.error("fill all the form fields");
+        setIsLoading(false)
       }
       // openModal()
     },
