@@ -69,7 +69,7 @@ const MenuDropdown: React.FC<MenuDropdownProps> = ({
         >
           <p className="mx-4 mt-2 text-primary">Download Receipt As</p>
           <ul className="py-1" role="none">
-            {items.map((item, index) => (
+            {items?.map((item, index) => (
               <MenuItem key={index} label={item.label} onClick={item.onClick} />
             ))}
           </ul>

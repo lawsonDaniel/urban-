@@ -52,7 +52,7 @@ function Dropdown({
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            {options.map((option: any) => (
+            {options?.map((option: any) => (
               <button
                 key={option.value}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
