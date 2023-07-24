@@ -7,6 +7,8 @@ import Avatar from "../../components/avatar";
 import { useRouter } from "next/navigation";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
+import manager from "@/common/classes/manager.class";
+import parkOBJ from "@/common/classes/park.class";
 
 export default function ManagerStatements() {
   const [selectedPark, setSelectedPark] = useState();
@@ -19,20 +21,20 @@ export default function ManagerStatements() {
     { value: "van", label: "Van" },
     { value: "others", label: "Others" },
   ];
-  const getAllParks = async () => {};
-  console.log(selectedPark, "parks");
-  const getAllManager = async () => {};
+
   useEffect(() => {
-    getAllParks();
-  }, [getAll]);
-  useEffect(() => {
-    getAllManager();
-  }, [selectedPark, getAll]);
+   
+    parkOBJ.getAll().then((res)=>{
+      console.log(res[0],'from the get all park')
+      setPark(res[0])
+    })
+    
+  }, []);
 
   const parkOption = Park.map((a: any) => {
     return {
-      value: a?.parkId,
-      label: a?.parkName,
+      value: a?.id,
+      label: a?.name,
     };
   });
   return (
