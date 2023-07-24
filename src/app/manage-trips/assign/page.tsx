@@ -62,9 +62,11 @@ export default function Assign() {
       if (selectedPark && selectedDriver) {
         values = {
           driverId: selectedDriver,
+
         };
-        tripOBJs.assignVechicle(values).then((res)=>{
+        tripOBJs.assignVechicle(values,selectedPark).then((res)=>{
           toast.success('successfully assigned vechicle')
+          router.push("/manage-trips");
           setIsLoading(false)
         }).catch((err)=>{
           toast.error(err?.message)

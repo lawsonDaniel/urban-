@@ -79,12 +79,12 @@ export default function SetTrip() {
       if (selectedLuggage && selectedPark) {
         const currentDate = new Date()
         const data = {
-          parkId: userData?.id,
+          parkId: selectedPark,
           startLocation: values.departureCity,
            endLocation: values.arivalCity,
            fare:values.fare,
            lugage:selectedLuggage,
-           isPublic: isPublic,
+           isPublic:`${isPublic}`,
            date:values.date,
            time:values.departureTime,
           

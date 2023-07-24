@@ -13,13 +13,11 @@ import dispatch from "@/common/classes/dispatch.class";
 
 export default function DispatchOfficers() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
+  const [inputField,setInputField] = useState<any>('')
+
   const userData = useUser();
 
   const getAllDispatchOfficers = async () => {};
-  useEffect(() => {
-    getAllDispatchOfficers();
-  }, [getAll]);
-  console.log(DispactchRider, "riders");
   const columns = [
     {
       id: "fullName",
@@ -33,25 +31,26 @@ export default function DispatchOfficers() {
       id: "phoneNumber",
       header: "Phone No",
     },
-  ];
-  const getAllRiders = async()=>{
-    try{
-      const res = await dispatch.getAll();
-      console.log("rider ress::", res);
-      setDispatchRider(res)
-      
-    }catch(err){
-      console.error(err)
-    }
-  }
+  ]
 
   useEffect(()=>{
-    getAllRiders()
-  },[])
+    dispatch.getAll().then((res)=>{
+      setDispatchRider(res)
+      if (inputField.trim().length >= 1) {
+        const searchFilter = res?.data((parkfiltername:any) =>
+        parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
+        );
+        
+        setDispatchRider(searchFilter)
+      } else {
+        setDispatchRider(res)
+      }
+    })
+  },[inputField])
 
   return (
     <main>
-      <SubHeader header="Dispatch Officers" inputText="Search Officers" />
+      <SubHeader header="Dispatch Officers" inputText="Search Officers" setInputField={setInputField}/>
       {/* <div className='grid grid-cols-3 gap-4 mt-8'>
 				{routes.PARK.map((park: any, index: any) => (
 					<div key={index} className=''>
@@ -79,14 +78,22 @@ export default function DispatchOfficers() {
 				<div></div>
 			</div> */}
       <div className="mt-[53px]">
-        <Table
+      {
+          DispactchRider?.length >=1 ? <Table
           columns={columns}
           data={DispactchRider}
           action={{
             type: ["view", "edit", "delete"],
             viewLabel: "View statememt",
           }}
-        />
+        />: <div className="mt-[10rem] text-center">
+        <p className="text-xl capitalize">
+          Sorry, No information yet, Add a Dispatch Rider to start
+        </p>
+      </div>
+        }
+        
+        
       </div>
     </main>
   );

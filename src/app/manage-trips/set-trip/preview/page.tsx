@@ -29,6 +29,7 @@ export default function Preview() {
     tripOBJs.create(stored).then((res)=>{
       console.log(res,'res from create park')
       toast.success('trip create successfully')
+      router.push("/manage-trips");
       setIsLoading(false);
     }).catch((err)=>{
       console.log(err)

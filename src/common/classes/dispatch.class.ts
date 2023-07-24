@@ -4,7 +4,7 @@ class dispatchOBJ {
      //get all driver
   getAll = async (pageNu?:Number) => {
     try {
-      const response: any = await api.get(`dispatch-officer?Page=${pageNu}`);
+      const response: any = await api.get(`dispatch-officer?page=${pageNu}`);
       if (response?.data?.success) {
         //store response in redux
         return response.data.data;

@@ -16,7 +16,7 @@ class ParkOBJ {
     try {
       let response: any
       if(pageNu){
-         response = await api.get(`park?Page=${pageNu}`);
+         response = await api.get(`park?page=${pageNu}`);
       }else{
         response = await api.get(`park`);
       }
@@ -55,6 +55,7 @@ class ParkOBJ {
       throw err;
     }
   };
+  
   
 }
 

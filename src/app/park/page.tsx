@@ -74,7 +74,7 @@ export default function Park() {
   
   useEffect(() => {
     if (userData) {
-      parkOBJ.getAll().then((res)=>{
+      parkOBJ.getAll(paginaton).then((res)=>{
       setParks(res[0])
       setPageLength(res[1])
       if (inputField.trim().length >= 1) {

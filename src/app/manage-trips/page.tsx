@@ -17,25 +17,33 @@ export default function ManageTrips() {
   const userData = useUser();
 
   const [Trip, setTrip] = useState<any[]>([]);
-  
+  const [inputField,setInputField] = useState<any>('')
   useEffect(() => {
     //getAllTrips
     tripOBJs.getAll().then((res)=>{
       setTrip(res)
+      if (inputField.trim().length >= 1) {
+        const searchFilter = res.filter((trip:any) =>
+          trip.tripCode.toLowerCase().includes(inputField.toLowerCase())
+        );
+        setTrip(searchFilter)
+      } else {
+        setTrip(res);
+      }
     })
-  }, []);
+  }, [inputField]);
  
   const columns = [
     {
-      id: "departurePark",
-      header: "Departure Park",
+      id: "endLocation",
+      header: "Arival City",
     },
     {
-      id: "departureTime",
+      id: "time",
       header: "Departure Time",
     },
     {
-      id: "departureCity",
+      id: "startLocation",
       header: "Departure City",
     },
     {
@@ -46,16 +54,13 @@ export default function ManageTrips() {
       id: "fare",
       header: "Fare",
     },
+    
     {
-      id: "typeOfVechicle",
-      header: "Vehicle Type",
-    },
-    {
-      id: "bookingStatus",
+      id: "status",
       header: "Booking Status",
     },
   ];
-
+console.log(Trip,'trips  ss')
   return (
     <>
       <SubHeader
@@ -63,6 +68,8 @@ export default function ManageTrips() {
         hideBack
         inputText="Search Trips"
         allowFilter
+        inputField={inputField} 
+        setInputField={setInputField}
       />
       <div className="grid grid-cols-3 gap-x-4 mt-8">
         {routes.TRIPS.map((trip: any, index: any) => (
@@ -88,7 +95,8 @@ export default function ManageTrips() {
         </Link>
       </div>
       <div className="mt-[53px]">
-        <Table
+        {
+          Trip ?  <Table
           columns={columns}
           data={Trip}
           action={{
@@ -97,8 +105,15 @@ export default function ManageTrips() {
             editLabel: "Edit Details",
           }}
           type="booking"
-        />
+        /> : <div className="mt-[10rem] text-center">
+        <p className="text-xl capitalize">
+          Sorry, No information yet, Add a Trip to start
+        </p>
       </div>
+   
+        }
+        </div>
+        
     </>
   );
 }

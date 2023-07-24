@@ -24,9 +24,9 @@ class tripOBJ {
     }
   };  
   //assign Vechicle
-  assignVechicle = async (data: any) => {
+  assignVechicle = async (data: any,id:any) => {
     try {
-      const response: any = await api.post(`trip/${data}/assign-vehicle`, data);
+      const response: any = await api.post(`trip/${id}/assign-vehicle`, data);
       return response;
     } catch (err) {
       throw err;
