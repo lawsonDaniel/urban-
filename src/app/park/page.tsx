@@ -78,13 +78,13 @@ export default function Park() {
       setParks(res[0])
       setPageLength(res?.totalPages)
       if (inputField.trim().length >= 1) {
-        const searchFilter = res[0].filter((parkfiltername:any) =>
+        const searchFilter = res?.parks.filter((parkfiltername:any) =>
         parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
         );
         console.log(searchFilter,'swae')
        setParks(searchFilter)
       } else {
-       setParks(res[0])
+       setParks(res?.parks)
       }
       // if(inputField){
       //   console.log(inputField,Park,'info')

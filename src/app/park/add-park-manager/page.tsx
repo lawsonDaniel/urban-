@@ -29,7 +29,7 @@ export default function AddParkManager() {
       const res = await parkOBJ.getAll();
       console.log("park ress::", res);
       const parks: any[] = [];
-      setParks(res);
+      setParks(res?.parks);
       // setMainParks(res);
     } catch (err) {
       console.log(err);
