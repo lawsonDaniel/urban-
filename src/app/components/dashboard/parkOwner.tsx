@@ -19,8 +19,8 @@ export default function ParkOwner({ user }: any) {
   const userData = useUser();
   // console.log("getLoginUser:::userData::", userData.uid)
 
-  const [parks, setParks] = useState<any[]>([]);
-  const [mainParks, setMainParks] = useState<any[]>([]);
+  const [parks, setParks] = useState<any>([]);
+  const [mainParks, setMainParks] = useState<any>([]);
   const [paginaton,setPagination] = useState(1)
   const [pageLength,setPageLength] = useState<any>(0)
 
@@ -51,7 +51,7 @@ export default function ParkOwner({ user }: any) {
 
   const options =
     mainParks &&
-    mainParks[0]?.map((park: { id: any; name: any; }) => {
+    mainParks?.parks?.map((park: { id: any; name: any; }) => {
       return {
         value: park.id,
         label: park.name,
@@ -67,15 +67,15 @@ export default function ParkOwner({ user }: any) {
   const getAllParks = async () => {
     try {
       const res = await parkOBJ.getAll();
-      setParks(res[0]);
-      setPageLength(res[1])
+      setParks(res?.parks);
+      setPageLength(res?.totalPages)
       setMainParks(res);
       if (selectedOption) {
     
         const filteredParks =
           selectedOption && selectedOption.value !== "all" ?
-        res[0].filter((a:any)=> a.id === selectedOption.value)
-          : res[0]
+        res?.parks.filter((a:any)=> a.id === selectedOption.value)
+          : res?.parks
             
               console.log(filteredParks,'filter')
         setParks(filteredParks);

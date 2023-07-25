@@ -74,9 +74,9 @@ export default function Park() {
   
   useEffect(() => {
     if (userData) {
-      parkOBJ.getAll(paginaton).then((res)=>{
+      parkOBJ.getAll().then((res)=>{
       setParks(res[0])
-      setPageLength(res[1])
+      setPageLength(res?.totalPages)
       if (inputField.trim().length >= 1) {
         const searchFilter = res[0].filter((parkfiltername:any) =>
         parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
@@ -93,10 +93,10 @@ export default function Park() {
         console.log(err)
       })
     }
-  }, [Park, inputField,  userData]);
+  }, [Park, inputField, paginaton, userData]);
 
   useEffect(()=>{
-    dispatch.getAll(paginaton).then((res)=>{
+    dispatch.getAll().then((res)=>{
       setDispatchRider(res)
       if (inputField.trim().length >= 1) {
         const searchFilter = res.filter((rider:any) =>
@@ -110,7 +110,7 @@ export default function Park() {
       console.log(err,'err from dispatch')
     })
   },[inputField, paginaton])
-  console.log(parks,'parlllsss')
+  console.log(DispactchRider,'dispatch rider')
   return (
     <div>
     <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField} />

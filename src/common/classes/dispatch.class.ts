@@ -3,8 +3,13 @@ import api from "../API";
 class dispatchOBJ {
      //get all driver
   getAll = async (pageNu?:Number) => {
+    let response:any
     try {
-      const response: any = await api.get(`dispatch-officer?page=${pageNu}`);
+    if(pageNu){
+      response = await api.get(`dispatch-officer?page=${pageNu}`);
+    }else{
+      response = await api.get(`dispatch-officer`);
+    }
       if (response?.data?.success) {
         //store response in redux
         return response.data.data;
