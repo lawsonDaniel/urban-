@@ -18,6 +18,7 @@ import { GenerateID } from "@/common/utils";
 import parkOBJ from "@/common/classes/park.class";
 import { GetUserData } from "@/common/hooks/token";
 import { routes } from "@/common/routes";
+import { cityFCT,cityLagos } from "@/common/data";
 
 export default function AddPark() {
   const options = [
@@ -37,6 +38,10 @@ export default function AddPark() {
   const [selectedCity, setSelectedCity] = useState();
   const [selectedState, setSelectedState] = useState();
   const [selectedRegion, setSelectedRegion] = useState();
+  const [cityObj,setCityObj] = useState<any>([{
+    label: "select state",
+    value: ''
+  }])
   const router = useRouter();
 
   const openModal = () => {
@@ -47,6 +52,16 @@ export default function AddPark() {
     setIsOpen(false);
   };
 
+  const setPArk = (e:any)=>{
+    setSelectedState(e)
+  }
+  useEffect(()=>{
+    if(selectedState == "abuja"){
+      setCityObj(cityFCT)
+    }else{
+      setCityObj(cityLagos)
+    }
+  },[selectedState])
   console.log("parkID::::", GenerateID("UB"));
 console.log(selectedState,selectedRegion,selectedCity,'values')
   const formik = useFormik({
@@ -112,7 +127,7 @@ console.log(selectedState,selectedRegion,selectedCity,'values')
           options={options}
           placeholder="State"
           label="Select State"
-          onSelect={(e: any) => setSelectedState(e)}
+          onSelect={(e: any) => setPArk(e)}
           className="w-[510px]"
         />
         <Dropdown
@@ -123,7 +138,7 @@ console.log(selectedState,selectedRegion,selectedCity,'values')
           className="w-[510px]"
         />
         <Dropdown
-          options={options}
+          options={cityObj}
           placeholder="City"
           label="Select City"
           onSelect={(e: any) => setSelectedCity(e)}

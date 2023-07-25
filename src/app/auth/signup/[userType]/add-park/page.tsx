@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
@@ -13,6 +13,7 @@ import Dropdown from "@/app/components/dropdown";
 import Button from "@/app/components/button";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
+import { cityFCT,cityLagos } from "@/common/data";
 
 export default function AddPark() {
   const router = useRouter();
@@ -24,7 +25,10 @@ export default function AddPark() {
   const [parkLocation, setParkLocation] = useState("");
   const [parkCity, setParkCity] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
-
+  const [cityObj,setCityObj] = useState<any>([{
+    label: "select state",
+    value: ''
+  }])
   const options = [
     { label: "Abuja", value: "abuja" },
     { label: "Lagos", value: "lagos" },
@@ -43,6 +47,17 @@ export default function AddPark() {
     parkFullAddress: Yup.string().required("Full address is required"),
   });
 
+  const setPArk = (e:any)=>{
+    setParkLocation(e)
+  }
+
+  useEffect(()=>{
+    if(parkLocation === "abuja"){
+      setCityObj(cityFCT)
+    }else{
+      setCityObj(cityLagos)
+    }
+  },[parkLocation])
   const formik = useFormik({
     initialValues: {
       parkName: "",
@@ -114,12 +129,12 @@ export default function AddPark() {
             options={options}
             placeholder="State"
             label="Select State"
-            onSelect={(e) => setParkLocation(e)}
+            onSelect={(e) => setPArk(e)}
             className="w-[510px]"
           />
 
           <Dropdown
-            options={parkRegion}
+            options={cityObj}
             placeholder="park city"
             label="Select city"
             onSelect={(e) => setParkCity(e)}
