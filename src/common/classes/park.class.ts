@@ -55,7 +55,27 @@ class ParkOBJ {
       throw err;
     }
   };
-  
+  //get all park by user
+  getAllByUser = async (pageNu?:any) => {
+    try {
+      let response: any
+      if(pageNu){
+         response = await api.get(`park/getAllByUser?page=${pageNu}`);
+      }else{
+        response = await api.get(`park/getAllByUser`);
+      }
+    
+      if (response?.data?.success) {
+        //store response in redux
+        console.log(response.data,'from park api ')
+        return response.data.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
   
 }
 

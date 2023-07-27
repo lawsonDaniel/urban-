@@ -74,12 +74,12 @@ export default function Park() {
   
   useEffect(() => {
     if (userData) {
-      parkOBJ.getAll().then((res)=>{
-      setParks(res[0])
+      parkOBJ.getAllByUser().then((res)=>{
+      setParks(res?.parks)
       setPageLength(res?.totalPages)
       if (inputField.trim().length >= 1) {
-        const searchFilter = res?.parks.filter((parkfiltername:any) =>
-        parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
+        const searchFilter = res?.parks?.filter((parkfiltername:any) =>
+        parkfiltername?.name.toLowerCase().includes(inputField.toLowerCase())
         );
         console.log(searchFilter,'swae')
        setParks(searchFilter)
@@ -100,7 +100,7 @@ export default function Park() {
       setDispatchRider(res)
       if (inputField.trim().length >= 1) {
         const searchFilter = res.filter((rider:any) =>
-          rider.fullName.toLowerCase().includes(inputField.toLowerCase())
+          rider?.fullName.toLowerCase().includes(inputField.toLowerCase())
         );
         setDispatchRider(searchFilter)
       } else {
@@ -117,13 +117,13 @@ export default function Park() {
     {userType === USER_TYPE.PARK_OWNER ? (
       <>
         <div className="grid grid-cols-3 gap-4 mt-8">
-          {routes.PARK.map((park: any, index: any) => (
+          {routes?.PARK?.map((park: any, index: any) => (
             <div key={index} className="">
               <QuickAction
-                path={park.path}
-                title={park.title}
-                iconClassName={park.iconClassName}
-                icon={park.icon}
+                path={park?.path}
+                title={park?.title}
+                iconClassName={park?.iconClassName}
+                icon={park?.icon}
               />
             </div>
           ))}

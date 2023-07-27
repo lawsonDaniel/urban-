@@ -66,7 +66,8 @@ export default function ParkOwner({ user }: any) {
   const [selectedOption, setSelectedOption] = useState<any>();
   const getAllParks = async () => {
     try {
-      const res = await parkOBJ.getAll();
+      const res = await parkOBJ.getAllByUser();
+      console.log(res,'parks')
       setParks(res?.parks);
       setPageLength(res?.totalPages)
       setMainParks(res);
