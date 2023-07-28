@@ -11,7 +11,7 @@ const api = axios.create({
 // Add an interceptor to include JWT in request headers if available
 api.interceptors.request.use(
   (config) => {
-    const jwt = GetStoredAuthToken(); // Replace getJWT() with the function to get the JWT from your storage or state
+    const jwt = GetStoredAuthToken(); // Replace GetStoredAuthToken() with the function to get the JWT from your storage or state
 
     if (jwt) {
       config.headers.Authorization = `Bearer ${jwt}`;
@@ -20,6 +20,23 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Add an interceptor to handle response errors
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    if (error.response) {
+      const { status, data } = error.response;
+      if (status === 401 && data.message === "An error occurred - Token Expired") {
+        // Token has expired, redirect to the login page
+        window.location.href = "/auth/login";
+      }
+    }
     return Promise.reject(error);
   }
 );

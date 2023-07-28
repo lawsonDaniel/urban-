@@ -11,6 +11,7 @@ import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
 import tripOBJs from "@/common/classes/trip.class";
+import { GetUserType } from "@/common/hooks/token";
 
 export default function ManageTrips() {
   // const router = useRouter()
@@ -18,13 +19,15 @@ export default function ManageTrips() {
 
   const [Trip, setTrip] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
+  const userType:string = GetUserType()
   useEffect(() => {
     //getAllTrips
-    tripOBJs.getAll().then((res)=>{
+    tripOBJs.getAll(userType).then((res)=>{
+      console.log(res,'from tripps')
       setTrip(res)
       if (inputField.trim().length >= 1) {
-        const searchFilter = res.filter((trip:any) =>
-          trip.tripCode.toLowerCase().includes(inputField.toLowerCase())
+        const searchFilter = res?.filter((trip:any) =>
+          trip?.tripCode.toLowerCase().includes(inputField.toLowerCase())
         );
         setTrip(searchFilter)
       } else {
@@ -33,6 +36,7 @@ export default function ManageTrips() {
     })
   }, [inputField]);
  
+  console.log(GetUserType(),'user type from trip')
   const columns = [
     {
       id: "endLocation",
@@ -96,7 +100,7 @@ console.log(Trip,'trips  ss')
       </div>
       <div className="mt-[53px]">
         {
-          Trip ?  <Table
+          Trip.length >=1 ?  <Table
           columns={columns}
           data={Trip}
           action={{

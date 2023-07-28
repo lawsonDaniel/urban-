@@ -2,9 +2,15 @@ import api from "../API";
 
 class tripOBJ {
      //get all trip
-  getAll = async () => {
+  getAll = async (user?:string) => {
     try {
-      const response: any = await api.get("/trip");
+      let response
+      if(user){
+         response = await api.get(`/trip/${user}`);
+      }else{
+         response = await api.get(`/trip`);
+      }
+     
       if (response?.data?.success) {
         return response.data.data;
       } else {
@@ -45,6 +51,7 @@ class tripOBJ {
       throw err;
     }
   }; 
+    
 }
 const tripOBJs = new tripOBJ()
 export default tripOBJs
