@@ -32,7 +32,7 @@ export default function SetTrip() {
   const [selectedLuggage, setSelectedLuggage] = useState(stored?.lugage || '');
   const [selectedCar, setSelectedCar] = useState();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [Park, setPark] = useState<any[]>([]);
+  const [Park, setPark] = useState<any>([]);
   const [isPublic,setIsPublic] = useState<boolean>(false)
 
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function SetTrip() {
   useEffect(() => {
     getAllParks();
   }, []);
-  const parkOption = Park[0]?.map((a: any) => {
+  const parkOption = Park?.parks?.map((a: any) => {
     return {
       value: a?.id,
       label: a?.name,
