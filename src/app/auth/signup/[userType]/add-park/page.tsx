@@ -85,14 +85,7 @@ export default function AddPark() {
           .register(values, "parkOwner")
           .then((res) => {
             toast.success(res?.data.message);
-            authOBJ
-              .currentUser()
-              .then((res) => {
-                router.push("/");
-              })
-              .catch((err) => {
-                router.push("/auth/login");
-              });
+           router.push("/auth/login");
             destroyCookie(null, "ParkOwner", { path: "/" });
             setIsLoading(false);
           })
@@ -130,7 +123,7 @@ export default function AddPark() {
             placeholder="State"
             label="Select State"
             onSelect={(e) => setPArk(e)}
-            className="w-[510px]"
+            className="w-full"
           />
 
           <Dropdown
@@ -138,7 +131,7 @@ export default function AddPark() {
             placeholder="park city"
             label="Select city"
             onSelect={(e) => setParkCity(e)}
-            className="w-[510px]"
+            className="w-full"
           />
 
           <Dropdown
@@ -146,7 +139,7 @@ export default function AddPark() {
             placeholder="Region"
             label="Select Region"
             onSelect={(e) => setSelectedRegion(e)}
-            className="w-[510px]"
+            className="w-full"
           />
 
           <Input

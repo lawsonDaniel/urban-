@@ -93,7 +93,7 @@ export type RadioSelectProps = {
   formik: any;
 };
 export type DropDownSelectProps = {
-  className: string;
+  className?: string;
   label?: string;
   containerStyle?: string;
   options: RadioOption[] | any;

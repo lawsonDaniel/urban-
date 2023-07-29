@@ -18,9 +18,10 @@ export default function Header() {
   console.log(storedUser, "user info");
   //function to logout user
   const logOut = () => {
-    authOBJ.logOut();
     //redirect to home
     router.push("./auth/login");
+    authOBJ.logOut();
+    
   };
   console.log(storedUser, "store user");
   return (

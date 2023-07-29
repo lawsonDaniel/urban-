@@ -76,8 +76,8 @@ export default function ParkManager() {
             toast.success(res?.data.message);
             //get user info
             authOBJ.currentUser();
-            //redirect to dashboard
-            router.push("/");
+            //redirect to login
+            router.push("/auth/login");
             setIsLoading(false);
           })
           .catch((err: any) => {

@@ -63,7 +63,7 @@ const Input = ({
         {label}
       </label>
 
-      <div className=" relative rounded-md">
+      <div className=" relative rounded-md w-full">
         {id === "search" && (
           <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
             <BiSearchAlt size={24} className="text-gray-500" />
@@ -77,7 +77,7 @@ const Input = ({
           onChange={onChange}
           onBlur={onBlur}
           placeholder={placeholder}
-          className={`appearance-none rounded-md px-4 py-2 border  ${
+          className={`appearance-none w-full rounded-md px-4 py-2 border  ${
             error ? "border-red-600" : "border-arsh"
           }  focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent 
 					} ${inputStyle} bg-gray-100`}
