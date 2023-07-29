@@ -188,7 +188,7 @@ export default function IndividualInput() {
         disabled={isLoading}
         // disabled={!formik.values['userType'] ? true : undefined}
       >
-        {isLoading ? "loading" : "Add Park"}
+        {isLoading ? "loading" : "proceed to add park"}
       </Button>
       <ToastContainer />
     </form>

@@ -173,13 +173,6 @@ export default function Park() {
           ) : (
             <div className="flex-col gap-7">
               <div className="grid grid-cols-3 mt-[32px] gap-8">
-                <div className="col-span-1 ">
-                  <CTA
-                    text="Veiw achieve"
-                    type="green"
-                    onClick={() => router.push("#")}
-                  />
-                </div>
               </div>
               <div className="mt-[10rem] text-center">
                 <p className="text-xl capitalize">

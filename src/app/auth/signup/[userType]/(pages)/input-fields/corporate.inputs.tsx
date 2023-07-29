@@ -194,7 +194,7 @@ export default function CorporateInput() {
         disabled={isLoading || !country}
         // disabled={!formik.values['userType'] ? true : undefined}
       >
-        {isLoading ? "loading" : "Add"}
+        {isLoading ? "loading" : "proceed to add park"}
       </Button>
       <ToastContainer />
     </form>

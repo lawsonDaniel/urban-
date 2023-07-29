@@ -67,10 +67,7 @@ export default function Header() {
         <Link
           href="#"
           className=" hover:cursor ml-4"
-          onClick={() => {
-            console.log("clicked");
-            logOut();
-          }}
+          onClick={logOut}
         >
           <AiOutlineLogout className="text-gray-600" size={24} />
         </Link>
