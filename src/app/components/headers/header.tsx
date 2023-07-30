@@ -19,7 +19,6 @@ export default function Header() {
   //function to logout user
   const logOut = () => {
     //redirect to home
-    router.push("./auth/login");
     authOBJ.logOut();
     
   };

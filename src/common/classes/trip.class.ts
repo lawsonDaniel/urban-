@@ -12,7 +12,7 @@ class tripOBJ {
       }
      
       if (response?.data?.success) {
-        return response.data.data;
+        return response?.data?.data;
       } else {
         throw new Error("something went wrong");
       }
@@ -43,7 +43,7 @@ class tripOBJ {
     try {
       const response: any = await api.get(`trip/${data}`);
       if (response?.data?.success) {
-        return response.data.data;
+        return response?.data?.data;
       } else {
         throw new Error("something went wrong");
       }

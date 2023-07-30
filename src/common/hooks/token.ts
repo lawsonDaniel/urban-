@@ -49,6 +49,7 @@ export const RemoveAllToken = () => {
   destroyCookie(null, "userToken", { path: "/" });
   destroyCookie(null, "userData", { path: "/" });
   destroyCookie(null, "userType", { path: "/" });
+  window.location.href = "/auth/login"
 };
 
 export const SetAllParkData: any = (data: string) => {

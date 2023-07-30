@@ -99,7 +99,7 @@ export default function Park() {
     dispatch.getAll().then((res)=>{
       setDispatchRider(res)
       if (inputField.trim().length >= 1) {
-        const searchFilter = res.filter((rider:any) =>
+        const searchFilter = res?.filter((rider:any) =>
           rider?.fullName.toLowerCase().includes(inputField.toLowerCase())
         );
         setDispatchRider(searchFilter)
@@ -159,7 +159,7 @@ export default function Park() {
             />
              <div className="flex gap-4 items-center justify-center mt-[10px]">
                {
-             parks.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
+             parks &&parks.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
                <button onClick={()=>{
                 console.log(paginaton,i+1,'pagination')
                 setPagination((a)=>{
@@ -193,7 +193,7 @@ export default function Park() {
             icon={routes.PARK[2].icon}
           />
           <div className="mt-[53px]">
-            {DispactchRider.length >=1 ? (
+            {DispactchRider && DispactchRider.length >=1 ? (
              <>
                <Table
                    columns={disColumns}
@@ -205,7 +205,7 @@ export default function Park() {
                />
                <div className="flex gap-4 items-center justify-center">
                {
-            DispactchRider.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
+           DispactchRider &&  DispactchRider.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
                <button onClick={()=>{
                 console.log(paginaton,i+1,'pagination')
                 setPagination((a)=>{
