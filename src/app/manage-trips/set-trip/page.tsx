@@ -47,10 +47,18 @@ export default function SetTrip() {
     getAllParks();
   }, []);
   const parkOption = Park?.parks?.map((a: any) => {
-    return {
-      value: a?.id,
-      label: a?.name,
-    };
+    if(a){
+      return {
+        value: a?.id,
+        label: a?.name,
+      };
+    } else{
+      return {
+        value: '',
+        label: "no Park found",
+      };
+    }
+    
   });
   console.log(parkOption,'optio')
   const userData:any = useUserInfo()

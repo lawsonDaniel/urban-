@@ -43,16 +43,32 @@ export default function Assign() {
   console.log(Trip, "Trip");
 
   const DriverOption = Driver.map((a: any) => {
-    return {
-      value: a?.id,
-      label: a?.fullName,
-    };
+    if(a){
+      return {
+        value: a?.id,
+        label: a?.fullName,
+      };
+    } else{
+      return {
+        value: '',
+        label: "no driver found",
+      };
+    }
+   
   });
   const TripOption = Trip.map((a: any) => {
-    return {
-      value: a?.id,
-      label: a?.tripCode,
-    };
+    if(a){
+      return {
+        value: a?.id,
+        label: a?.tripCode,
+      };
+    } else{
+      return {
+        value: '',
+        label: "no trip found",
+      };
+    }
+  
   });
  
   const formik = useFormik({

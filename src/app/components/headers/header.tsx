@@ -66,10 +66,10 @@ export default function Header() {
         </Link>
         <Link
           href="#"
-          className=" hover:cursor ml-4"
+          className="rounded-full w-12 h-12 flex items-center justify-center bg-[red] hover:cursor ml-4"
           onClick={logOut}
         >
-          <AiOutlineLogout className="text-gray-600" size={24} />
+          <AiOutlineLogout className="text-white" size={24} />
         </Link>
       </div>
     </div>

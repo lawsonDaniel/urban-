@@ -41,10 +41,17 @@ useEffect(()=>{
   const options =
     parks &&
     parks.map((park) => {
-      return {
-        value: park.id,
-        label: park.name,
-      };
+      if(park){
+        return {
+          value: park.id,
+          label: park.name,
+        };
+      } else{
+        return {
+          value: '',
+          label: "no Park found",
+        };
+      }
     });
 
   const [selectedPark, setSelectedPark] = useState<any>();

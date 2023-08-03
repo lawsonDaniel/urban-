@@ -36,19 +36,35 @@ export default function RequestDriver() {
   const parkOption =
     allPark &&
     allPark.map((a: any) => {
-      return {
-        value: a?.id,
-        label: a?.data?.parkName,
-      };
+      if(a){
+        return {
+          value: a?.id,
+          label: a?.data?.parkName,
+        };
+      } else{
+        return {
+          value: '',
+          label: "no Park found",
+        };
+      }
+     
     });
 
   const providerAgencyOption =
     allProviderAgency &&
     allProviderAgency.map((a: any) => {
-      return {
-        value: a?.id,
-        label: a?.data?.name,
-      };
+      if(a){
+        return {
+          value: a?.id,
+          label: a?.data?.name,
+        };
+      } else{
+        return {
+          value: '',
+          label: "no Provider found",
+        };
+      }
+      
     });
   const validationSchema = Yup.object().shape({
     parkPhone: Yup.string().required("Park phone is required"),
