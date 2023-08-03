@@ -6,7 +6,7 @@ import Modal from "@/app/components/modal";
 import SuccessModal from "@/app/components/modal/sucess-modal";
 import { useFormik } from "formik";
 import { parseCookies } from "nookies";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdOutlineCelebration } from "react-icons/md";
 import { useAuth } from "@/common/hooks/useAuth";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ import { USER_TYPE } from "@/common/types";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
+import parkOBJ from "@/common/classes/park.class";
 
 export default function OwnerForm({ openModal }: { openModal: () => void }) {
   const options = [
@@ -27,7 +28,7 @@ export default function OwnerForm({ openModal }: { openModal: () => void }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { signUp } = useAuth();
   const router = useRouter();
-
+  const [parks, setParks] = useState<any[]>([]);
   const formik = useFormik({
     initialValues: {
       dispatcherName: "",
@@ -45,27 +46,72 @@ export default function OwnerForm({ openModal }: { openModal: () => void }) {
         phoneNumber:values.phoneNumber,
         deviceToken:"uefuefue23",
         password:values.password,
-        retypePassword: values.confirmPassword
+        retypePassword: values.confirmPassword,
+        parkId:selectedPark
     }
-    authOBJ
-    .register(data,"dispatchOfficer")
-    .then((res: any) => {
-      console.log(res, "data form dispatch");
-      toast.success(res?.data.message)
-      //redirect to park
-       router.push("/park");
-      setIsLoading(false);
-    })
-    .catch((err: any) => {
-      toast.error(err?.response?.data?.message);
-      setIsLoading(false);
-    });
+    if(selectedPark){
+      authOBJ
+      .register(data,"dispatchOfficer")
+      .then((res: any) => {
+        console.log(res, "data form dispatch");
+        toast.success(res?.data.message)
+        //redirect to park
+         router.push("/park");
+        setIsLoading(false);
+      })
+      .catch((err: any) => {
+        toast.error(err?.response?.data?.message);
+        setIsLoading(false);
+      });
+    }else{
+        toast.error('please fill all fields')
+    }
     },
   });
+
+  
+  const getAllParks = async () => {
+    try {
+      const res = await parkOBJ.getAll();
+      console.log("park ress::", res);
+      const parks: any[] = [];
+      setParks(res?.parks);
+      // setMainParks(res);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+useEffect(()=>{
+  getAllParks()
+},[])
+  const option =
+    parks &&
+    parks.map((park) => {
+      if(park){
+        return {
+          value: park.id,
+          label: park.name,
+        };
+      } else{
+        return {
+          value: '',
+          label: "no Park found",
+        };
+      }
+    });
+
 
   return (
     <div>
       <form className="mt-10 w-[510px]" onSubmit={formik.handleSubmit}>
+      <Dropdown
+          options={option}
+          placeholder="Select Park"
+          label="Select Park"
+          onSelect={(e: any) => setSelectedPark(e)}
+          className="w-[510px]"
+          
+        />
         <Input
           label="Dispatcher Name"
           type="text"

@@ -147,7 +147,7 @@ export default function Park() {
           <div></div>
         </div>
         <div className="mt-[53px]">
-          {parks.length >=1 ? (
+          {parks?.length >=1 ? (
            <>
              <Table
               columns={columns}
