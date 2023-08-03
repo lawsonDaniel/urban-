@@ -62,13 +62,13 @@ export default function AddPark() {
       setCityObj(cityLagos)
     }
   },[selectedState])
-  console.log("parkID::::", GenerateID("UB"));
-console.log(selectedState,selectedRegion,selectedCity,'values')
+ 
   const formik = useFormik({
     initialValues: {
       parkName: "",
       fullAddress: "",
       parkPhoneNumber: "",
+      coordinate:""
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
@@ -77,11 +77,11 @@ console.log(selectedState,selectedRegion,selectedCity,'values')
         parkOwnerId: GetUserData().id,
         state: selectedState,
         city: selectedCity,
-        region: selectedRegion,
         fullAddress: values.fullAddress,
+        coordinate:values.coordinate
       };
-      if (selectedState && selectedRegion && selectedCity) {
-        console.log(data)
+      if (selectedState  && selectedCity) {
+       
         parkOBJ
           .create(data)
           .then((res) => {
@@ -130,13 +130,7 @@ console.log(selectedState,selectedRegion,selectedCity,'values')
           onSelect={(e: any) => setPArk(e)}
           className="w-[510px]"
         />
-        <Dropdown
-          options={parkRegion}
-          placeholder="Region"
-          label="Select Region"
-          onSelect={(e: any) => setSelectedRegion(e)}
-          className="w-[510px]"
-        />
+        
         <Dropdown
           options={cityObj}
           placeholder="City"
@@ -153,6 +147,16 @@ console.log(selectedState,selectedRegion,selectedCity,'values')
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.fullAddress && formik.errors.fullAddress}
+        />
+         <Input
+          label="Coordinate"
+          type="text"
+          id="coordinate"
+          name="coordinate"
+          value={formik.values.coordinate}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.coordinate && formik.errors.coordinate}
         />
         {/*<Input*/}
         {/*  label="Park Phone Number"*/}

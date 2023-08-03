@@ -26,7 +26,7 @@ export default function AddParkManager() {
 
   const getAllParks = async () => {
     try {
-      const res = await parkOBJ.getAll();
+      const res = await parkOBJ.getAllByUser();
       console.log("park ress::", res);
       const parks: any[] = [];
       setParks(res?.parks);

@@ -24,7 +24,7 @@ export default function ManagerStatements() {
 
   useEffect(() => {
    
-    parkOBJ.getAll().then((res)=>{
+    parkOBJ.getAllByUser().then((res)=>{
       setPark(res?.parks)
     })
     
