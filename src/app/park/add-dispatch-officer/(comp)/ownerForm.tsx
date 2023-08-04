@@ -49,6 +49,7 @@ export default function OwnerForm({ openModal }: { openModal: () => void }) {
         retypePassword: values.confirmPassword,
         parkId:selectedPark
     }
+    console.log(data,'data from the form')
     if(selectedPark){
       authOBJ
       .register(data,"dispatchOfficer")

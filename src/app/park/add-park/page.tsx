@@ -42,6 +42,10 @@ export default function AddPark() {
     label: "select state",
     value: ''
   }])
+  const [coordinateData,setCoordinateData] = useState({
+    lat:'',
+    long:''
+  })
   const router = useRouter();
 
   const openModal = () => {
@@ -62,13 +66,46 @@ export default function AddPark() {
       setCityObj(cityLagos)
     }
   },[selectedState])
- 
+ useEffect(()=>{
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+} else {
+    alert("Geolocation is not supported by this browser.");
+}
+function showPosition(position:any) {
+  var latitude = position.coords.latitude;
+  var longitude = position.coords.longitude;
+  setCoordinateData({
+    lat: latitude,
+    long: longitude
+  });
+  
+}
+
+function showError(error:any) {
+  switch(error.code) {
+      case error.PERMISSION_DENIED:
+        toast.error("Unable to get coordinates please eneter manually");
+          break;
+      case error.POSITION_UNAVAILABLE:
+        toast.error("Unable to get coordinates please eneter manually");
+          break;
+      case error.TIMEOUT:
+        toast.error("Unable to get coordinates please eneter manually");
+          break;
+      case error.UNKNOWN_ERROR:
+          toast.error("Unable to get coordinates please eneter manually");
+          break;
+  }
+}
+ },[])
+ console.log(`${coordinateData.lat},${coordinateData.long}`,'coordinate')
   const formik = useFormik({
     initialValues: {
       parkName: "",
       fullAddress: "",
       parkPhoneNumber: "",
-      coordinate:""
+      coordinate:`[${coordinateData.lat},${coordinateData.long}]` || ''
     },
     onSubmit: async (values: any) => {
       setIsLoading(true);
@@ -78,7 +115,8 @@ export default function AddPark() {
         state: selectedState,
         city: selectedCity,
         fullAddress: values.fullAddress,
-        coordinate:values.coordinate
+        latitude:`${coordinateData.lat}`,
+        longitude:`${coordinateData.long}`
       };
       if (selectedState  && selectedCity) {
        
@@ -153,8 +191,8 @@ export default function AddPark() {
           type="text"
           id="coordinate"
           name="coordinate"
-          value={formik.values.coordinate}
-          onChange={formik.handleChange}
+          value={`[${coordinateData.lat},${coordinateData.long}]`|| formik.values.coordinate}
+          onChange={!formik.values.coordinate && formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.touched.coordinate && formik.errors.coordinate}
         />
