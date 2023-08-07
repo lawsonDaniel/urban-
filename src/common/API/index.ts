@@ -1,8 +1,8 @@
 import axios from "axios";
 import { GetStoredAuthToken } from "../hooks/token";
 
-const baseURL = "https://ui62646llb.execute-api.us-east-1.amazonaws.com/prod";
-
+// const baseURL = "https://ui62646llb.execute-api.us-east-1.amazonaws.com/prod";
+const baseURL = "http://localhost:8002"
 // Create an Axios instance with the base URL
 const api = axios.create({
   baseURL: `${baseURL}`,

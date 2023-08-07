@@ -19,9 +19,9 @@ export default function ParkManager() {
     { label: "Corporate", value: "corporate" },
   ];
 
-  const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [country, setCountry] = useState<string>();
+ const [isChecked, setIsChecked] = useState<boolean>(false);
+const [isLoading, setIsLoading] = useState<boolean>(false);
+const [country, setCountry] = useState<string>("");
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked);
   };
@@ -33,7 +33,7 @@ export default function ParkManager() {
     lastName: Yup.string().required("Last Name is required"),
     phoneNumber: Yup.string().required("Phone Number is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    parkGeneralName: Yup.string().required("Park General Name is required"),
+    
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters long"),
@@ -49,7 +49,6 @@ export default function ParkManager() {
       lastName: "",
       phoneNumber: "",
       email: "",
-      parkGeneralName: "",
       password: "",
       confirmPassword: "",
     },
@@ -57,6 +56,7 @@ export default function ParkManager() {
     onSubmit: async (values) => {
       if (country) {
         setIsLoading(true);
+        console.log('submittes')
         authOBJ
           .register(
             {
@@ -65,7 +65,6 @@ export default function ParkManager() {
               country: country,
               phoneNumber: values.phoneNumber,
               email: values.email,
-              parkGeneralName: values.parkGeneralName,
               deviceToken: "12345",
               password: values.password,
               retypePassword: values.confirmPassword,
@@ -73,6 +72,7 @@ export default function ParkManager() {
             "parkManager"
           )
           .then((res: any) => {
+            console.log(res,'from submitting form')
             toast.success(res?.data.message);
             //get user info
             authOBJ.currentUser();
@@ -145,19 +145,7 @@ export default function ParkManager() {
             error={formik.touched.email && formik.errors.email}
             // icon={<LockClosedIcon />}
           />
-          <Input
-            label="Park General Name"
-            type="text"
-            id="parkGeneralName"
-            name="parkGeneralName"
-            value={formik.values.parkGeneralName}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.parkGeneralName && formik.errors.parkGeneralName
-            }
-            // icon={<LockClosedIcon />}
-          />
+         
           <Dropdown
             options={countryList().getData()}
             className={"w-full"}
