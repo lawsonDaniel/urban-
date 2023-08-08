@@ -27,14 +27,22 @@ export default function ManagerStatements() {
     parkOBJ.getAllByUser().then((res)=>{
       setPark(res?.parks)
     })
-    
-  }, []);
+    console.log(Park,'park ')
+  }, [Park]);
 
-  const parkOption = Park.map((a: any) => {
-    return {
-      value: a?.id,
-      label: a?.name,
-    };
+  const parkOption = Park?.map((a: any) => {
+    console.log(a,'options')
+    if(a){
+      return {
+        value: a?.id,
+        label: a?.name,
+      };
+    } else{
+      return {
+        value: 'no Park found',
+        label: "no Park found",
+      };
+    }
   });
   return (
     <>

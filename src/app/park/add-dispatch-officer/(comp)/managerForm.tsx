@@ -83,7 +83,7 @@ useEffect(()=>{
   const option =
     parks &&
     parks.map((park) => {
-      if(park){
+      if(park.length >=1){
         return {
           value: park.id,
           label: park.name,
