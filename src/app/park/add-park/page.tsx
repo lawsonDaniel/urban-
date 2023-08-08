@@ -192,7 +192,11 @@ function showError(error:any) {
           id="coordinate"
           name="coordinate"
           value={`[${coordinateData.lat},${coordinateData.long}]`|| formik.values.coordinate}
-          onChange={!formik.values.coordinate && formik.handleChange}
+          onChange={(e:any) => {
+            if (!formik.values.coordinate) {
+              formik.handleChange(e);
+            }
+          }}
           onBlur={formik.handleBlur}
           error={formik.touched.coordinate && formik.errors.coordinate}
         />
