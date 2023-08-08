@@ -37,7 +37,7 @@ export default function SetTrip() {
 
   const router = useRouter();
   const getAllParks = async () => {
-    parkOBJ.getAll().then((res)=>{
+    parkOBJ.getAllByUser().then((res)=>{
       console.log(res,'park from option')
       setPark(res)
     })
@@ -46,6 +46,7 @@ export default function SetTrip() {
   useEffect(() => {
     getAllParks();
   }, []);
+  
   const parkOption = Park?.parks?.map((a: any) => {
     if(a){
       return {

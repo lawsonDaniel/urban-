@@ -40,7 +40,10 @@ export default function Header() {
           <p className="text-xl text-primary font-bold text-uppercase">
             {storedUser?.dispatchName ||
               storedUser?.firstName ||
-              storedUser?.companyName}
+              storedUser?.companyName || storedUser?.email.split('@')[0]
+              
+              } 
+
           </p>
         </div>
       </div>

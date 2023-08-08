@@ -29,6 +29,10 @@ export default function AddPark() {
     label: "select state",
     value: ''
   }])
+  const [coordinateData,setCoordinateData] = useState({
+    lat:'',
+    long:''
+  })
   const options = [
     { label: "Abuja", value: "abuja" },
     { label: "Lagos", value: "lagos" },
@@ -52,6 +56,40 @@ export default function AddPark() {
   }
 
   useEffect(()=>{
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition, showError);
+  } else {
+      alert("Geolocation is not supported by this browser.");
+  }
+  function showPosition(position:any) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    setCoordinateData({
+      lat: latitude,
+      long: longitude
+    });
+    
+  }
+  
+  function showError(error:any) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+          toast.error("Unable to get coordinates please eneter manually");
+            break;
+        case error.POSITION_UNAVAILABLE:
+          toast.error("Unable to get coordinates please eneter manually");
+            break;
+        case error.TIMEOUT:
+          toast.error("Unable to get coordinates please eneter manually");
+            break;
+        case error.UNKNOWN_ERROR:
+            toast.error("Unable to get coordinates please eneter manually");
+            break;
+    }
+  }
+   },[])
+
+  useEffect(()=>{
     if(parkLocation === "abuja"){
       setCityObj(cityFCT)
     }else{
@@ -64,19 +102,22 @@ export default function AddPark() {
       parkFullAddress: "",
       parkState: "",
       parkCity: "",
-      parkRegion: "",
+      coordinate:`[${coordinateData.lat},${coordinateData.long}]` || ''
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      values.parkState = parkLocation;
-      values.parkRegion = selectedRegion;
-      values.parkCity = parkCity;
+      
       values = {
-        ...values,
+        latitude:`${coordinateData.lat}`,
+        longitude:`${coordinateData.long}`,
+        parkName: values.parkName,
+        parkFullAddress: values.parkFullAddress,
+        parkState: parkLocation,
+        parkCity: parkCity,
         ...ParkOwner,
       };
 
-      if (parkLocation && parkCity && selectedRegion) {
+      if (parkLocation && parkCity) {
         setIsLoading(true);
 
         console.log(values, "from the park");
@@ -134,14 +175,20 @@ export default function AddPark() {
             className="w-full"
           />
 
-          <Dropdown
-            options={parkRegion}
-            placeholder="Region"
-            label="Select Region"
-            onSelect={(e) => setSelectedRegion(e)}
-            className="w-full"
-          />
-
+        <Input
+          label="Coordinate"
+          type="text"
+          id="coordinate"
+          name="coordinate"
+          value={`[${coordinateData.lat},${coordinateData.long}]`|| formik.values.coordinate}
+          onChange={(e:any) => {
+            if (!formik.values.coordinate) {
+              formik.handleChange(e);
+            }
+          }}
+          onBlur={formik.handleBlur}
+          error={formik.touched.coordinate && formik.errors.coordinate}
+        />
           <Input
             label="Full Address"
             type="tel"

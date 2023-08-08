@@ -13,6 +13,7 @@ import * as Yup from "yup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
+import parkOBJ from "@/common/classes/park.class";
 
 export default function RequestDriver() {
   const lugage = [
@@ -26,46 +27,48 @@ export default function RequestDriver() {
   const [allPark, setAllPark] = useState<any>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allProviderAgency, setAllProviderAgency] = useState<any>([]);
-  const getAllPark = async () => {};
+  const getAllPark = async () => {
+    parkOBJ.getAllByUser().then((res)=>{
+      console.log(res,'park from option')
+      setAllPark(res)
+    })
+  };
   const getAllProviderAgency = async () => {};
   useEffect(() => {
     getAllPark();
     getAllProviderAgency();
   }, [getAll]);
 
-  const parkOption =
-    allPark &&
-    allPark.map((a: any) => {
-      if(a){
-        return {
-          value: a?.id,
-          label: a?.data?.parkName,
-        };
-      } else{
-        return {
-          value: '',
-          label: "no Park found",
-        };
-      }
-     
-    });
+  let parkOption: [{ value: string; label: string; }]
+  
+  if(allPark && allPark?.parks?.length >= 1){
+    parkOption = allPark.parks?.map((a: any) => ({
+      value: a?.id ,
+      label: a?.name ,
+    }))
+  }else{
+    parkOption = [{
+      value:'',
+      label : 'no Park found'
+    }]
+  }
 
-  const providerAgencyOption =
-    allProviderAgency &&
-    allProviderAgency.map((a: any) => {
-      if(a){
-        return {
-          value: a?.id,
-          label: a?.data?.name,
-        };
-      } else{
-        return {
-          value: '',
-          label: "no Provider found",
-        };
-      }
-      
-    });
+   
+    let providerAgencyOption: [{ value: string; label: string; }]
+  console.log(allProviderAgency ,'provider agency')
+    if (allProviderAgency && allProviderAgency.length >= 1) {
+      providerAgencyOption = allProviderAgency.map((a: any) => ({
+        value: a?.id,
+        label: a?.data?.name,
+      }));
+    } else {
+      providerAgencyOption = [{
+        value: "",
+        label: 'no Provider found',
+      }];
+    }
+
+
   const validationSchema = Yup.object().shape({
     parkPhone: Yup.string().required("Park phone is required"),
     departureCity: Yup.string().required("Departure city is required"),
