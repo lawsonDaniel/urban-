@@ -39,7 +39,7 @@ export default function RequestDriver() {
     getAllProviderAgency();
   }, [getAll]);
 
-  let parkOption: [{ value: string; label: string; }]
+  let parkOption: [{ value: any; label: string; }]
   
   if(allPark && allPark?.parks?.length >= 1){
     parkOption = allPark.parks?.map((a: any) => ({
@@ -48,13 +48,13 @@ export default function RequestDriver() {
     }))
   }else{
     parkOption = [{
-      value:'',
+      value:null,
       label : 'no Park found'
     }]
   }
 
    
-    let providerAgencyOption: [{ value: string; label: string; }]
+    let providerAgencyOption: [{ value: any; label: string; }]
   console.log(allProviderAgency ,'provider agency')
     if (allProviderAgency && allProviderAgency.length >= 1) {
       providerAgencyOption = allProviderAgency.map((a: any) => ({
@@ -63,7 +63,7 @@ export default function RequestDriver() {
       }));
     } else {
       providerAgencyOption = [{
-        value: "",
+        value: null,
         label: 'no Provider found',
       }];
     }
@@ -89,7 +89,7 @@ export default function RequestDriver() {
     validationSchema,
     onSubmit: async (values: any) => {
       setIsLoading(true);
-      if (selectedPark && ProviderAgency) {
+      if (selectedPark && ProviderAgency && selectedPark !=null && ProviderAgency!=null ) {
         values = {
           providerAgency: ProviderAgency,
           park: selectedPark,
@@ -194,7 +194,7 @@ export default function RequestDriver() {
           />
 
           <Button
-            disabled={!selectedPark && !ProviderAgency}
+            disabled={!selectedPark && !ProviderAgency && selectedPark ===null && ProviderAgency === null}
             type="submit"
             className="w-full mt-20 text-white"
           >

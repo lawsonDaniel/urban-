@@ -42,34 +42,35 @@ export default function Assign() {
   }, [getAll]);
   console.log(Trip, "Trip");
 
-  const DriverOption = Driver.map((a: any) => {
-    if(a){
-      return {
-        value: a?.id,
-        label: a?.fullName,
-      };
-    } else{
-      return {
-        value: '',
-        label: "no driver found",
-      };
-    }
-   
-  });
-  const TripOption = Trip.map((a: any) => {
-    if(a){
-      return {
-        value: a?.id,
-        label: a?.tripCode,
-      };
-    } else{
-      return {
-        value: '',
-        label: "no trip found",
-      };
-    }
+  let DriverOption: { value: any; label: any; }[]
   
-  });
+  if(Driver && Driver?.length >= 1){
+    DriverOption = Driver?.map((a: any) => ({
+      value: a?.id ,
+      label: a?.fullName ,
+    }))
+  }else{
+    DriverOption = [{
+      value:null,
+      label : 'no Driver found'
+    }]
+  }
+
+  let TripOption: { value: any; label: any; }[]
+  
+  if(Trip && Trip?.length >= 1){
+    TripOption = Trip?.map((a: any) => ({
+      value: a?.id ,
+      label: a?.tripCode ,
+    }))
+  }else{
+    DriverOption = [{
+      value:null,
+      label : 'no Trip found'
+    }]
+  }
+ 
+  
  
   const formik = useFormik({
     initialValues: {},
@@ -139,7 +140,7 @@ export default function Assign() {
         </div>
         <div className=" w-[510px]">
           <Button
-            disabled={!selectedDriver && !selectedPark}
+            disabled={!selectedDriver && !selectedPark && selectedDriver === null && selectedPark === null}
             type="submit"
             className="w-full mt-20 text-white"
           >

@@ -47,21 +47,20 @@ export default function SetTrip() {
     getAllParks();
   }, []);
   
-  const parkOption = Park?.parks?.map((a: any) => {
-    if(a){
-      return {
-        value: a?.id,
-        label: a?.name,
-      };
-    } else{
-      return {
-        value: '',
-        label: "no Park found",
-      };
-    }
-    
-  });
-  console.log(parkOption,'optio')
+  let parkOption: [{ value: string; label: string; }]
+  
+  if(Park && Park?.parks?.length >= 1){
+    parkOption = Park?.parks?.map((a: any) => ({
+      value: a?.id ,
+      label: a?.name ,
+    }))
+  }else{
+    parkOption = [{
+      value:'',
+      label : 'no Park found'
+    }]
+  }
+
   const userData:any = useUserInfo()
   const validationSchema = Yup.object().shape({
     departureTime: Yup.string().required("Please enter the departure time."),
