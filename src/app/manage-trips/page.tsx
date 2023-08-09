@@ -104,9 +104,10 @@ console.log(Trip,'trips  ss')
           columns={columns}
           data={Trip}
           action={{
-            label: "Edit details",
-            type: ["edit"],
-            editLabel: "Edit Details",
+            editLabel: "Edit details",
+            type: ["edit","view","Request Driver"],
+            viewLabel:"Veiw Details",
+            label: "Assign Driver",
           }}
           type="booking"
         /> : <div className="mt-[10rem] text-center">

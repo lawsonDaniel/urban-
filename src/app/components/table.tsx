@@ -36,7 +36,7 @@ type Props = {
     editLabel?: string;
     viewLabel?: string;
     deleteLabel?: string;
-    type: TableType[];
+    type: any[];
   };
   noAction?: boolean;
   hideDefaultBody?: boolean;

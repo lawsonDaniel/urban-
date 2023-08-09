@@ -175,12 +175,12 @@ export const routes: any = {
   },
 
   TRIPS: [
-    {
-      path: "/manage-trips/assign",
-      title: "Assign Vehicle & Driver",
-      icon: <TfiCar size={22} className="" />,
-      iconClassName: "bg-primary",
-    },
+    // {
+    //   path: "/manage-trips/assign",
+    //   title: "Assign Vehicle & Driver",
+    //   icon: <TfiCar size={22} className="" />,
+    //   iconClassName: "bg-primary",
+    // },
     {
       path: "/manage-trips/track-request",
       title: "Track Request",
