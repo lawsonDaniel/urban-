@@ -13,47 +13,50 @@ import manager from "@/common/classes/manager.class";
 export default function Managers() {
   const columns = [
     {
-      id: "parkName",
-      header: "Park Name",
+      id: "firstName",
+      header: "Manager Name",
     },
     {
-      id: "totalTrips",
-      header: "total trips",
+      id: "email",
+      header: "Email",
     },
     {
-      id: "successfulTrips",
-      header: "successful trips",
+      id: "phone number",
+      header: "Phone No",
     },
     {
-      id: "scheduledTrips",
-      header: "scheduled trips",
-    },
-    {
-      id: "cancelledTrips",
-      header: "cancelled trips",
-    },
+      id: "urbanId",
+      header: "Manger id",
+    }
   ];
 
   const userData = useUser();
   const [managerPark, setManagerPark] = useState<any[]>([]);
-  const [inputField,setInputField] = useState<any>('')
-
+  const [inputField, setInputField] = useState<string>('');
+  
   useEffect(() => {
     if (userData) {
-      manager.getAll().then((res)=>{
-        setManagerPark(res?.data)
-        if (inputField.trim().length >= 1) {
-          const searchFilter = res?.data((parkfiltername:any) =>
-          parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
-          );
-          console.log(searchFilter,'swae')
-          setManagerPark(searchFilter)
-        } else {
-          setManagerPark(res?.data)
-        }
-      })
+      manager.getAll()
+        .then((res) => {
+          let filteredParks = res;
+          if (inputField.trim().length >= 1) {
+            const searchFilter:any[] = filteredParks.filter((park: any) =>
+              park.urbanId.toLowerCase().includes(inputField.toLowerCase())
+            );
+            console.log(searchFilter,'filter data')
+            setManagerPark(searchFilter);
+          } else {
+            setManagerPark(filteredParks);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching manager data:", error);
+        });
     }
+    
   }, [inputField, userData]);
+  
+  // Rest of your component...
 
   return (
     <main>

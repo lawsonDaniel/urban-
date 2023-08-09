@@ -12,8 +12,7 @@ class managerOBJ {
         
           if (response?.data?.success) {
             //store response in redux
-            console.log(response.data,'from manager api ')
-            return response.data.data;
+            return response?.data?.data;
           } else {
             throw new Error("something went wrong");
           }
