@@ -51,7 +51,19 @@ class tripOBJ {
       throw err;
     }
   }; 
-    
+ filter = async (user:string,status:string) => {
+    try {
+      let response
+         response = await api.get(`/trip/${user}/filter/${status}`);
+      if (response?.data?.success) {
+        return response?.data?.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }; 
 }
 const tripOBJs = new tripOBJ()
 export default tripOBJs

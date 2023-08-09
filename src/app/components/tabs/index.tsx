@@ -10,6 +10,7 @@ export default function MyTabs({
   headers: string[];
   components: JSX.Element[];
 }) {
+  
   return (
     <>
       <Tabs>
