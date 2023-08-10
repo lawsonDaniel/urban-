@@ -56,7 +56,7 @@ export default function Assign() {
     }]
   }
 
-  let TripOption: { value: any; label: any; }[]
+  let TripOption:any = []
   
   if(Trip && Trip?.length >= 1){
     TripOption = Trip?.map((a: any) => ({

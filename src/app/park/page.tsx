@@ -154,7 +154,7 @@ export default function Park() {
               data={parks}
               action={{
                 viewLabel: "View statement",
-                type: ["view"],
+                type: ["view", "edit",],
               }}
             />
              <div className="flex gap-4 items-center justify-center mt-[10px]">
@@ -192,6 +192,23 @@ export default function Park() {
             iconClassName={routes.PARK[2].iconClassName}
             icon={routes.PARK[2].icon}
           />
+          <div className="grid grid-cols-3 gap-4 mt-[32px]">
+          <Button
+            type="button"
+            onClick={() => router.push("/park/managers")}
+            className="w-full text-primary bg-primary bg-opacity-20 hover:bg-primary hover:text-white"
+          >
+            See All Park Managers
+          </Button>
+          <Button
+            type="button"
+            onClick={() => router.push("/park/dispatch-officers")}
+            className="w-full bg-primary_blue text-primary_blue bg-opacity-20 hover:bg-primary_blue hover:text-white"
+          >
+            See All Dispatch Officers
+          </Button>
+          <div></div>
+        </div>
           <div className="mt-[53px]">
             {DispactchRider && DispactchRider.length >=1 ? (
              <>
