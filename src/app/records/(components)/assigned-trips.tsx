@@ -4,15 +4,15 @@ import React from "react";
 export default function AssignedTrips({ data }: any) {
   const columns = [
     {
-      id: "departurePark",
-      header: "Departure Park",
+      id: "startLocation",
+      header: "Departure City",
     },
     {
-      id: "departureTime",
+      id: "time",
       header: "Departure Time",
     },
     {
-      id: "destinationCity",
+      id: "endLocation",
       header: "Destination City",
     },
     {
@@ -28,7 +28,8 @@ export default function AssignedTrips({ data }: any) {
   return (
     <>
       <div className="mt-[53px]">
-        <Table
+        {
+          data && data.length >=1 ?  <Table
           columns={columns}
           data={data}
           action={{
@@ -36,7 +37,19 @@ export default function AssignedTrips({ data }: any) {
             viewLabel: "View Details",
           }}
           type="companyTrack"
-        />
+        />:(
+            <div className="flex-col gap-7">
+              <div className="grid grid-cols-3 mt-[32px] gap-8">
+              </div>
+              <div className="mt-[10rem] text-center">
+                <p className="text-xl capitalize">
+                  Sorry, No Trip yet
+                </p>
+              </div>
+            </div>
+          )
+        }
+       
       </div>
     </>
   );

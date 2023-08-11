@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import jwt_decode from "jwt-decode";
 import { decode } from "querystring";
 import { RemoveAllToken } from "./common/hooks/token";
+import { destroyCookie } from "nookies";
 
 export function middleware(req: NextRequest) {
   const storedUser:any = req.cookies.get("userToken");
@@ -14,7 +15,9 @@ export function middleware(req: NextRequest) {
   if (!storedUser) {
     return NextResponse.redirect(new URL("/auth/login", req.url));
   }else if( decoded?.exp < currentTime){
-      RemoveAllToken()
+    destroyCookie(null, "userToken", { path: "/" });
+    destroyCookie(null, "userData", { path: "/" });
+    destroyCookie(null, "userType", { path: "/" });
       return NextResponse.redirect(new URL("/auth/login", req.url));
 
   }

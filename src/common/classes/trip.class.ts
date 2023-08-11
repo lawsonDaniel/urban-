@@ -64,6 +64,26 @@ class tripOBJ {
       throw err;
     }
   }; 
+  getRecords = async (user:string,startDate:any,  endDate:any,park:string) => {
+   
+    const filterParams = {
+      startDate:startDate,
+      endDate:endDate,
+      park:park
+    };
+     const queryString = new URLSearchParams(filterParams).toString();
+    try {
+      let response
+         response = await api.get(`/trip/${user}/records?${queryString}`);
+      if (response?.data?.success) {
+        return response?.data?.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }; 
 }
 const tripOBJs = new tripOBJ()
 export default tripOBJs

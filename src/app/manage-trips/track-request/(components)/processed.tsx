@@ -85,7 +85,7 @@ export default function Processed({inputField}:any) {
             </div>
             <div className="mt-[10rem] text-center">
               <p className="text-xl capitalize">
-                Sorry, No information yet
+                Sorry, No Trip yet
               </p>
             </div>
           </div>

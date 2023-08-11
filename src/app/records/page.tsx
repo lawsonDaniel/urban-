@@ -13,10 +13,12 @@ import { useRouter } from "next/navigation";
 import Input from "@/app/components/input";
 import parkOBJ from "@/common/classes/park.class";
 import { classifyDate } from "@/common/utils";
+import tripOBJs from "@/common/classes/trip.class";
+import { GetUserType } from "@/common/hooks/token";
 
 export default function Records() {
   const [parks, setParks] = useState<any[]>([]);
-
+  const userType = GetUserType()
   let option: { value: any; label: any; }[]
   
   if(parks &&  parks?.length >= 1){
@@ -44,6 +46,7 @@ export default function Records() {
   const [selectedPark, setSelectedPark] = useState<string>();
   const [activeOption, setActiveOption] = useState<any>("Today");
   const [selectedVehicle, setSelectedVehicle] = useState("");
+  const [allTrips,setAllTrips] = useState<any[]>([])
   
 const today = new Date();
 const year = today.getFullYear();
@@ -66,14 +69,14 @@ useEffect(()=>{
     })
   }
  
-},[dateRange])
+},[dateRange, formattedDate])
 
   useEffect(() => {
     const getAllParks = async () => {
     try {
      const res:any = await parkOBJ.getAll()
+     console.log(res,'res to select park')
       setParks(res?.parks)
-      console.log("parks:", parks);
     } catch (err) {
       console.log(err);
     }
@@ -81,16 +84,39 @@ useEffect(()=>{
     getAllParks();
   }, []);
 
+  const onSubmit =()=>{
+    console.log('clicked park statement')
+    if(dateRange.start && dateRange.end && activeOption && selectedPark){
+      tripOBJs.getRecords(userType,dateRange.start,dateRange.end,selectedPark).then((res:any)=>{
+        console.log(res,'records of park')
+        setAllTrips(res)
+      }).catch((err)=>{
+        console.log(err,'err')
+      })
+    }else{
+      
+    }
+  }
+
  
   let scheduledTrips: any = null;
   let assignedTrips: any = null;
   let completedTrips: any = null;
-
-  
-  //working on the park statement
-  if(selectedPark){
-    router.push(`/park-statements/manager?`)
-  }
+    if(allTrips && allTrips.length >=1){
+        allTrips.map((a)=>{
+          if(a.status === "completed"){
+            completedTrips = []
+            completedTrips.push(a)
+          }else if(a.status === "scheduled"){
+            scheduledTrips = []
+            scheduledTrips.push(a)
+          }else if(a.status === "assigned"){
+            assignedTrips = []
+            assignedTrips.push(a)
+          }
+        })
+    }
+    console.log(scheduledTrips,'scheduledTrips')
   return (
     <>
       <SubHeader header="Records" hideBack />
@@ -249,13 +275,14 @@ useEffect(()=>{
         <div className="mt-10">
           <Button
             type="button"
-            
+            disabled={!dateRange.start || !dateRange.end || !activeOption || !selectedPark}
+            onClick={()=> onSubmit()}
             className="w-full bg-white text-primary bg-opacity-20 hover:bg-primary border border-2 border-primary hover:text-white"
           >
             See Statement
           </Button>
         </div>
-        <div className="my-10">
+        {/* <div className="my-10">
           <RadioButton
             name="selectedVehicle"
             options={transportOptions}
@@ -265,7 +292,7 @@ useEffect(()=>{
             customInputWrapperStyle="bg-gray-100 w-32 h-[105px] flex items-center justify-center rounded-xl"
             customActiveStyle="border border-2 border-primary"
           />
-        </div>
+        </div> */}
       </div>
       <div>
         <MyTabs
