@@ -5,9 +5,6 @@ import Dropdown from "../../components/dropdown";
 import NotificationCard from "../../components/notification-card";
 import Avatar from "../../components/avatar";
 import { useRouter } from "next/navigation";
-import { getAll } from "@/common/hooks/fireStore";
-import { DocumentSnapshot } from "@firebase/firestore";
-import manager from "@/common/classes/manager.class";
 import parkOBJ from "@/common/classes/park.class";
 
 export default function ManagerStatements() {

@@ -13,10 +13,38 @@ export function GenerateID(prefix: string) {
   return prefix + randomDigits.join("");
 }
 
-export const convertCamelCaseToNormal = (camelCaseString: string) => {
-  return camelCaseString
-    .replace(/([a-z])([A-Z])/g, "$1 $2")
-    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-};
+export function classifyDate(date1: string, date2: string){
+ console.log(date1,date2,'date one and two')
+ let day1 = Number(date1.split('-')[2] )
+ let day2 = Number(date2.split('-')[2]) 
+
+ let month1 = Number(date1.split('-')[1]) 
+ let month2 = Number(date2.split('-')[1]) 
+
+//Today
+if(day1 === day2 && month1 === month2){
+  return 'Today'
+}else if(day1-day2 === 1 && month1 === month2){
+  return 'Yesterday'
+}else if(day2 > day1 && day2 <= day1 + 7 && month1 === month2){
+  return "Current Week"
+}else if(day2 < day1-1 && day2 >= day1 - 7 && month1 === month2){
+  return "Previous Week"
+}else if(month1 === month2){
+  return "Current Month"
+}else if(month1>month2){
+  return "Previous Month"
+}
+ 
+}
+// Today
+
+// Yesterday
+
+// Current Week
+
+// Previous Week
+
+// Current Month
+
+// Previous Month

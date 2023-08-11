@@ -3,7 +3,6 @@ import SubHeader from "../components/headers/sub-header";
 import Dropdown from "../components/dropdown";
 import { useEffect, useState } from "react";
 import { RadioButton } from "../components/radio/auth.radio";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import ScheduledTrips from "./(components)/scheduled-trip";
 import AssignedTrips from "./(components)/assigned-trips";
@@ -12,19 +11,25 @@ import Button from "../components/button";
 import MyTabs from "../components/tabs";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/input";
-import { getAll } from "@/common/hooks/fireStore";
-import { DocumentSnapshot } from "@firebase/firestore";
+import parkOBJ from "@/common/classes/park.class";
+import { classifyDate } from "@/common/utils";
 
 export default function Records() {
   const [parks, setParks] = useState<any[]>([]);
 
-  const options = parks
-    ? parks.map((park) => ({
-        value: park.park_id,
-        label: park.park_name,
-      }))
-    : null;
-
+  let option: { value: any; label: any; }[]
+  
+  if(parks &&  parks?.length >= 1){
+    option =  parks?.map((park: any) => ({
+      value: park.id,
+      label: park.name,
+    }))
+  }else{
+    option = [{
+      value:null,
+      label : 'no Park found'
+    }]
+  }
   const transportOptions = [
     { value: "bus", label: "Bus" },
     { value: "sedan", label: "Sedan" },
@@ -35,100 +40,57 @@ export default function Records() {
   const [trips, setTrips] = useState<any[]>([]);
 
   const router = useRouter();
-
+ 
   const [selectedPark, setSelectedPark] = useState<string>();
-  const [activeOption, setActiveOption] = useState<string>("Today");
+  const [activeOption, setActiveOption] = useState<any>("Today");
   const [selectedVehicle, setSelectedVehicle] = useState("");
+  
+const today = new Date();
+const year = today.getFullYear();
+const month = today.getMonth() + 1; // Months are zero-indexed, so adding 1
+const day = today.getDate();
+const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
+const [dateRange,setDateRange] = useState<any>({
+  start:formattedDate,
+  end:formattedDate
+})
 
-  const getAllParks = async () => {
+useEffect(()=>{
+  if(classifyDate(dateRange.start,dateRange.end)){
+    setActiveOption(classifyDate(dateRange.start,dateRange.end))
+  }else{
+    setActiveOption("Today")
+    setDateRange({
+      start:formattedDate,
+      end:formattedDate
+    })
+  }
+ 
+},[dateRange])
+
+  useEffect(() => {
+    const getAllParks = async () => {
     try {
-      const res = await getAll("parks", ["=="], ["manager_id"], ["UB62333968"]);
-      console.log(res);
-      const parks: any[] = [];
-      res.forEach((doc: DocumentSnapshot) => {
-        parks.push(doc.data());
-      });
-      setParks(parks);
+     const res:any = await parkOBJ.getAll()
+      setParks(res?.parks)
       console.log("parks:", parks);
     } catch (err) {
       console.log(err);
     }
   };
-  const getAllTrips = async () => {
-    if (selectedPark) {
-      try {
-        const whereClauses = [];
-
-        if (selectedVehicle) {
-          whereClauses.push({
-            field: "vehicleType",
-            operator: "==",
-            value: selectedVehicle,
-          });
-        }
-
-        whereClauses.push({
-          field: "departureParkId",
-          operator: "==",
-          value: selectedPark,
-        });
-
-        const res = await getAll(
-          "trips",
-          ["=="],
-          ["vehicleType"],
-          [selectedVehicle]
-        );
-        const trips: any[] = [];
-        res.forEach((doc: DocumentSnapshot) => {
-          trips.push(doc.data());
-        });
-        setTrips(trips);
-        console.log("trips:", trips, res);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  };
-
-  useEffect(() => {
     getAllParks();
-  }, [getAll]);
+  }, []);
 
-  useEffect(() => {
-    getAllTrips();
-  }, [selectedPark]);
-
+ 
   let scheduledTrips: any = null;
   let assignedTrips: any = null;
   let completedTrips: any = null;
 
-  if (trips) {
-    const filteredTrips = trips.reduce(
-      (acc, trip) => {
-        if (trip.tripStatus === "SCHEDULED") {
-          acc.scheduledTrips.push(trip);
-        } else if (trip.tripStatus === "Assigned") {
-          acc.assignedTrips.push(trip);
-        } else if (trip.tripStatus === "Completed") {
-          acc.completedTrips.push(trip);
-        }
-        return acc;
-      },
-      {
-        scheduledTrips: [],
-        assignedTrips: [],
-        completedTrips: [],
-      }
-    );
-
-    scheduledTrips = filteredTrips.scheduledTrips;
-    assignedTrips = filteredTrips.assignedTrips;
-    completedTrips = filteredTrips.completedTrips;
+  
+  //working on the park statement
+  if(selectedPark){
+    router.push(`/park-statements/manager?`)
   }
-
-  console.log("selectedPark?.value:", selectedPark, selectedVehicle);
-
   return (
     <>
       <SubHeader header="Records" hideBack />
@@ -204,10 +166,14 @@ export default function Records() {
             type={"date"}
             id=""
             name=""
-            value={""}
+            value={dateRange.start}
             onChange={
-              (e) => {}
-              // setSearch(e.target.value)
+             (e:any)=> setDateRange((a:any)=>{
+              return({
+                start:e.target.value,
+                end:a.end
+              })
+             })
             }
             // onBlur={formik.handleBlur}
             // error={formik.touched.password && formik.errors.password}
@@ -222,10 +188,14 @@ export default function Records() {
             type={"date"}
             id=""
             name=""
-            value={""}
+            value={dateRange.end}
             onChange={
-              (e) => {}
-              // setSearch(e.target.value)
+             (e:any)=> setDateRange((a:any)=>{
+              return({
+                start:a.start,
+                end:e.target.value
+              })
+             })
             }
             // onBlur={formik.handleBlur}
             // error={formik.touched.password && formik.errors.password}
@@ -235,7 +205,7 @@ export default function Records() {
       <div className="w-[551px]">
         <div>
           <Dropdown
-            options={options}
+            options={option}
             placeholder="Select Park"
             onSelect={(e) => setSelectedPark(e)}
             className="w-[551px]"
@@ -244,7 +214,7 @@ export default function Records() {
         <div className="mt-10">
           <Button
             type="button"
-            onClick={() => router.push("/park-statements/manager")}
+            
             className="w-full bg-white text-primary bg-opacity-20 hover:bg-primary border border-2 border-primary hover:text-white"
           >
             See Statement

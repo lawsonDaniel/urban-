@@ -80,22 +80,21 @@ export default function ManagerForm({ openModal }: { openModal: () => void }) {
 useEffect(()=>{
   getAllParks()
 },[])
-  const option =
-    parks &&
-    parks.map((park) => {
-      if(park.length >=1){
-        return {
-          value: park.id,
-          label: park.name,
-        };
-      } else{
-        return {
-          value: '',
-          label: "no Park found",
-        };
-      }
-      
-    });
+
+let option: { value: any; label: any; }[]
+  
+  if(parks &&  parks?.length >= 1){
+    option =  parks?.map((park: any) => ({
+      value: park.id,
+      label: park.name,
+    }))
+  }else{
+    option = [{
+      value:null,
+      label : 'no Park found'
+    }]
+  }
+  
 
   const [selectedPark, setSelectedPark] = useState<any>();
 
