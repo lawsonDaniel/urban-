@@ -101,7 +101,13 @@ useEffect(()=>{
               ? "text-primary font-bold"
               : "text-gray-600"
           }`}
-          onClick={() => setActiveOption("Today")}
+          onClick={() => {
+            setDateRange({
+              start:formattedDate,
+              end:formattedDate
+            })
+            setActiveOption("Today")
+          }}
         >
           Today
         </p>
@@ -111,7 +117,13 @@ useEffect(()=>{
               ? "text-primary font-bold"
               : "text-gray-600"
           }`}
-          onClick={() => setActiveOption("Yesterday")}
+          onClick={() => {
+            setDateRange({
+              start:formattedDate,
+              end:`${year}-${month < 10 ? '0' : ''}${month}-${day-1 < 10 ? '0' : ''}${day-1}`
+            })
+            setActiveOption("Yesterday")
+          }}
         >
           Yesterday
         </p>
@@ -121,7 +133,13 @@ useEffect(()=>{
               ? "text-primary font-bold"
               : "text-gray-600"
           }`}
-          onClick={() => setActiveOption("Current Week")}
+          onClick={() => {
+            setDateRange({
+              start:formattedDate,
+              end:`${year}-${month < 10 ? '0' : ''}${month}-${day+7 < 10 ? '0' : ''}${day+7}`
+            })
+            setActiveOption("Current Week")}
+          }
         >
           Current Week
         </p>
@@ -131,7 +149,13 @@ useEffect(()=>{
               ? "text-primary font-bold"
               : "text-gray-600"
           }`}
-          onClick={() => setActiveOption("Previous Week")}
+          onClick={() => {
+            setDateRange({
+              start:formattedDate,
+              end:`${year}-${month < 10 ? '0' : ''}${month}-${day-7 < 10 ? '0' : ''}${day-7}`
+            })
+            setActiveOption("Previous Week")
+          }}
         >
           Previous Week
         </p>
@@ -141,7 +165,12 @@ useEffect(()=>{
               ? "text-primary font-bold"
               : "text-gray-600"
           }`}
-          onClick={() => setActiveOption("Current Month")}
+          onClick={() => {
+            setDateRange({
+              start:formattedDate,
+              end:`${year}-${month < 10 ? '0' : ''}${month}-${day+8 < 10 ? '0' : ''}${day+8}`
+            })
+            setActiveOption("Current Month")}}
         >
           Current Month
         </p>
@@ -151,7 +180,13 @@ useEffect(()=>{
               ? "text-primary font-bold"
               : "text-gray-600"
           }`}
-          onClick={() => setActiveOption("Previous Month")}
+          onClick={() => {
+            setDateRange({
+              start:formattedDate,
+              end:`${year}-${month-1 < 10 ? '0' : ''}${month-1}-${day < 10 ? '0' : ''}${day}`
+            })
+            setActiveOption("Previous Month")
+          }}
         >
           Previous Month
         </p>
