@@ -1,7 +1,8 @@
 import "./globals.css";
 import Layout from "@/app/layouts";
 import { Providers } from "./redux/provider";
-import localFont from "@next/font/local";
+import localFont from "next/font/local";
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 
 export const metadata = {
   title: "Urban",
@@ -85,7 +86,15 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${creatoFont.variable} font-sans`}>
       <Providers>
-        <Layout>{children}</Layout>
+        <Layout>
+          {children}
+          <ProgressBar
+            height="4px"
+            color="#fffd00"
+            options={{ showSpinner: false }}
+            shallowRouting
+          />
+        </Layout>
       </Providers>
     </html>
   );
