@@ -1,6 +1,3 @@
-import api from "@/common/API";
-import axios from "axios";
-
 export function activeLink(path: string, pathname: string) {
   const regex = new RegExp(`^${path}(\/.*)?$`);
   return regex.test(pathname);
