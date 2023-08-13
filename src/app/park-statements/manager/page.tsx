@@ -12,6 +12,7 @@ export default function ManagerStatements() {
   const [selectedPark, setSelectedPark] = useState();
   const [Park, setPark] = useState<any[]>([]);
   const [Manager, setManager] = useState<any[]>([]);
+  const [mangerId, setManageId] = useState<string>('')
   const router = useRouter();
   const options = [
     { value: "bus", label: "Bus" },
@@ -21,18 +22,22 @@ export default function ManagerStatements() {
   ];
 
   useEffect(() => {
-   
     parkOBJ.getAllByUser().then((res)=>{
       setPark(res?.parks)
     })
-    console.log(Park,'park ')
   }, [Park]);
+  let parkDetails:any
 useEffect(()=>{
   if(selectedPark){
     let parkDetails:any = Park.filter((a)=> a?.id === selectedPark)
-    console.log(parkDetails,parkDetails[0]?.parkManagerId,'parkDetails')
     manager.getOne(parkDetails[0]?.parkManagerId).then((res:any)=>{
-     
+      let query = {
+        ...parkDetails[0],
+        ...res
+      }
+      console.log(query,'query')
+    const queryString = new URLSearchParams(query).toString();
+    setManageId(queryString)
       setManager([res])
     })
   }
@@ -51,6 +56,7 @@ useEffect(()=>{
       label : 'no Park found'
     }]
   }
+  console.log(mangerId,'manager id')
   return (
     <>
       <SubHeader header="Manager Statements" allowFilter hideBack hideRight />
@@ -72,12 +78,12 @@ useEffect(()=>{
                 textBody={
                   <p>
                     Manager Name:{" "}
-                    <span className="text-primary">{a.firstName}</span>
+                    <span className="text-primary">{a?.firstName}</span>
                   </p>
                 }
                 left={<Avatar body="DK" />}
                 onClick={() =>
-                  router.push("/park-statements/manager/tade/records")
+                  router.push(`/park-statements/manager/${a?.firstName}/records?${mangerId}`)
                 }
               />
             </>
