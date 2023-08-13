@@ -20,6 +20,21 @@ class managerOBJ {
           throw err;
         }
       };
+      getOne = async (id:any) => {
+        try {
+          let response:any = await api.get(`manager/getParkManager/${id}`);
+         
+          if (response?.data?.success) {
+            //store response in redux
+            console.log(response,'from manage api')
+            return response?.data?.data;
+          } else {
+            throw new Error("something went wrong");
+          }
+        } catch (err) {
+          throw err;
+        }
+      };
 }
 
 const manager = new managerOBJ()

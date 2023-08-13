@@ -6,6 +6,7 @@ import NotificationCard from "../../components/notification-card";
 import Avatar from "../../components/avatar";
 import { useRouter } from "next/navigation";
 import parkOBJ from "@/common/classes/park.class";
+import manager from "@/common/classes/manager.class";
 
 export default function ManagerStatements() {
   const [selectedPark, setSelectedPark] = useState();
@@ -26,21 +27,30 @@ export default function ManagerStatements() {
     })
     console.log(Park,'park ')
   }, [Park]);
+useEffect(()=>{
+  if(selectedPark){
+    let parkDetails:any = Park.filter((a)=> a?.id === selectedPark)
+    console.log(parkDetails,parkDetails[0]?.parkManagerId,'parkDetails')
+    manager.getOne(parkDetails[0]?.parkManagerId).then((res:any)=>{
+     
+      setManager([res])
+    })
+  }
+},[Park, selectedPark])
 
-  const parkOption = Park?.map((a: any) => {
-    console.log(a,'options')
-    if(a){
-      return {
-        value: a?.id,
-        label: a?.name,
-      };
-    } else{
-      return {
-        value: 'no Park found',
-        label: "no Park found",
-      };
-    }
-  });
+  let parkOption: { value: any; label: any; }[]
+  
+  if(Park &&  Park?.length >= 1){
+    parkOption = Park?.map((park: any) => ({
+      value: park.id,
+      label: park.name,
+    }))
+  }else{
+    parkOption = [{
+      value:null,
+      label : 'no Park found'
+    }]
+  }
   return (
     <>
       <SubHeader header="Manager Statements" allowFilter hideBack hideRight />
@@ -54,7 +64,7 @@ export default function ManagerStatements() {
         />
       </div>
       <div className="mt-8 grid grid-col-1 gap-y-4">
-        {Manager.map((a: any) => {
+        {Manager?.map((a: any) => {
           return (
             <>
               <NotificationCard

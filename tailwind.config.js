@@ -27,8 +27,8 @@ module.exports = {
       },
       plugins: [],
       fontFamily: {
-        creato: ["creato", "./fonts/creato_display/CreatoDisplay-Black.otf"],
-        thin: ["creato-thin", "./fonts/creato_display/CreatoDisplay-Thin.otf"],
+        creato: ["creato", "public/fonts/creato_display/CreatoDisplay-Bold.otf"],
+        thin: ["creato-thin", "public/fonts/creato_display/CreatoDisplay-Thin.otf"],
       },
     },
   },
