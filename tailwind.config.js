@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx}",
+    "./src/app/**/*.{js,ts,jsx,tsx}",
+    "./src/common/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {
       backgroundImage: {
@@ -27,8 +31,7 @@ module.exports = {
       },
       plugins: [],
       fontFamily: {
-        creato: ["creato", "public/fonts/creato_display/CreatoDisplay-Bold.otf"],
-        thin: ["creato-thin", "public/fonts/creato_display/CreatoDisplay-Thin.otf"],
+        sans: ["var(--font-creato)"],
       },
     },
   },
