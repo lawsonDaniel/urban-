@@ -6,7 +6,7 @@ import ParkManager from "./components/dashboard/parkManager";
 import DispatchOfficer from "./components/dashboard/dispatchOfficer";
 import { useRouter } from "next/navigation";
 import { GetUserType } from "@/common/hooks/token";
-import "@/styles/dist.css";
+import "./dist.css";
 
 export default function Home() {
   const cookies = parseCookies();
