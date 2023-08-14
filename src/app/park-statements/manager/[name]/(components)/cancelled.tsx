@@ -1,18 +1,26 @@
 import Table from "@/app/components/table";
-import React from "react";
+import React,{useState,useEffect} from "react";
+import tripOBJs from "@/common/classes/trip.class";
+import { GetUserType } from "@/common/hooks/token";
 
-export default function Cancelled() {
+export default function Cancelled({managerInfo}:any) {
+  const[canceled,setCanceled] = useState<any>([])
+   const userType:string = GetUserType()
+
+useEffect(()=>{
+  tripOBJs.filter(userType,'canceled').then((res)=>{
+    let com = res?.filter((a:any)=> a?.park?.parkManager?.id === managerInfo?.id)
+    setCanceled(com)
+  })
+},[managerInfo?.id, userType])
+
   const columns = [
     {
-      id: "departurePark",
+      id: "startLocation",
       header: "Departure Park",
     },
     {
-      id: "departureTime",
-      header: "Departure Time",
-    },
-    {
-      id: "destinationCity",
+      id: "time",
       header: "Departure Time",
     },
     {
@@ -28,52 +36,34 @@ export default function Cancelled() {
       header: "Type Of Vehicle",
     },
     {
-      id: "bookingStatus",
+      id: "totalSeats",
       header: "Booking Status",
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      departurePark: "Isale Oko Sagamu",
-      departureTime: "09:00 AM",
-      destinationCity: "Abuja",
-      tripCode: "ABJSAG",
-      fare: "N12,000",
-      typeOfVehicle: "Bus",
-      bookingStatus: "Cancelled",
-    },
-    {
-      id: 2,
-      departurePark: "Isale Oko Sagamu",
-      departureTime: "09:00 AM",
-      destinationCity: "Abuja",
-      tripCode: "ABJSAG",
-      fare: "N12,000",
-      typeOfVehicle: "Bus",
-      bookingStatus: "Cancelled",
-    },
-    {
-      id: 3,
-      departurePark: "Isale Oko Sagamu",
-      departureTime: "09:00 AM",
-      destinationCity: "Abuja",
-      tripCode: "ABJSAG",
-      fare: "N12,000",
-      typeOfVehicle: "Bus",
-      bookingStatus: "Cancelled",
-    },
-  ];
+  
   return (
     <>
       <div className="mt-[53px]">
-        <Table
+        {
+          canceled && canceled.length >=1 ?  <Table
           columns={columns}
-          data={data}
+          data={canceled}
           action={{ viewLabel: "See Details", type: ["view"] }}
           noAction
-        />
+        /> : (
+            <div className="flex-col gap-7">
+              <div className="grid grid-cols-3 mt-[32px] gap-8">
+              </div>
+              <div className="mt-[10rem] text-center">
+                <p className="text-xl capitalize">
+                  Sorry, No Trip yet
+                </p>
+              </div>
+            </div>
+          )
+        }
+       
       </div>
     </>
   );

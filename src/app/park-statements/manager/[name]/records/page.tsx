@@ -10,40 +10,69 @@ import CarSideIcon from "@/app/components/custom svg/car-side";
 import { HiCheck } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
 import { BiCopy, BiMoney } from "react-icons/bi";
+import { useRouter } from "next/router";
+import {useEffect,useState} from 'react'
+import tripOBJs from "@/common/classes/trip.class";
+import { GetUserType } from "@/common/hooks/token";
 
 export default function Records() {
+  const [managerInfo,setManagerInfo] = useState<any>("")
+  
+  const userType:string = GetUserType()
+ useEffect(()=>{
+  const searchParams = new URLSearchParams(window.location.search);
+
+// Convert the searchParams to a plain object
+const params:any = {};
+searchParams.forEach((value, key) => {
+  params[key] = value;
+});
+setManagerInfo(params)
+
+ },[])
+
+  useEffect(()=>{
+   
+
+
+  
+
+},[managerInfo?.id, userType])
+
+
+
   return (
     <>
-      <SubHeader header="Tade Ogunsowo Records" allowFilter />
+      <SubHeader header={`${(managerInfo?.firstName || '').charAt(0).toUpperCase() + (managerInfo?.firstName || '').slice(1)} ${(managerInfo?.lastName || '').charAt(0).toUpperCase() + (managerInfo?.lastName || '').slice(1)}`} allowFilter />
       <div className="mt-8">
         <div className="my-[53px] grid grid-cols-4 gap-8">
           <InfoCard
             title="Total Trips Set"
-            num="3,456"
+            num={managerInfo?.totalTrip}
             icon={() => <CarSideIcon color="stroke-white" size={"16"} />}
           />
           <InfoCard
             title="Successful Trips"
-            num="30,000"
+            num={managerInfo?.successfulTrip}
             icon={() => <HiCheck color="white" />}
           />
           <InfoCard
             title="Cancelled Trips"
-            num="23,000"
+            num={managerInfo?.cancelledTrip}
             icon={() => <IoMdClose color="white" />}
           />
           <InfoCard
             title="Scheduled Trips"
-            num="2,900"
+            num={managerInfo?.scheduledTrip}
             icon={() => <BiMoney color="white" />}
           />
         </div>
         <MyTabs
           headers={["Scheduled ", "Completed Trips", "Cancelled"]}
           components={[
-            <Scheduled key="1" />,
-            <Completed key="2" />,
-            <Cancelled key="2" />,
+            <Scheduled key="1" managerInfo={managerInfo}/>,
+            <Completed key="2" managerInfo={managerInfo} />,
+            <Cancelled key="2" managerInfo={managerInfo}/>,
           ]}
         />
       </div>
