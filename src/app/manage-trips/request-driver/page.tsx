@@ -28,10 +28,10 @@ export default function RequestDriver() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allProviderAgency, setAllProviderAgency] = useState<any>([]);
   const getAllPark = async () => {
-    parkOBJ.getAllByUser().then((res)=>{
-      console.log(res,'park from option')
-      setAllPark(res)
-    })
+    parkOBJ.getAllByUser().then((res) => {
+      console.log(res, "park from option");
+      setAllPark(res);
+    });
   };
   const getAllProviderAgency = async () => {};
   useEffect(() => {
@@ -39,35 +39,37 @@ export default function RequestDriver() {
     getAllProviderAgency();
   }, [getAll]);
 
-  let parkOption: [{ value: any; label: string; }]
-  
-  if(allPark && allPark?.parks?.length >= 1){
+  let parkOption: [{ value: any; label: string }];
+
+  if (allPark && allPark?.parks?.length >= 1) {
     parkOption = allPark.parks?.map((a: any) => ({
-      value: a?.id ,
-      label: a?.name ,
-    }))
-  }else{
-    parkOption = [{
-      value:null,
-      label : 'no Park found'
-    }]
+      value: a?.id,
+      label: a?.name,
+    }));
+  } else {
+    parkOption = [
+      {
+        value: null,
+        label: "no Park found",
+      },
+    ];
   }
 
-   
-    let providerAgencyOption: [{ value: any; label: string; }]
-  console.log(allProviderAgency ,'provider agency')
-    if (allProviderAgency && allProviderAgency.length >= 1) {
-      providerAgencyOption = allProviderAgency.map((a: any) => ({
-        value: a?.id,
-        label: a?.data?.name,
-      }));
-    } else {
-      providerAgencyOption = [{
+  let providerAgencyOption: [{ value: any; label: string }];
+  console.log(allProviderAgency, "provider agency");
+  if (allProviderAgency && allProviderAgency.length >= 1) {
+    providerAgencyOption = allProviderAgency.map((a: any) => ({
+      value: a?.id,
+      label: a?.data?.name,
+    }));
+  } else {
+    providerAgencyOption = [
+      {
         value: null,
-        label: 'no Provider found',
-      }];
-    }
-
+        label: "no Provider found",
+      },
+    ];
+  }
 
   const validationSchema = Yup.object().shape({
     parkPhone: Yup.string().required("Park phone is required"),
@@ -89,7 +91,12 @@ export default function RequestDriver() {
     validationSchema,
     onSubmit: async (values: any) => {
       setIsLoading(true);
-      if (selectedPark && ProviderAgency && selectedPark !=null && ProviderAgency!=null ) {
+      if (
+        selectedPark &&
+        ProviderAgency &&
+        selectedPark != null &&
+        ProviderAgency != null
+      ) {
         values = {
           providerAgency: ProviderAgency,
           park: selectedPark,
@@ -123,62 +130,9 @@ export default function RequestDriver() {
           <Dropdown
             options={parkOption}
             placeholder="Option"
-            label="Select Park"
+            label="Select Trip Code"
             onSelect={(e: any) => setSelectedPark(e)}
             className="w-[510px]"
-          />
-          <Input
-            label="Park Phone Number"
-            type="text"
-            id="parkPhone"
-            name="parkPhone"
-            value={formik.values.parkPhone}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.parkPhone && formik.errors.parkPhone}
-          />
-
-          <Input
-            label="Departure City"
-            type="text"
-            id="departureCity"
-            name="departureCity"
-            value={formik.values.departureCity}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.departureCity && formik.errors.departureCity}
-          />
-          <Input
-            label="Destination City"
-            type="text"
-            id="destinationCity"
-            name="destinationCity"
-            value={formik.values.destinationCity}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.destinationCity && formik.errors.destinationCity
-            }
-          />
-          <Input
-            label="Departure Date"
-            type="date"
-            id="departureDate"
-            name="departureDate"
-            value={formik.values.departureDate}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.departureDate && formik.errors.departureDate}
-          />
-          <Input
-            label="Departure Time"
-            type="time"
-            id="departureTime"
-            name="departureTime"
-            value={formik.values.departureTime}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.departureTime && formik.errors.departureTime}
           />
           <Textarea
             label="Additional Info"
@@ -192,9 +146,13 @@ export default function RequestDriver() {
               formik.touched.additionalInfo && formik.errors.additionalInfo
             }
           />
-
           <Button
-            disabled={!selectedPark && !ProviderAgency && selectedPark ===null && ProviderAgency === null}
+            disabled={
+              !selectedPark &&
+              !ProviderAgency &&
+              selectedPark === null &&
+              ProviderAgency === null
+            }
             type="submit"
             className="w-full mt-20 text-white"
           >

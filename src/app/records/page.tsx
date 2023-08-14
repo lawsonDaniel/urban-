@@ -18,19 +18,21 @@ import { GetUserType } from "@/common/hooks/token";
 
 export default function Records() {
   const [parks, setParks] = useState<any[]>([]);
-  const userType = GetUserType()
-  let option: { value: any; label: any; }[]
-  
-  if(parks &&  parks?.length >= 1){
-    option =  parks?.map((park: any) => ({
+  const userType = GetUserType();
+  let option: { value: any; label: any }[];
+
+  if (parks && parks?.length >= 1) {
+    option = parks?.map((park: any) => ({
       value: park.id,
       label: park.name,
-    }))
-  }else{
-    option = [{
-      value:null,
-      label : 'no Park found'
-    }]
+    }));
+  } else {
+    option = [
+      {
+        value: null,
+        label: "no Park found",
+      },
+    ];
   }
   const transportOptions = [
     { value: "bus", label: "Bus" },
@@ -42,81 +44,83 @@ export default function Records() {
   const [trips, setTrips] = useState<any[]>([]);
 
   const router = useRouter();
- 
+
   const [selectedPark, setSelectedPark] = useState<string>();
   const [activeOption, setActiveOption] = useState<any>("Today");
   const [selectedVehicle, setSelectedVehicle] = useState("");
-  const [allTrips,setAllTrips] = useState<any[]>([])
-  
-const today = new Date();
-const year = today.getFullYear();
-const month = today.getMonth() + 1; // Months are zero-indexed, so adding 1
-const day = today.getDate();
-const formattedDate = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}`;
-const [dateRange,setDateRange] = useState<any>({
-  start:formattedDate,
-  end:formattedDate
-})
+  const [allTrips, setAllTrips] = useState<any[]>([]);
 
-useEffect(()=>{
-  if(classifyDate(dateRange.start,dateRange.end)){
-    setActiveOption(classifyDate(dateRange.start,dateRange.end))
-  }else{
-    setActiveOption("Today")
-    setDateRange({
-      start:formattedDate,
-      end:formattedDate
-    })
-  }
- 
-},[dateRange, formattedDate])
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1; // Months are zero-indexed, so adding 1
+  const day = today.getDate();
+  const formattedDate = `${year}-${month < 10 ? "0" : ""}${month}-${
+    day < 10 ? "0" : ""
+  }${day}`;
+  const [dateRange, setDateRange] = useState<any>({
+    start: formattedDate,
+    end: formattedDate,
+  });
+
+  useEffect(() => {
+    if (classifyDate(dateRange.start, dateRange.end)) {
+      setActiveOption(classifyDate(dateRange.start, dateRange.end));
+    } else {
+      setActiveOption("Today");
+      setDateRange({
+        start: formattedDate,
+        end: formattedDate,
+      });
+    }
+  }, [dateRange, formattedDate]);
 
   useEffect(() => {
     const getAllParks = async () => {
-    try {
-     const res:any = await parkOBJ.getAll()
-     console.log(res,'res to select park')
-      setParks(res?.parks)
-    } catch (err) {
-      console.log(err);
-    }
-  };
+      try {
+        const res: any = await parkOBJ.getAllByUser();
+        console.log(res, "res to select park");
+        setParks(res?.parks);
+      } catch (err) {
+        console.log(err);
+      }
+    };
     getAllParks();
   }, []);
 
-  const onSubmit =()=>{
-    console.log('clicked park statement')
-    if(dateRange.start && dateRange.end && activeOption && selectedPark){
-      tripOBJs.getRecords(userType,dateRange.start,dateRange.end,selectedPark).then((res:any)=>{
-        console.log(res,'records of park')
-        setAllTrips(res)
-      }).catch((err)=>{
-        console.log(err,'err')
-      })
-    }else{
-      
+  const onSubmit = () => {
+    console.log("clicked park statement");
+    if (dateRange.start && dateRange.end && activeOption && selectedPark) {
+      tripOBJs
+        .getRecords(userType, dateRange.start, dateRange.end, selectedPark)
+        .then((res: any) => {
+          console.log(res, "records of park");
+          setAllTrips(res);
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    } else {
     }
-  }
+  };
 
- 
   let scheduledTrips: any = null;
   let assignedTrips: any = null;
   let completedTrips: any = null;
-    if(allTrips && allTrips.length >=1){
-        allTrips.map((a)=>{
-          if(a.status === "completed"){
-            completedTrips = []
-            completedTrips.push(a)
-          }else if(a.status === "scheduled"){
-            scheduledTrips = []
-            scheduledTrips.push(a)
-          }else if(a.status === "assigned"){
-            assignedTrips = []
-            assignedTrips.push(a)
-          }
-        })
-    }
-    console.log(scheduledTrips,'scheduledTrips')
+  if (allTrips && allTrips.length >= 1) {
+    allTrips.map((a) => {
+      if (a.status === "completed") {
+        completedTrips = [];
+        completedTrips.push(a);
+      } else if (a.status === "scheduled") {
+        scheduledTrips = [];
+        scheduledTrips.push(a);
+      } else if (a.status === "assigned") {
+        assignedTrips = [];
+        assignedTrips.push(a);
+      }
+    });
+  }
+  console.log(scheduledTrips, "scheduledTrips");
   return (
     <>
       <SubHeader header="Records" hideBack />
@@ -129,10 +133,10 @@ useEffect(()=>{
           }`}
           onClick={() => {
             setDateRange({
-              start:formattedDate,
-              end:formattedDate
-            })
-            setActiveOption("Today")
+              start: formattedDate,
+              end: formattedDate,
+            });
+            setActiveOption("Today");
           }}
         >
           Today
@@ -145,10 +149,12 @@ useEffect(()=>{
           }`}
           onClick={() => {
             setDateRange({
-              start:formattedDate,
-              end:`${year}-${month < 10 ? '0' : ''}${month}-${day-1 < 10 ? '0' : ''}${day-1}`
-            })
-            setActiveOption("Yesterday")
+              start: formattedDate,
+              end: `${year}-${month < 10 ? "0" : ""}${month}-${
+                day - 1 < 10 ? "0" : ""
+              }${day - 1}`,
+            });
+            setActiveOption("Yesterday");
           }}
         >
           Yesterday
@@ -161,11 +167,13 @@ useEffect(()=>{
           }`}
           onClick={() => {
             setDateRange({
-              start:formattedDate,
-              end:`${year}-${month < 10 ? '0' : ''}${month}-${day+7 < 10 ? '0' : ''}${day+7}`
-            })
-            setActiveOption("Current Week")}
-          }
+              start: formattedDate,
+              end: `${year}-${month < 10 ? "0" : ""}${month}-${
+                day + 7 < 10 ? "0" : ""
+              }${day + 7}`,
+            });
+            setActiveOption("Current Week");
+          }}
         >
           Current Week
         </p>
@@ -177,10 +185,12 @@ useEffect(()=>{
           }`}
           onClick={() => {
             setDateRange({
-              start:formattedDate,
-              end:`${year}-${month < 10 ? '0' : ''}${month}-${day-7 < 10 ? '0' : ''}${day-7}`
-            })
-            setActiveOption("Previous Week")
+              start: formattedDate,
+              end: `${year}-${month < 10 ? "0" : ""}${month}-${
+                day - 7 < 10 ? "0" : ""
+              }${day - 7}`,
+            });
+            setActiveOption("Previous Week");
           }}
         >
           Previous Week
@@ -193,10 +203,13 @@ useEffect(()=>{
           }`}
           onClick={() => {
             setDateRange({
-              start:formattedDate,
-              end:`${year}-${month < 10 ? '0' : ''}${month}-${day+8 < 10 ? '0' : ''}${day+8}`
-            })
-            setActiveOption("Current Month")}}
+              start: formattedDate,
+              end: `${year}-${month < 10 ? "0" : ""}${month}-${
+                day + 8 < 10 ? "0" : ""
+              }${day + 8}`,
+            });
+            setActiveOption("Current Month");
+          }}
         >
           Current Month
         </p>
@@ -208,10 +221,12 @@ useEffect(()=>{
           }`}
           onClick={() => {
             setDateRange({
-              start:formattedDate,
-              end:`${year}-${month-1 < 10 ? '0' : ''}${month-1}-${day < 10 ? '0' : ''}${day}`
-            })
-            setActiveOption("Previous Month")
+              start: formattedDate,
+              end: `${year}-${month - 1 < 10 ? "0" : ""}${month - 1}-${
+                day < 10 ? "0" : ""
+              }${day}`,
+            });
+            setActiveOption("Previous Month");
           }}
         >
           Previous Month
@@ -228,13 +243,13 @@ useEffect(()=>{
             id=""
             name=""
             value={dateRange.start}
-            onChange={
-             (e:any)=> setDateRange((a:any)=>{
-              return({
-                start:e.target.value,
-                end:a.end
+            onChange={(e: any) =>
+              setDateRange((a: any) => {
+                return {
+                  start: e.target.value,
+                  end: a.end,
+                };
               })
-             })
             }
             // onBlur={formik.handleBlur}
             // error={formik.touched.password && formik.errors.password}
@@ -250,13 +265,13 @@ useEffect(()=>{
             id=""
             name=""
             value={dateRange.end}
-            onChange={
-             (e:any)=> setDateRange((a:any)=>{
-              return({
-                start:a.start,
-                end:e.target.value
+            onChange={(e: any) =>
+              setDateRange((a: any) => {
+                return {
+                  start: a.start,
+                  end: e.target.value,
+                };
               })
-             })
             }
             // onBlur={formik.handleBlur}
             // error={formik.touched.password && formik.errors.password}
@@ -275,8 +290,13 @@ useEffect(()=>{
         <div className="mt-10">
           <Button
             type="button"
-            disabled={!dateRange.start || !dateRange.end || !activeOption || !selectedPark}
-            onClick={()=> onSubmit()}
+            disabled={
+              !dateRange.start ||
+              !dateRange.end ||
+              !activeOption ||
+              !selectedPark
+            }
+            onClick={() => onSubmit()}
             className="w-full bg-white text-primary bg-opacity-20 hover:bg-primary border border-2 border-primary hover:text-white"
           >
             See Statement

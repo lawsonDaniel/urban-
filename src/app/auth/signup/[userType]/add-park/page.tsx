@@ -13,7 +13,7 @@ import Dropdown from "@/app/components/dropdown";
 import Button from "@/app/components/button";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
-import { cityFCT,cityLagos } from "@/common/data";
+import { cityFCT, cityLagos } from "@/common/data";
 
 export default function AddPark() {
   const router = useRouter();
@@ -25,14 +25,16 @@ export default function AddPark() {
   const [parkLocation, setParkLocation] = useState("");
   const [parkCity, setParkCity] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [cityObj,setCityObj] = useState<any>([{
-    label: "select state",
-    value: ''
-  }])
-  const [coordinateData,setCoordinateData] = useState({
-    lat:'',
-    long:''
-  })
+  const [cityObj, setCityObj] = useState<any>([
+    {
+      label: "select state",
+      value: "",
+    },
+  ]);
+  const [coordinateData, setCoordinateData] = useState({
+    lat: "",
+    long: "",
+  });
   const options = [
     { label: "Abuja", value: "abuja" },
     { label: "Lagos", value: "lagos" },
@@ -51,65 +53,64 @@ export default function AddPark() {
     parkFullAddress: Yup.string().required("Full address is required"),
   });
 
-  const setPArk = (e:any)=>{
-    setParkLocation(e)
-  }
+  const setPArk = (e: any) => {
+    setParkLocation(e);
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
+    } else {
       alert("Geolocation is not supported by this browser.");
-  }
-  function showPosition(position:any) {
-    var latitude = position.coords.latitude;
-    var longitude = position.coords.longitude;
-    setCoordinateData({
-      lat: latitude,
-      long: longitude
-    });
-    
-  }
-  
-  function showError(error:any) {
-    switch(error.code) {
+    }
+    function showPosition(position: any) {
+      console.log({ position });
+      var latitude = position.coords.latitude;
+      var longitude = position.coords.longitude;
+      setCoordinateData({
+        lat: latitude,
+        long: longitude,
+      });
+    }
+
+    function showError(error: any) {
+      switch (error.code) {
         case error.PERMISSION_DENIED:
           toast.error("Unable to get coordinates please eneter manually");
-            break;
+          break;
         case error.POSITION_UNAVAILABLE:
           toast.error("Unable to get coordinates please eneter manually");
-            break;
+          break;
         case error.TIMEOUT:
           toast.error("Unable to get coordinates please eneter manually");
-            break;
+          break;
         case error.UNKNOWN_ERROR:
-            toast.error("Unable to get coordinates please eneter manually");
-            break;
+          toast.error("Unable to get coordinates please eneter manually");
+          break;
+      }
     }
-  }
-   },[])
+  }, []);
 
-  useEffect(()=>{
-    if(parkLocation === "abuja"){
-      setCityObj(cityFCT)
-    }else{
-      setCityObj(cityLagos)
+  useEffect(() => {
+    if (parkLocation === "abuja") {
+      setCityObj(cityFCT);
+    } else {
+      setCityObj(cityLagos);
     }
-  },[parkLocation])
+  }, [parkLocation]);
   const formik = useFormik({
     initialValues: {
       parkName: "",
       parkFullAddress: "",
       parkState: "",
       parkCity: "",
-      coordinate:`[${coordinateData.lat},${coordinateData.long}]` || ''
+      coordinate: `[${coordinateData.lat},${coordinateData.long}]` || "",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      
       values = {
-        latitude:`${coordinateData.lat}`,
-        longitude:`${coordinateData.long}`,
+        latitude: `${coordinateData.lat}`,
+        longitude: `${coordinateData.long}`,
         parkName: values.parkName,
         parkFullAddress: values.parkFullAddress,
         parkState: parkLocation,
@@ -126,7 +127,7 @@ export default function AddPark() {
           .register(values, "parkOwner")
           .then((res) => {
             toast.success(res?.data.message);
-           router.push("/auth/login");
+            router.push("/auth/login");
             destroyCookie(null, "ParkOwner", { path: "/" });
             setIsLoading(false);
           })
@@ -175,20 +176,23 @@ export default function AddPark() {
             className="w-full"
           />
 
-        <Input
-          label="Coordinate"
-          type="text"
-          id="coordinate"
-          name="coordinate"
-          value={`[${coordinateData.lat},${coordinateData.long}]`|| formik.values.coordinate}
-          onChange={(e:any) => {
-            if (!formik.values.coordinate) {
-              formik.handleChange(e);
-            }
-          }}
-          onBlur={formik.handleBlur}
-          error={formik.touched.coordinate && formik.errors.coordinate}
-        />
+          {/*<Input*/}
+          {/*  label="Coordinate"*/}
+          {/*  type="text"*/}
+          {/*  id="coordinate"*/}
+          {/*  name="coordinate"*/}
+          {/*  value={*/}
+          {/*    `[${coordinateData.lat},${coordinateData.long}]` ||*/}
+          {/*    formik.values.coordinate*/}
+          {/*  }*/}
+          {/*  onChange={(e: any) => {*/}
+          {/*    if (!formik.values.coordinate) {*/}
+          {/*      formik.handleChange(e);*/}
+          {/*    }*/}
+          {/*  }}*/}
+          {/*  onBlur={formik.handleBlur}*/}
+          {/*  error={formik.touched.coordinate && formik.errors.coordinate}*/}
+          {/*/>*/}
           <Input
             label="Full Address"
             type="tel"

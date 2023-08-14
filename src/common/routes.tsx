@@ -181,17 +181,18 @@ export const routes: any = {
     //   icon: <TfiCar size={22} className="" />,
     //   iconClassName: "bg-primary",
     // },
-    {
-      path: "/manage-trips/track-request",
-      title: "Track Request",
-      icon: <AiOutlineShareAlt size={24} />,
-      iconClassName: "bg-primary_blue",
-    },
+
     {
       path: "/manage-trips/request-driver",
       title: "Request a Driver",
       icon: <RiUserAddLine size={24} />,
       iconClassName: "bg-primary_red",
+    },
+    {
+      path: "/manage-trips/track-request",
+      title: "Track Driver Requests",
+      icon: <AiOutlineShareAlt size={24} />,
+      iconClassName: "bg-primary_blue",
     },
   ],
   PARK: [

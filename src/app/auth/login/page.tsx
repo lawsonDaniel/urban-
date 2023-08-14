@@ -1,24 +1,18 @@
 "use client";
-import Image from "next/image";
-import { Inter } from "next/font/google";
 import { RadioButton } from "@/app/components/radio/auth.radio";
 import Input from "@/app/components/input";
 import Button from "@/app/components/button";
-import { LockClosedIcon } from "@heroicons/react/solid";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Metadata } from "next";
 import { routes } from "@/common/routes";
-// import useLocalStorage from '@/common/hooks/localStorage'
-import CheckBox from "@/app/components/checkbox";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
 import { onLoginSuccess } from "@/app/redux/reducers/userSlice";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -37,7 +31,7 @@ const options = [
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [userType, setUserType] = useState(options[0].value);
- const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -76,12 +70,12 @@ export default function Login() {
           console.log(res, "data form login");
           toast.success(res?.data.message);
           //get user info
-          authOBJ.currentUser().then((res)=>{
+          authOBJ.currentUser().then((res) => {
             //store user info in redux
-            dispatch(onLoginSuccess(res))
-          })
+            dispatch(onLoginSuccess(res));
+          });
           //redirect to dashboard
-           router.push("/");
+          router.push("/");
 
           setIsLoading(false);
         })

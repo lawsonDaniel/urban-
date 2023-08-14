@@ -1,7 +1,7 @@
 import axios from "axios";
 import { GetStoredAuthToken } from "../hooks/token";
-//const baseURL = "https://ui62646llb.execute-api.us-east-1.amazonaws.com/prod";
-const baseURL = "http://localhost:8003"
+const baseURL = "https://ui62646llb.execute-api.us-east-1.amazonaws.com/prod";
+// const baseURL = "http://localhost:8003"
 // Create an Axios instance with the base URL
 const api = axios.create({
   baseURL: `${baseURL}`,
@@ -31,7 +31,10 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
-      if (status === 401 && data.message === "An error occurred - Token Expired") {
+      if (
+        status === 401 &&
+        data.message === "An error occurred - Token Expired"
+      ) {
         // Token has expired, redirect to the login page
         window.location.href = "/auth/login";
       }
