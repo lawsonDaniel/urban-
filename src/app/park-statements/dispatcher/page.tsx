@@ -7,6 +7,7 @@ import Avatar from "../../components/avatar";
 import { useRouter } from "next/navigation";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
+import parkOBJ from "@/common/classes/park.class";
 
 export default function DispatcherStatements() {
   const router = useRouter();
@@ -23,17 +24,27 @@ export default function DispatcherStatements() {
   const getAllParks = async () => {};
   const getAllManager = async () => {};
   useEffect(() => {
-    getAllParks();
-  }, [getAll]);
+    parkOBJ.getAllByUser().then((res)=>{
+      setPark(res?.parks)
+    })
+  }, [Park]);
   useEffect(() => {
     getAllManager();
-  }, [selectedPark, getAll]);
-  const parkOption = Park.map((a: any) => {
-    return {
-      value: a?.parkId,
-      label: a?.parkName,
-    };
-  });
+  }, [selectedPark]);
+  
+   let parkOption: { value: any; label: any; }[]
+  
+  if(Park &&  Park?.length >= 1){
+    parkOption = Park?.map((park: any) => ({
+      value: park.id,
+      label: park.name,
+    }))
+  }else{
+    parkOption = [{
+      value:null,
+      label : 'no Park found'
+    }]
+  }
 
   return (
     <>
