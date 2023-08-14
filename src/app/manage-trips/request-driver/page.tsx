@@ -134,6 +134,18 @@ export default function RequestDriver() {
             onSelect={(e: any) => setSelectedPark(e)}
             className="w-[510px]"
           />
+          <Textarea
+            label="Additional Info"
+            type="text"
+            id="additionalInfo"
+            name="additionalInfo"
+            value={formik.values.additionalInfo}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            error={
+              formik.touched.additionalInfo && formik.errors.additionalInfo
+            }
+          />
           <Button
             disabled={
               !selectedPark &&
