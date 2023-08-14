@@ -31,7 +31,10 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       const { status, data } = error.response;
-      if (status === 401 && data.message === "An error occurred - Token Expired") {
+      if (
+        status === 401 &&
+        data.message === "An error occurred - Token Expired"
+      ) {
         // Token has expired, redirect to the login page
         window.location.href = "/auth/login";
       }
