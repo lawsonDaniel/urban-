@@ -64,13 +64,22 @@ class tripOBJ {
       throw err;
     }
   }; 
-  getRecords = async (user:string,startDate:any,  endDate:any,park:string) => {
-   
-    const filterParams = {
+  getRecords = async (user:string,startDate:any,  endDate:any,park?:any) => {
+   let filterParams:any
+    if(park){
+    filterParams = {
       startDate:startDate,
       endDate:endDate,
       park:park
     };
+   }else{
+    filterParams = {
+      startDate:startDate,
+      endDate:endDate,
+    
+    };
+   }
+    
      const queryString = new URLSearchParams(filterParams).toString();
     try {
       let response

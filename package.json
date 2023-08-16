@@ -6,7 +6,8 @@
     "dev": "concurrently \"next dev --turbo\" \"tailwindcss -i styles/globals.css -o styles/dist.css -w\"",
     "build": "tailwindcss -m -i src/app/globals.css -o src/app/dist.css && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "slow":"next dev"
   },
   "dependencies": {
     "@heroicons/react": "^1.0.6",
