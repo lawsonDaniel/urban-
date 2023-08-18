@@ -15,7 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
 import parkOBJ from "@/common/classes/park.class";
-
+import { ClipLoader } from "react-spinners";
 export default function OwnerForm({ openModal }: { openModal: () => void }) {
   const options = [
     { value: "bus", label: "Bus" },
@@ -170,7 +170,7 @@ useEffect(()=>{
           className="w-full mt-10 text-white"
           // disabled={!formik.values['userType'] ? true : undefined}
         >
-          {isLoading ? "loading" : "Add Dispatch officer"}
+          {isLoading ? <ClipLoader color="#ffffff" /> : "Add Dispatch officer"}
         </Button>
       </form>
       <ToastContainer />

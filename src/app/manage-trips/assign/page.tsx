@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import driverOBJs from "@/common/classes/driver.class";
 import tripOBJs from "@/common/classes/trip.class";
-
+import { ClipLoader } from "react-spinners";
 export default function Assign() {
   const router = useRouter();
   const lugage = [
@@ -144,7 +144,7 @@ export default function Assign() {
             type="submit"
             className="w-full mt-20 text-white"
           >
-            {isLoading ? "loading" : "Assign"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "Assign"}
           </Button>
         </div>
       </form>

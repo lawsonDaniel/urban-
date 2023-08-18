@@ -19,7 +19,7 @@ import parkOBJ from "@/common/classes/park.class";
 import { GetUserData } from "@/common/hooks/token";
 import { routes } from "@/common/routes";
 import { cityFCT,cityLagos } from "@/common/data";
-
+import { ClipLoader } from "react-spinners";
 export default function AddPark() {
   const options = [
     { label: "Abuja", value: "abuja" },
@@ -213,7 +213,7 @@ function showError(error:any) {
         {/*  }*/}
         {/*/>*/}
         <Button type="submit" className="w-full mt-10 text-white">
-          {isLoading ? "loading" : "Add Park"}
+          {isLoading ? <ClipLoader color="#ffffff" /> : "Add Park"}
         </Button>
       </form>
       <SuccessModal

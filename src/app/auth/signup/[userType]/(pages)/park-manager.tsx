@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
 import countryList from "react-select-country-list";
 import Dropdown from "@/app/components/dropdown";
-
+import { ClipLoader } from "react-spinners";
 export default function ParkManager() {
   const options = [
     { label: "Individual", value: "individual" },
@@ -199,7 +199,7 @@ const [country, setCountry] = useState<string>("");
             className="w-full mt-10 text-white"
             disabled={isLoading || !country}
           >
-            {isLoading ? "loading" : "sign up"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "sign up"}
           </Button>
         </form>
       </div>

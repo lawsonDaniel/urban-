@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import countryList from "react-select-country-list";
 import Dropdown from "@/app/components/dropdown";
 import { setCookie } from "nookies";
-
+import { ClipLoader } from "react-spinners";
 export default function IndividualInput() {
   const router = useRouter();
 
@@ -188,7 +188,7 @@ export default function IndividualInput() {
         disabled={isLoading}
         // disabled={!formik.values['userType'] ? true : undefined}
       >
-        {isLoading ? "loading" : "proceed to add park"}
+        {isLoading ? <ClipLoader color="#ffffff" /> : "proceed to add park"}
       </Button>
       <ToastContainer />
     </form>
