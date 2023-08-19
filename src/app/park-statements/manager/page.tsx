@@ -41,7 +41,7 @@ useEffect(()=>{
       setManager([res])
     })
   }
-},[Park, selectedPark])
+},[ selectedPark])
 
   let parkOption: { value: any; label: any; }[]
   

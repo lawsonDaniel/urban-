@@ -8,12 +8,14 @@ import { useRouter } from "next/navigation";
 import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
 import parkOBJ from "@/common/classes/park.class";
+import dispatch from "@/common/classes/dispatch.class";
 
 export default function DispatcherStatements() {
   const router = useRouter();
   const [selectedPark, setSelectedPark] = useState();
   const [Park, setPark] = useState<any[]>([]);
   const [Manager, setManager] = useState<any[]>([]);
+  const [mangerId, setManageId] = useState<any>()
 
   const options = [
     { value: "bus", label: "Bus" },
@@ -45,6 +47,15 @@ export default function DispatcherStatements() {
       label : 'no Park found'
     }]
   }
+  useEffect(()=>{
+    if(selectedPark){
+      let parkDetails:any = Park.filter((a)=> a?.id === selectedPark)
+      dispatch.getAll().then((res:any)=>{
+       const slectedRider:any = res.filter((a:any)=> a?.parkId === selectedPark)
+       setManager(slectedRider)
+      })
+    }
+  },[Park, selectedPark])
 
   return (
     <>
@@ -60,6 +71,10 @@ export default function DispatcherStatements() {
       </div>
       <div className="mt-8 grid grid-col-1 gap-y-4">
         {Manager.map((a: any) => {
+           const queryString = new URLSearchParams({
+           ...a
+           }).toString();
+         console.log(queryString,'this is going to bhe thequery string')
           return (
             <>
               <NotificationCard
@@ -67,12 +82,12 @@ export default function DispatcherStatements() {
                 textBody={
                   <p>
                     Dispatcher Name:{" "}
-                    <span className="text-primary">{a.firstName}</span>
+                    <span className="text-primary">{a?.fullName}</span>
                   </p>
                 }
                 left={<Avatar body="DK" />}
                 onClick={() =>
-                  router.push("/park-statements/dispatcher/tade/records")
+                  router.push(`/park-statements/dispatcher/${a?.fullName}/records?${queryString}`)
                 }
               />
             </>
