@@ -5,12 +5,14 @@ import CTA from "./comp/cta";
 import DataCard from "./comp/dataCard";
 import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
-
+import authOBJ from "@/common/classes/auth.class";
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function DispatchOfficer({ user }: any) {
   const router = useRouter();
-
+  authOBJ.currentUser().then((res)=>{
+console.log(res,'resp for current users')
+  })
   const columns = [
     {
       id: "passengerName",

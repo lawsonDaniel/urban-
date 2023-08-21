@@ -1,50 +1,54 @@
 import Table from "@/app/components/table";
 import React from "react";
 
-export default function Completed() {
+export default function CompletedTrips({ data }: any) {
   const columns = [
     {
-      id: "name",
-      header: "Name",
-    },
-    {
-      id: "bookingCode",
-      header: "Booking Code",
-    },
-    {
-      id: "date",
-      header: "Date",
+      id: "startLocation",
+      header: "Departure City",
     },
     {
       id: "time",
-      header: "Time",
+      header: "Departure Time",
+    },
+    {
+      id: "endLocation",
+      header: "Destination City",
+    },
+    {
+      id: "tripCode",
+      header: "Trip Code",
+    },
+    {
+      id: "vehicleType",
+      header: "Type Of Vehicle",
     },
   ];
 
-  const data = [
-    {
-      id: 1,
-      name: "John Doe",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "09:00AM",
-    },
-    {
-      id: 2,
-      name: "oshodi Doe",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "09:00AM",
-    },
-  ];
   return (
     <>
       <div className="mt-[53px]">
-        <Table
+      {
+          data && data.length >=1 ?  <Table
           columns={columns}
           data={data}
-          action={{ viewLabel: "View Receipt", type: ["view", "edit"] }}
-        />
+          action={{
+            type: ["view"],
+            viewLabel: "View Details",
+          }}
+          type="companyTrack"
+        />:(
+            <div className="flex-col gap-7">
+              <div className="grid grid-cols-3 mt-[32px] gap-8">
+              </div>
+              <div className="mt-[10rem] text-center">
+                <p className="text-xl capitalize">
+                  Sorry, No Trip yet
+                </p>
+              </div>
+            </div>
+          )
+        }
       </div>
     </>
   );
