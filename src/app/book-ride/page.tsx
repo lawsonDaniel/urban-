@@ -16,7 +16,8 @@ import { saveData } from "@/common/hooks/fireStore";
 import Button from "../components/button";
 import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
-
+import { cityFCT,cityLagos } from "@/common/data";
+import parkOBJ from "@/common/classes/park.class";
 export default function BookRide() {
   const options = [
     { value: "bus", label: "Bus" },
@@ -33,7 +34,7 @@ export default function BookRide() {
   const [selectedVehicle, setSelectedVehicle] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [step, setStep] = useState("selectSeat");
-
+  const [parks, setParks] = useState<any[]>([]);
   const openModal = () => {
     setIsOpen(true);
   };
@@ -42,6 +43,36 @@ export default function BookRide() {
     setIsOpen(false);
   };
   const router = useRouter();
+
+  useEffect(() => {
+    const getAllParks = async () => {
+      try {
+        const res: any = await parkOBJ.getAll();
+        console.log(res, "res to select park");
+        setParks(res?.parks);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getAllParks();
+  }, []);
+
+  let option: { value: any; label: any }[];
+
+  if (parks && parks?.length >= 1) {
+    option = parks?.map((park: any) => ({
+      value: park.id,
+      label: park.name,
+    }));
+  } else {
+    option = [
+      {
+        value: null,
+        label: "no Park found",
+      },
+    ];
+  }
+
   const columns = [
     {
       id: "tripCode",
@@ -130,7 +161,7 @@ export default function BookRide() {
           <div>
             <div className="flex">
               <Dropdown
-                options={options}
+                options={[...cityFCT,...cityLagos]}
                 placeholder="Option"
                 label="Select Departure City"
                 onSelect={(e: any) => setDepatureCity(e)}
@@ -151,7 +182,7 @@ export default function BookRide() {
             </div>
             <div className="w-1/2">
               <Dropdown
-                options={options}
+                options={option}
                 placeholder="Option"
                 label="Select Departure Park"
                 onSelect={(e: any) => setSelectedPark(e)}
@@ -161,7 +192,7 @@ export default function BookRide() {
             {/* </div> */}
 
             <Dropdown
-              options={options}
+              options={[...cityFCT,...cityLagos]}
               placeholder="Option"
               label="Destination City"
               onSelect={(e: any) => setDestinationCity(e)}

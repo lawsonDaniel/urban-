@@ -14,6 +14,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/navigation";
 import parkOBJ from "@/common/classes/park.class";
+import providerOBJs from "@/common/classes/provider";
+import { ClipLoader } from "react-spinners";
 
 export default function RequestDriver() {
   const lugage = [
@@ -33,7 +35,12 @@ export default function RequestDriver() {
       setAllPark(res);
     });
   };
-  const getAllProviderAgency = async () => {};
+  const getAllProviderAgency = async () => {
+    providerOBJs.getAll().then((res)=>{
+      console.log(res,'provider agency')
+      setAllProviderAgency(res)
+    })
+  };
   useEffect(() => {
     getAllPark();
     getAllProviderAgency();
@@ -156,7 +163,7 @@ export default function RequestDriver() {
             type="submit"
             className="w-full mt-20 text-white"
           >
-            {isLoading ? "loading" : "Submit Request"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "Submit Request"}
           </Button>
           <ToastContainer />
         </div>

@@ -11,6 +11,11 @@ export function GenerateID(prefix: string) {
 }
 
 export function classifyDate(date1: string, date2: string) {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1; // Months are zero-indexed, so adding 1
+  const day = today.getDate();
+  
   console.log(date1, date2, "date one and two");
   let day1 = Number(date1.split("-")[2]);
   let day2 = Number(date2.split("-")[2]);
@@ -40,11 +45,12 @@ export function classifyDate(date1: string, date2: string) {
     y1 === y2
   ) {
     return "Previous Week";
-  } else if (month1 === month2 && y1 === y2) {
+  } else if (month1 === month2 && y1 === y2 && month1 === month && month2 === month) {
     return "Current Month";
-  } else if (month1 > month2 && y1 === y2) {
+  } else if (month1 > month2 && y1 === y2 || month1 < month && month2 < month) {
     return "Previous Month";
   }
+  console.log(month1,month,'test')
 }
 export function convertCamelCaseToNormal(camelCaseString: string): string {
   return camelCaseString

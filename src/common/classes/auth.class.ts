@@ -24,15 +24,6 @@ class AUTH {
   register = async (data: any, user: String) => {
     try {
       const response: any = await api.post(`auth/register/${user}`, data);
-      //store jwt
-      if(user != "dispatchOfficer" ){
-        if (data?.userType) {
-          SetUserType(data?.userType);
-        } else {
-          SetUserType("parkOwner");
-        }
-      }
-      StoreAuthToken(response?.data?.data?.token);
       return response;
     } catch (err) {
       throw err;

@@ -6,7 +6,7 @@ import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-
+import { ClipLoader } from "react-spinners";
 import Header from "../../(components)/header";
 import Input from "@/app/components/input";
 import Dropdown from "@/app/components/dropdown";
@@ -211,7 +211,7 @@ export default function AddPark() {
             className="w-full mt-10 text-white"
             disabled={isLoading}
           >
-            {isLoading ? "Loading" : "Sign up"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "Sign up"}
           </Button>
         </form>
       </div>

@@ -99,9 +99,24 @@ export default function Records() {
         .catch((err) => {
           console.log(err, "err");
         });
-    } else {
     }
   };
+
+  useEffect(()=>{
+    if (dateRange.start && dateRange.end && activeOption) {
+      tripOBJs
+        .getRecords(userType, dateRange.start, dateRange.end)
+        .then((res: any) => {
+          console.log(res, "records of park");
+          setAllTrips(res);
+        })
+        .catch((err) => {
+          console.log(err, "err");
+        });
+    }
+  },[activeOption, dateRange.end, dateRange.start, userType])
+
+  
 
   let scheduledTrips: any = null;
   let assignedTrips: any = null;
@@ -120,6 +135,7 @@ export default function Records() {
       }
     });
   }
+ 
   console.log(scheduledTrips, "scheduledTrips");
   return (
     <>
@@ -203,10 +219,10 @@ export default function Records() {
           }`}
           onClick={() => {
             setDateRange({
-              start: formattedDate,
-              end: `${year}-${month < 10 ? "0" : ""}${month}-${
-                day + 8 < 10 ? "0" : ""
-              }${day + 8}`,
+              start:  `${year}-${month < 10 ? "0" : ""}${month}-${
+               1 < 10 ? "0" : ""
+              }${1}`,
+              end:formattedDate ,
             });
             setActiveOption("Current Month");
           }}
@@ -221,10 +237,12 @@ export default function Records() {
           }`}
           onClick={() => {
             setDateRange({
-              start: formattedDate,
+              start: `${year}-${month - 1 < 10 ? "0" : ""}${month - 1}-${
+                1 < 10 ? "0" : ""
+              }${1}`,
               end: `${year}-${month - 1 < 10 ? "0" : ""}${month - 1}-${
-                day < 10 ? "0" : ""
-              }${day}`,
+                29 < 10 ? "0" : ""
+              }${29}`,
             });
             setActiveOption("Previous Month");
           }}

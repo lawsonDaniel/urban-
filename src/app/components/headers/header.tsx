@@ -40,7 +40,7 @@ export default function Header() {
           <p className="text-xl text-primary font-bold text-uppercase">
             {storedUser?.dispatchName ||
               storedUser?.firstName ||
-              storedUser?.companyName || storedUser?.email.split('@')[0]
+              storedUser?.companyName || storedUser?.fullName || storedUser?.email.split('@')[0] 
               
               } 
 

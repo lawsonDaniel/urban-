@@ -7,6 +7,9 @@ import DispatchOfficer from "./components/dashboard/dispatchOfficer";
 import { useRouter } from "next/navigation";
 import { GetUserType } from "@/common/hooks/token";
 import "./dist.css";
+import jwt_decode from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Home() {
   const cookies = parseCookies();
@@ -21,9 +24,15 @@ export default function Home() {
   // useLayoutEffect(()=>{
   //   if (!storedUser) router.push("/auth/login");
   // },[])
+   var decoded:any = storedUser && jwt_decode(storedUser?.value)
+  const currentTime = Math.floor(Date.now() / 1000);
+  if( decoded?.exp < currentTime){
+    toast.info('Session expired. Redirecting to login page.');
 
+  }
   return (
     <div className="">
+      <ToastContainer/>
       {userType === "parkOwner" ? (
         <ParkOwner user={storedUser} />
       ) : userType === "dispatchOfficer" ? (

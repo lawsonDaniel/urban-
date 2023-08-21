@@ -13,6 +13,7 @@ import { onLoginSuccess } from "@/app/redux/reducers/userSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { ClipLoader } from "react-spinners";
 
 // const inter = Inter({ subsets: ['latin'] })
 
@@ -149,7 +150,7 @@ export default function Login() {
             disabled={isLoading}
             className="w-full mt-10 text-white"
           >
-            {isLoading ? "loading" : "login"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "login"}
           </Button>
         </form>
         <div className="mt-4 flex justify-center items-center">

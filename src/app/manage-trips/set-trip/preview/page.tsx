@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { tripObject } from "@/common/data";
 import { useUser } from "@/common/hooks/useUser";
 import tripOBJs from "@/common/classes/trip.class";
-
+import { ClipLoader } from "react-spinners";
 
 export default function Preview() {
   const userData = useUser();
@@ -76,7 +76,7 @@ export default function Preview() {
           onClick={() => onSubmit()}
           className="mt-6 w-full bg-primary text-white border-2 hover:bg-opacity-70 hover:bg-primary hover:text-white h-[67px]"
         >
-          {isLoading ? "loading" : "Proceed"}
+          {isLoading ? <ClipLoader color="#ffffff" /> : "Proceed"}
         </Button>
       </div>
       <ToastContainer />

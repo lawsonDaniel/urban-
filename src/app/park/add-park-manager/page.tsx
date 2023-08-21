@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import parkOBJ from "@/common/classes/park.class";
 import { CgFormatStrike } from "react-icons/cg";
 
+import { ClipLoader } from "react-spinners";
 export default function AddParkManager() {
   const userData = useUser();
   const [parks, setParks] = useState<any[]>([]);
@@ -123,7 +124,7 @@ useEffect(()=>{
           className="w-full mt-10 text-white"
           // disabled={!formik.values['userType'] ? true : undefined}
         >
-          {isLoading ? "loading" : "Add Manager"}
+          {isLoading ? <ClipLoader color="#ffffff" /> : "Add Manager"}
         </Button>
       </form>
       <SuccessModal

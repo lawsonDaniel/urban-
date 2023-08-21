@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { parseCookies, setCookie } from "nookies";
 import parkOBJ from "@/common/classes/park.class";
 import { useUserInfo } from "@/common/hooks/getUserInfo";
-
+import { ClipLoader } from "react-spinners";
 export default function SetTrip() {
   const lugage = [
     { value: "normal", label: "Normal Luggage" },
@@ -271,7 +271,7 @@ export default function SetTrip() {
             type="submit"
             className="w-full mt-20 text-white"
           >
-            {isLoading ? "loading" : "Set Trip"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "Set Trip"}
           </Button>
         </div>
       </form>

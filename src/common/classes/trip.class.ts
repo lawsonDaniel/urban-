@@ -54,7 +54,7 @@ class tripOBJ {
  filter = async (user:string,status:string) => {
     try {
       let response
-         response = await api.get(`/trip/${user}/filter/${status}`);
+         response = await api.get(`trip/${user}/filter/${status}`);
       if (response?.data?.success) {
         return response?.data?.data;
       } else {
@@ -64,17 +64,54 @@ class tripOBJ {
       throw err;
     }
   }; 
-  getRecords = async (user:string,startDate:any,  endDate:any,park:string) => {
-   
-    const filterParams = {
+  getRecords = async (user:string,startDate:any,  endDate:any,park?:any) => {
+   let filterParams:any
+    if(park){
+    filterParams = {
       startDate:startDate,
       endDate:endDate,
       park:park
     };
+   }else{
+    filterParams = {
+      startDate:startDate,
+      endDate:endDate,
+    
+    };
+   }
+    
      const queryString = new URLSearchParams(filterParams).toString();
     try {
       let response
-         response = await api.get(`/trip/${user}/records?${queryString}`);
+         response = await api.get(`trip/${user}/records?${queryString}`);
+      if (response?.data?.success) {
+        console.log(response,'from the records page')
+        return response?.data?.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }; 
+
+   //get all trip
+   getByDispatchId = async (id:string) => {
+    try {
+      const response: any = await api.get(`trip/get-all-by-dispatch/${id}`);
+      if (response?.data?.success) {
+        return response?.data?.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }; 
+
+  getByDispatchMainId = async (id:string) => {
+    try {
+      const response: any = await api.get(`trip/get-all-by-dispatchid/${id}`);
       if (response?.data?.success) {
         return response?.data?.data;
       } else {

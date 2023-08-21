@@ -13,7 +13,7 @@ import { useAuth } from "@/common/hooks/useAuth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { USER_TYPE } from "@/common/types";
-
+import { ClipLoader } from "react-spinners";
 export default function DispatchOfficer() {
   const router = useRouter();
   const { signUp } = useAuth();
@@ -151,7 +151,7 @@ export default function DispatchOfficer() {
             disabled={isLoading}
             // disabled={!formik.errors ? true : undefined}
           >
-            {isLoading ? "loading" : "sign up"}
+            {isLoading ? <ClipLoader color="#ffffff" /> : "sign up"}
           </Button>
         </form>
       </div>
