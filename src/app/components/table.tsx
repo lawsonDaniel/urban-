@@ -43,7 +43,6 @@ type Props = {
   type?: string;
   path?: string;
   modalBody?: React.ReactNode;
-  
 };
 
 const Table = ({
@@ -114,7 +113,7 @@ const Table = ({
           <tr>
             {columns.map((column: Column) => (
               <th
-                key={column.id}
+                key={column?.id}
                 className="px-4 py-3  text-sm text-primary capitalize text-center font-normal tracking-wider"
               >
                 {column.header}
@@ -154,7 +153,6 @@ const Table = ({
                   {!noAction && (
                     <>
                       <TableDropDown action={action} />
-                     
                     </>
                   )}
                 </td>
