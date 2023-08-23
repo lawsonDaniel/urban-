@@ -1,36 +1,35 @@
-"use client";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface UserState {
-  value: any;
+export interface IAuthState {
+  authUser: any;
+  setAuthType:any;
+  
 }
 
-const initialState: UserState = {
-  value: null,
+const initialState: IAuthState = {
+  authUser: {},
+  setAuthType: {}
 };
 
-export const userSlice = createSlice({
-  name: "user",
+export const authSlice = createSlice({
+  name: "auth",
   initialState,
   reducers: {
-    onLoginSuccess: (state, action: PayloadAction<string>) => {
-      return {
-        ...state,
-        user: action.payload,
-      };
+    setAuth: (state, action: PayloadAction<any>) => {
+      state.authUser = action.payload;
     },
-    onLogout: (state, action: PayloadAction<any>) => {
-      return {
-        ...state,
-        user: action.payload,
-      };
+    setAuthType: (state, action: PayloadAction<any>) => {
+      state.setAuthType = action.payload;
+    },
+    deAuth: (state, action: PayloadAction<any>) => {
+      state.authUser = null;
+      state.setAuthType = null;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { onLoginSuccess, onLogout } = userSlice.actions;
+export const { setAuth, deAuth, setAuthType } = authSlice.actions;
 
-const userSliceReducer = userSlice.reducer;
-export default userSliceReducer;
+export const authReducer = authSlice.reducer;

@@ -14,11 +14,12 @@ import { useRouter } from "next/router";
 import {useEffect,useState} from 'react'
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
 
 export default function Records() {
   const [managerInfo,setManagerInfo] = useState<any>("")
   
-  const userType:string = GetUserType()
+  const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
  useEffect(()=>{
   const searchParams = new URLSearchParams(window.location.search);
 

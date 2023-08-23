@@ -13,7 +13,8 @@ import { useSelector } from "react-redux";
 
 export default function Header() {
   //get user info
-  const storedUser = GetUserData();
+
+  const storedUser = useSelector((a:any)=> a?.authUser?.authUser);
   const router = useRouter();
   console.log(storedUser, "user info");
   //function to logout user
@@ -38,9 +39,9 @@ export default function Header() {
         <div className="ml-4">
           <p>Hello</p>
           <p className="text-xl text-primary font-bold text-uppercase">
-            {storedUser?.dispatchName ||
+            {storedUser && storedUser?.dispatchName ||
               storedUser?.firstName ||
-              storedUser?.companyName || storedUser?.fullName || storedUser?.email.split('@')[0] 
+              storedUser?.companyName || storedUser?.fullName || storedUser?.email && storedUser?.email.split('@')[0] 
               
               } 
 

@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
-import { onLoginSuccess } from "@/app/redux/reducers/userSlice";
+import { setAuth,setAuthType } from "@/app/redux/reducers/userSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -73,7 +73,8 @@ export default function Login() {
           //get user info
           authOBJ.currentUser().then((res) => {
             //store user info in redux
-            dispatch(onLoginSuccess(res));
+            dispatch(setAuthType(userType));
+            dispatch(setAuth(res));
           });
           //redirect to dashboard
           router.push("/");

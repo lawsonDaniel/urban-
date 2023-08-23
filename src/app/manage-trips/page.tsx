@@ -12,6 +12,7 @@ import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import {useSelector} from 'react-redux'
 
 export default function ManageTrips() {
   // const router = useRouter()
@@ -19,7 +20,7 @@ export default function ManageTrips() {
 
   const [Trip, setTrip] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
-  const userType:string = GetUserType()
+  const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   useEffect(() => {
     //getAllTrips
     tripOBJs.getAll(userType).then((res)=>{

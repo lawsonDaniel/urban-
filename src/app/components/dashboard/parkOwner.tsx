@@ -12,11 +12,12 @@ import { parseCookies } from "nookies";
 import { useUser } from "@/common/hooks/useUser";
 import { useAuth } from "@/common/hooks/useAuth";
 import parkOBJ from "@/common/classes/park.class";
+import {useSelector} from 'react-redux'
 // const inter = Inter({ subsets: ['latin'] })
 
 export default function ParkOwner({ user }: any) {
   const router = useRouter();
-  const userData = useUser();
+  const userData = useSelector((a:any)=> a?.authUser?.authUser);
   // console.log("getLoginUser:::userData::", userData.uid)
 
   const [parks, setParks] = useState<any>([]);

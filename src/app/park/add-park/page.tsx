@@ -20,6 +20,8 @@ import { GetUserData } from "@/common/hooks/token";
 import { routes } from "@/common/routes";
 import { cityFCT,cityLagos } from "@/common/data";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
+
 export default function AddPark() {
   const options = [
     { label: "Abuja", value: "abuja" },
@@ -99,6 +101,7 @@ function showError(error:any) {
   }
 }
  },[])
+ let userData =useSelector((a:any)=> a?.authUser?.authUser)
  console.log(`${coordinateData.lat},${coordinateData.long}`,'coordinate')
   const formik = useFormik({
     initialValues: {
@@ -111,7 +114,7 @@ function showError(error:any) {
       setIsLoading(true);
       const data = {
         name: values.parkName,
-        parkOwnerId: GetUserData().id,
+        parkOwnerId: userData.id,
         state: selectedState,
         city: selectedCity,
         fullAddress: values.fullAddress,

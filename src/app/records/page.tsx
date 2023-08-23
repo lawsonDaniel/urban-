@@ -15,10 +15,11 @@ import parkOBJ from "@/common/classes/park.class";
 import { classifyDate } from "@/common/utils";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
 
 export default function Records() {
   const [parks, setParks] = useState<any[]>([]);
-  const userType = GetUserType();
+  const userType = useSelector((a:any)=> a?.authUser?.setAuthType);
   let option: { value: any; label: any }[];
 
   if (parks && parks?.length >= 1) {

@@ -1,7 +1,7 @@
 "use client";
 import "./globals.css";
 import Layout from "@/app/layouts";
-import { Providers } from "./redux/provider";
+import ReduxProvider from "./redux/provider";
 import localFont from "next/font/local";
 import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 
@@ -86,7 +86,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${creatoFont.variable} font-sans`}>
-      <Providers>
+      <ReduxProvider>
         <Layout>
           {children}
           <ProgressBar
@@ -96,7 +96,7 @@ export default function RootLayout({
             shallowRouting
           />
         </Layout>
-      </Providers>
+      </ReduxProvider>
     </html>
   );
 }

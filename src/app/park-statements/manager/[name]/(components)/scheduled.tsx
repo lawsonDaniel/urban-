@@ -2,6 +2,7 @@ import Table from "@/app/components/table";
 import React,{useState,useEffect} from "react";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
 
 export default function Scheduled({managerInfo}:any) {
   const columns = [
@@ -31,7 +32,7 @@ export default function Scheduled({managerInfo}:any) {
     },
   ];   
    const[sheduled,setsheduled] = useState<any>([])
-  const userType:string = GetUserType()
+  const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
 
   useEffect(()=>{
     tripOBJs.filter(userType,'scheduled').then((res)=>{

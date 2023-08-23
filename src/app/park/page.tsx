@@ -16,6 +16,7 @@ import { GetUserType } from "@/common/hooks/token";
 import CTA from "../components/dashboard/comp/cta";
 import parkOBJ from "@/common/classes/park.class";
 import dispatch from "@/common/classes/dispatch.class";
+import { useSelector } from "react-redux";
 
 export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
@@ -25,7 +26,7 @@ export default function Park() {
   const [pageLength,setPageLength] = useState<any>(0)
 
   
-  const userData = useUser();
+  const userData = useSelector((a:any)=> a?.authUser?.authUser);
   const getAllDispatchOfficers = async () => {};
 
   const router = useRouter();
@@ -66,7 +67,7 @@ export default function Park() {
     },
   ];
 
-  const userType = GetUserType();
+  const userType = useSelector((a:any)=> a?.authUser?.setAuthType)
   
   const [parks, setParks] = useState<any[]>([]);
   
