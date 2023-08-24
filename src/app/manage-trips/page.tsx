@@ -13,6 +13,7 @@ import { useUser } from "@/common/hooks/useUser";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
 import {useSelector} from 'react-redux'
+import MainTable from "@/app/components/tables/main.table";
 
 export default function ManageTrips() {
   // const router = useRouter()
@@ -20,48 +21,53 @@ export default function ManageTrips() {
 
   const [Trip, setTrip] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
+  const [tripData,setTripData] = useState<any[]>([])
   const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   useEffect(() => {
     //getAllTrips
     tripOBJs.getAll(userType).then((res)=>{
       console.log(res,'from tripps')
       setTrip(res)
-      if (inputField.trim().length >= 1) {
-        const searchFilter = res?.filter((trip:any) =>
-          trip?.tripCode.toLowerCase().includes(inputField.toLowerCase())
-        );
-        setTrip(searchFilter)
-      } else {
-        setTrip(res);
-      }
+      setTripData(res)
     })
-  }, [inputField]);
- 
+  }, []);
+  //handle search
+const SearchManager = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = tripData?.filter((parkfiltername:any) =>
+    parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setTrip(searchFilter)
+  } else {
+    setTrip(tripData)
+  }
+}
   console.log(GetUserType(),'user type from trip')
   const columns = [
     {
-      id: "endLocation",
+      key: "endLocation",
       header: "Arival City",
     },
     {
-      id: "time",
+      key: "time",
       header: "Departure Time",
     },
     {
-      id: "startLocation",
+      key: "startLocation",
       header: "Departure City",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Booking Code",
     },
     {
-      id: "fare",
+      key: "fare",
       header: "Fare",
     },
     
     {
-      id: "status",
+      key: "status",
       header: "Booking Status",
     },
   ];
@@ -71,10 +77,7 @@ console.log(Trip,'trips  ss')
       <SubHeader
         header="Manage Trips"
         hideBack
-        inputText="Search Trips"
-        allowFilter
-        inputField={inputField} 
-        setInputField={setInputField}
+        
       />
       <div className="grid grid-cols-3 gap-x-4 mt-8">
         {routes.TRIPS.map((trip: any, index: any) => (
@@ -101,23 +104,32 @@ console.log(Trip,'trips  ss')
       </div>
       <div className="mt-[53px]">
         {
-          Trip.length >=1 ?  <Table
-          columns={columns}
-          data={Trip}
-          action={{
-            editLabel: "Edit details",
-            type: ["edit","view","Request Driver"],
-            viewLabel:"Veiw Details",
-            label: "Assign Driver",
-          }}
-          type="booking"
-        /> : <div className="mt-[10rem] text-center">
-        <p className="text-xl capitalize">
-          Sorry, No information yet, Add a Trip to start
-        </p>
-      </div>
+      //     Trip.length >=1 ?  <Table
+      //     columns={columns}
+      //     data={Trip}
+      //     action={{
+      //       editLabel: "Edit details",
+      //       type: ["edit","view","Request Driver"],
+      //       viewLabel:"Veiw Details",
+      //       label: "Assign Driver",
+      //     }}
+      //     type="booking"
+      //   /> : <div className="mt-[10rem] text-center">
+      //   <p className="text-xl capitalize">
+      //     Sorry, No information yet, Add a Trip to start
+      //   </p>
+      // </div>
    
         }
+         <MainTable 
+             columns={columns}
+             data={Trip}
+             identifier=""
+             searchBy="Urban id"
+             handleSearch={(e:any)=> {SearchManager(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
         </div>
         
     </>
