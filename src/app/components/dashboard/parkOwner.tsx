@@ -14,6 +14,7 @@ import { useAuth } from "@/common/hooks/useAuth";
 import parkOBJ from "@/common/classes/park.class";
 import {useSelector} from 'react-redux'
 // const inter = Inter({ subsets: ['latin'] })
+import MainTable from "../tables/main.table";
 
 export default function ParkOwner({ user }: any) {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function ParkOwner({ user }: any) {
   // console.log("getLoginUser:::userData::", userData.uid)
 
   const [parks, setParks] = useState<any>([]);
+  const [parkData,setParkData] = useState<any>([])
   const [mainParks, setMainParks] = useState<any>([]);
   const [paginaton,setPagination] = useState(1)
   const [pageLength,setPageLength] = useState<any>(0)
@@ -29,23 +31,23 @@ export default function ParkOwner({ user }: any) {
 
   const columns = [
     {
-      id: "name",
+      key: "name",
       header: "Park Name",
     },
     {
-      id: "totalTrip",
+      key: "totalTrip",
       header: "total trips",
     },
     {
-      id: "successfulTrip",
+      key: "successfulTrip",
       header: "successful trips",
     },
     {
-      id: "scheduledTrip",
+      key: "scheduledTrip",
       header: "scheduled trips",
     },
     {
-      id: "cancelledTrip",
+      key: "cancelledTrip",
       header: "cancelled trips",
     },
   ];
@@ -55,14 +57,10 @@ export default function ParkOwner({ user }: any) {
     mainParks?.parks?.map((park: { id: any; name: any; }) => {
       return {
         value: park.id,
-        label: park.name,
+        item: park.name,
       };
     });
 
-  options?.unshift({
-    value: "all",
-    label: "All",
-  });
 
   const [selectedOption, setSelectedOption] = useState<any>();
   const getAllParks = async () => {
@@ -70,18 +68,10 @@ export default function ParkOwner({ user }: any) {
       const res = await parkOBJ.getAllByUser();
       console.log(res,'parks')
       setParks(res?.parks);
+      setParkData(res?.parks)
       setPageLength(res?.totalPages)
       setMainParks(res);
-      if (selectedOption) {
-    
-        const filteredParks =
-          selectedOption && selectedOption.value !== "all" ?
-        res?.parks.filter((a:any)=> a.id === selectedOption.value)
-          : res?.parks
-            
-              console.log(filteredParks,'filter')
-        setParks(filteredParks);
-      }
+     
     } catch (err) {
       console.log(err);
     }
@@ -91,18 +81,39 @@ export default function ParkOwner({ user }: any) {
       getAllParks();
     }
   }, [ userData,paginaton,selectedOption]);
- console.log(parks,'page kk')
+  //handle filter
+  const FilterPark = (e:any)=>{
+    console.log('data from filter',parkData,e.value,parkData?.filter((a:any)=> a.id === e.value))
+    if(e){
+      let filteredParks;
+    if(e.item ! == "All"){
+      setParks(parkData?.filter((a:any)=> a.id === e.value))
+    }
+    }else{
+      setParks(parkData)
+    }  
+  }
+//handle search
+const SearchPark = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = parkData?.filter((parkfiltername:any) =>
+    parkfiltername?.name.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+   setParks(searchFilter)
+  } else {
+   setParks(parkData)
+  }
+}
+
+
   return (
     <div className="">
       {/* <div className='p-14 min-h-full mt-10 rounded-xl bg-white'> */}
       <SubHeader
         header="Dashboard"
         hideBack
-        inputText="Search Park"
-        boxType="dropdown"
-        allowFilter
-        setSelectedOption={setSelectedOption}
-        dropDownOptions={options}
+        
       />
       <DataCard title="Total Income" amount="N345,000" percentage="10%" />
 
@@ -125,24 +136,23 @@ export default function ParkOwner({ user }: any) {
       </div>
 
       <div className="mt-[53px]">
-        <Table
+        {/* <Table
           columns={columns}
           data={parks}
           action={{ viewLabel: "View Statement", type: ["view"] }}
-        />
+        /> */}
+        <MainTable 
+             columns={columns}
+             data={parks}
+             identifier=""
+             filterMenu={options}
+             searchBy="park name"
+             handleSearch={(e:any)=> SearchPark(e)}
+             handleFilter={(e:any)=>FilterPark(e)} 
+             apiSearch={()=>{}}
+             />
       </div>
-      <div className="flex gap-4 items-center justify-center mt-[10px]">
-                 {
-             parks &&  Array.from({ length: pageLength}, (_, index) => index + 1).map((a,i)=>(
-                 <button onClick={()=>{
-                  console.log(paginaton,i+1,'pagination')
-                  setPagination((a)=>{
-                    return a=i+1
-                  })
-                 }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
-               ))
-             }
-                 </div>
+    
       {/* <div className=' h-40 flex flex-col mt-10 items-center justify-center'>
 				<ReactSVG src='./img/svg/stars.svg' />
 				<p>Sorry, No information yet, Select Vehicle Type to start</p>

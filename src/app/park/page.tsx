@@ -17,10 +17,13 @@ import CTA from "../components/dashboard/comp/cta";
 import parkOBJ from "@/common/classes/park.class";
 import dispatch from "@/common/classes/dispatch.class";
 import { useSelector } from "react-redux";
+import MainTable from "../components/tables/main.table";
 
 export default function Park() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
+  const [DispatchData,setDispatchData]= useState<any>([])
   const [Park, setPark] = useState<any[]>([]);
+  const [parkData,setParkData] = useState<any>([])
   const [inputField,setInputField] = useState<any>('')
   const [paginaton,setPagination] = useState(1)
   const [pageLength,setPageLength] = useState<any>(0)
@@ -32,37 +35,37 @@ export default function Park() {
   const router = useRouter();
   const columns = [
     {
-      id: "name",
+      key: "name",
       header: "Park Name",
     },
     {
-      id: "totalTrip",
+      key: "totalTrip",
       header: "total trips",
     },
     {
-      id: "successfulTrip",
+      key: "successfulTrip",
       header: "successful trips",
     },
     {
-      id: "scheduledTrip",
+      key: "scheduledTrip",
       header: "scheduled trips",
     },
     {
-      id: "cancelledTrip",
+      key: "cancelledTrip",
       header: "cancelled trips",
     },
   ];
   const disColumns = [
     {
-      id: "fullName",
+      key: "fullName",
       header: "Dispatch Name",
     },
     {
-      id: "email_",
+      key: "email_",
       header: "Email Address",
     },
     {
-      id: "phoneNumber",
+      key: "phoneNumber",
       header: "Phone No",
     },
   ];
@@ -77,24 +80,26 @@ export default function Park() {
     if (userData) {
       parkOBJ.getAllByUser().then((res)=>{
       setParks(res?.parks)
+      setParkData(res?.parks)
       setPageLength(res?.totalPages)
-      if (inputField.trim().length >= 1) {
-        const searchFilter = res?.parks?.filter((parkfiltername:any) =>
-        parkfiltername?.name.toLowerCase().includes(inputField.toLowerCase())
-        );
-        console.log(searchFilter,'swae')
-       setParks(searchFilter)
-      } else {
-       setParks(res?.parks)
-      }
-      // if(inputField){
-      //   console.log(inputField,Park,'info')
-      // }
+     
       }).catch((err)=>{
         console.log(err)
       })
     }
-  }, [Park, inputField, paginaton, userData]);
+  }, [Park, paginaton, userData]);
+  //handle search
+  const SearchPark = (e:any)=>{
+    if (e.trim().length >= 1) {
+      const searchFilter = parkData?.filter((parkfiltername:any) =>
+      parkfiltername?.name.toLowerCase().includes(e.toLowerCase())
+      );
+      console.log(searchFilter,'swae')
+     setParks(searchFilter)
+    } else {
+     setParks(parkData)
+    }
+  }
 
   useEffect(()=>{
     dispatch.getAll().then((res)=>{
@@ -111,10 +116,20 @@ export default function Park() {
       console.log(err,'err from dispatch')
     })
   },[inputField, paginaton])
-  console.log(DispactchRider,'dispatch rider')
+  //handle search
+  const SearchDispatch = (e:any)=>{
+    if (e.trim().length >= 1) {
+      const searchFilter = DispatchData?.filter((rider:any) =>
+        rider?.fullName.toLowerCase().includes(e.toLowerCase())
+      );
+      setDispatchRider(searchFilter)
+    } else {
+      setDispatchRider(DispatchData);
+    }
+  }
   return (
     <div>
-    <SubHeader header="Park" hideBack inputText="Search park" inputField={inputField} setInputField={setInputField} />
+    <SubHeader header="Park" hideBack  />
     {userType === USER_TYPE.PARK_OWNER ? (
       <>
         <div className="grid grid-cols-3 gap-4 mt-8">
@@ -148,40 +163,19 @@ export default function Park() {
           <div></div>
         </div>
         <div className="mt-[53px]">
-          {parks?.length >=1 ? (
-           <>
-             <Table
-              columns={columns}
-              data={parks}
-              action={{
-                viewLabel: "View statement",
-                type: ["view", "edit",],
-              }}
-            />
-             <div className="flex gap-4 items-center justify-center mt-[10px]">
-               {
-             parks &&parks.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
-               <button onClick={()=>{
-                console.log(paginaton,i+1,'pagination')
-                setPagination((a)=>{
-                  return a=i+1
-                })
-               }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
-             ))
-           }
-               </div>
-           </>
-          ) : (
-            <div className="flex-col gap-7">
-              <div className="grid grid-cols-3 mt-[32px] gap-8">
-              </div>
-              <div className="mt-[10rem] text-center">
-                <p className="text-xl capitalize">
-                  Sorry, No information yet, Add a Park to start
-                </p>
-              </div>
-            </div>
-          )}
+          
+             <MainTable 
+             columns={columns}
+             data={parks}
+             identifier=""
+             searchBy="park name"
+             handleSearch={(e)=> SearchPark(e)}
+             handleFilter={()=>{}} 
+             apiSearch={()=>{}}
+             />
+             
+    
+      
         </div>
       </>
     ) : (
@@ -211,48 +205,15 @@ export default function Park() {
           <div></div>
         </div>
           <div className="mt-[53px]">
-            {DispactchRider && DispactchRider.length >=1 ? (
-             <>
-               <Table
-                   columns={disColumns}
-                   data={DispactchRider}
-                   action={{
-                     label: "",
-                     type: ["view", "edit", "delete"],
-                   }}
-               />
-               <div className="flex gap-4 items-center justify-center">
-               {
-           DispactchRider &&  DispactchRider.length >=1 && Array.from({ length: pageLength }, (_, index) => index + 1).map((a,i)=>(
-               <button onClick={()=>{
-                console.log(paginaton,i+1,'pagination')
-                setPagination((a)=>{
-                  return a=i+1
-                })
-               }} className={`${paginaton === i+1 ? "bg-[#036e03]" : "bg-[#036e03b5]"} text-white p-[10px] w-[30px] h-[30px] flex items-center justify-center text-[12px]`} key={i}>{a}</button>
-             ))
-           }
-               </div>
-              
-             </>
-            ) : (
-              <div className="flex-col gap-7">
-                <div className="grid grid-cols-3 mt-[32px] gap-8">
-                  <div className="col-span-1 ">
-                    <CTA
-                      text="Veiw achieve"
-                      type="green"
-                      onClick={() => router.push("#")}
-                    />
-                  </div>
-                </div>
-                <div className="mt-[10rem] text-center">
-                  <p className="text-xl capitalize">
-                    Sorry, No information yet, Add a dispatch Rider to start
-                  </p>
-                </div>
-              </div>
-            )}
+          <MainTable 
+             columns={disColumns}
+             data={DispactchRider}
+             identifier=""
+             searchBy="Rider's Name "
+             handleSearch={(e:any)=> SearchDispatch(e)}
+             handleFilter={()=>{}} 
+             apiSearch={()=>{}}
+             />
           </div>
         </div>
       )
