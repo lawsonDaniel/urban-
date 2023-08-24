@@ -11,6 +11,7 @@ import { useUser } from "@/common/hooks/useUser";
 import manager from "@/common/classes/manager.class";
 import MainTable from "@/app/components/tables/main.table";
 import {useSelector} from 'react-redux'
+
 export default function Managers() {
   const columns = [
     {

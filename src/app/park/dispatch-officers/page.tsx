@@ -10,25 +10,27 @@ import { USER_TYPE } from "@/common/types";
 import { DocumentSnapshot } from "firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
 import dispatch from "@/common/classes/dispatch.class";
+import MainTable from "@/app/components/tables/main.table";
+import {useSelector} from 'react-redux'
 
 export default function DispatchOfficers() {
   const [DispactchRider, setDispatchRider] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
-
-  const userData = useUser();
+  const [dispatchData,setDispatchData]  = useState<any[]>([]);
+  const userData = useSelector((a:any)=> a?.authUser?.authUser);
 
   const getAllDispatchOfficers = async () => {};
   const columns = [
     {
-      id: "fullName",
+      key: "fullName",
       header: "Dispatch Name",
     },
     {
-      id: "email_",
+      key: "email_",
       header: "Email Address",
     },
     {
-      id: "phoneNumber",
+      key: "phoneNumber",
       header: "Phone No",
     },
   ]
@@ -36,21 +38,24 @@ export default function DispatchOfficers() {
   useEffect(()=>{
     dispatch.getAll().then((res)=>{
       setDispatchRider(res)
-      if (inputField.trim().length >= 1) {
-        const searchFilter = res?.data((parkfiltername:any) =>
-        parkfiltername.name.toLowerCase().includes(inputField.toLowerCase())
-        );
-        
-        setDispatchRider(searchFilter)
-      } else {
-        setDispatchRider(res)
-      }
+      setDispatchData(res)
+     
     })
-  },[inputField])
-
+  },[])
+const SearchRider = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = dispatchData?.filter((parkfiltername:any) =>
+    parkfiltername?.fullName.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setDispatchRider(searchFilter)
+  } else {
+    setDispatchRider(dispatchData)
+  }
+}
   return (
     <main>
-      <SubHeader header="Dispatch Officers" inputText="Search Officers" setInputField={setInputField}/>
+      <SubHeader header="Dispatch Officers" />
       {/* <div className='grid grid-cols-3 gap-4 mt-8'>
 				{routes.PARK.map((park: any, index: any) => (
 					<div key={index} className=''>
@@ -78,7 +83,7 @@ export default function DispatchOfficers() {
 				<div></div>
 			</div> */}
       <div className="mt-[53px]">
-      {
+      {/* {
           DispactchRider?.length >=1 ? <Table
           columns={columns}
           data={DispactchRider}
@@ -91,9 +96,17 @@ export default function DispatchOfficers() {
           Sorry, No information yet, Add a Dispatch Rider to start
         </p>
       </div>
-        }
+        } */}
         
-        
+        <MainTable 
+             columns={columns}
+             data={DispactchRider}
+             identifier=""
+             searchBy="Dispatch name"
+             handleSearch={(e:any)=> {SearchRider(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </main>
   );
