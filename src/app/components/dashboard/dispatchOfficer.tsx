@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
 // const inter = Inter({ subsets: ['latin'] })
+import MainTable from "../tables/main.table";
 
 export default function DispatchOfficer({ user }: any) {
   const router = useRouter();
@@ -15,19 +16,19 @@ console.log(res,'resp for current users')
   })
   const columns = [
     {
-      id: "passengerName",
+      key: "passengerName",
       header: "Passenger Name",
     },
     {
-      id: "bookingCode",
+      key: "bookingCode",
       header: "Booking Code",
     },
     {
-      id: "date",
+      key: "date",
       header: "Date",
     },
     {
-      id: "time",
+      key: "time",
       header: "Time",
     },
   ];
@@ -92,12 +93,21 @@ console.log(res,'resp for current users')
       </div>
 
       <div className="mt-[53px]">
-        <Table
+        {/* <Table
           columns={columns}
           data={data}
           action={{ viewLabel: "View Receipt", type: ["view"] }}
           path="/book-ride/payment/receipt"
-        />
+        /> */}
+        <MainTable 
+             columns={columns}
+             data={data}
+             identifier=""
+             searchBy="park name"
+             handleSearch={(e:any)=> {}}
+             handleFilter={(e:any)=> {}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </div>
   );
