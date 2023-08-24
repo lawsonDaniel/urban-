@@ -147,7 +147,7 @@ const MainTable: React.FC<MainTableProps> = ({
   };
   const exportedText = () => {
     const text =
-      selectedRows.length == paginatedData.length
+      selectedRows.length == paginatedData?.length
         ? "All"
         : selectedRows.length > 0
         ? selectedRows.length
@@ -301,7 +301,7 @@ const MainTable: React.FC<MainTableProps> = ({
             handleSubmit={exportData}
           />
         </div>
-        {paginatedData.length > 0 ? (
+        {paginatedData?.length > 0 ? (
           <Table className="table custom-table w-100">
             <TableHead>
               <TableRow>{renderTableHeaderCell(columns)}</TableRow>
@@ -327,7 +327,7 @@ const MainTable: React.FC<MainTableProps> = ({
       <TablePagination
         rowsPerPageOptions={[25, 50, 100]}
         component="div"
-        count={filteredData.length}
+        count={filteredData?.length}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

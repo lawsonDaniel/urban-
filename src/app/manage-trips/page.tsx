@@ -125,7 +125,7 @@ console.log(Trip,'trips  ss')
              columns={columns}
              data={Trip}
              identifier=""
-             searchBy="Urban id"
+             searchBy="Booking Code"
              handleSearch={(e:any)=> {SearchManager(e)}}
              handleFilter={(e:any)=>{}} 
              apiSearch={()=>{}}

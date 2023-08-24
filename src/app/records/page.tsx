@@ -17,6 +17,7 @@ import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
 import { useSelector } from "react-redux";
 
+
 export default function Records() {
   const [parks, setParks] = useState<any[]>([]);
   const userType = useSelector((a:any)=> a?.authUser?.setAuthType);
