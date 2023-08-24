@@ -169,7 +169,7 @@ export default function Park() {
              data={parks}
              identifier=""
              searchBy="park name"
-             handleSearch={(e)=> SearchPark(e)}
+             handleSearch={(e:any)=> SearchPark(e)}
              handleFilter={()=>{}} 
              apiSearch={()=>{}}
              />
