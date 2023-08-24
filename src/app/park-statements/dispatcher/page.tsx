@@ -74,7 +74,7 @@ export default function DispatcherStatements() {
            const queryString = new URLSearchParams({
            ...a
            }).toString();
-         console.log(queryString,'this is going to bhe thequery string')
+     
           return (
             <>
               <NotificationCard

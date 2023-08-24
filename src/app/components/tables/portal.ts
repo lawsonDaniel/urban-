@@ -47,10 +47,10 @@ export interface MainTableProps {
   data: any;
   handleSearch: Function;
   handleFilter: Function;
-  columns: Column[];
+  columns: { key: string; header: string; }[];
   actionObject?: any;
   searchBy?: any;
-  detailsProps: any;
+  detailsProps?: any;
   onExport?: any;
   filterMenu?: any;
   apiSearch: Function;

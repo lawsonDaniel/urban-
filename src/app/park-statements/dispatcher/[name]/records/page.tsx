@@ -4,10 +4,12 @@ import MyTabs from "@/app/components/tabs";
 import React,{useState,useEffect} from "react";
 import Table from "@/app/components/table";
 import tripOBJs from "@/common/classes/trip.class";
+import MainTable from "@/app/components/tables/main.table";
 
 export default function Records() {
    const [managerInfo,setManagerInfo] = useState<any>("")
    const [dispatch,setDispatch] = useState<any>("")
+   const [Data,setData] = useState<any[]>([])
     useEffect(()=>{
   const searchParams = new URLSearchParams(window.location.search);
 
@@ -23,24 +25,36 @@ setManagerInfo(params)
 useEffect(()=>{
   tripOBJs.getByDispatchId(managerInfo.userId).then((res)=>{
   setDispatch(res)
+  setData(res)
 })
 },[managerInfo.userId])
 
+const Search = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = Data?.filter((parkfiltername:any) =>
+    parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setDispatch(searchFilter)
+  } else {
+    setDispatch(Data)
+  }
+}
   const columns = [
     // {
     //   id: "passegerName",
     //   header: "Passenger Name",
     // },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Trip Code",
     },
     {
-      id: "date",
+      key: "date",
       header: "Date",
     },
     {
-      id: "time",
+      key: "time",
       header: "Time",
     },
   ];
@@ -72,7 +86,7 @@ useEffect(()=>{
     <>
       <SubHeader header={`${(managerInfo?.fullName || '').charAt(0).toUpperCase() + (managerInfo?.fullName || '').slice(1)} ${(managerInfo?.lastName || '').charAt(0).toUpperCase() + (managerInfo?.lastName || '').slice(1)}`} allowFilter />
       <div className="mt-[53px]">
-        {
+        {/* {
           dispatch && dispatch.length >=1 ?   <Table
           columns={columns}
           data={dispatch}
@@ -89,8 +103,16 @@ useEffect(()=>{
               </div>
             </div>
           )
-        }
-      
+        } */}
+       <MainTable 
+             columns={columns}
+             data={dispatch}
+             identifier=""
+             searchBy="Booking code"
+             handleSearch={(e:any)=> {Search(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </>
   );
