@@ -1,25 +1,25 @@
-import Button from "@mui/material/Button";
-// import Spinner from "../Spinner";
+import { Button } from "@mui/material";
 import { ClipLoader } from "react-spinners";
-import "../button.scss";
+
 type PropT = {
   title: string;
   handleSubmit?: Function;
   isDisabled?: boolean;
   isLoading: boolean;
   width?: string;
-  heigth?: string;
+  height?: string; // Fixed a typo in the prop name
   backgroundColor?: string;
   color?: string;
   type?: any;
 };
+
 export default function DefaultButton({
   title,
   handleSubmit,
   isDisabled,
   isLoading,
   width,
-  heigth,
+  height,
   backgroundColor,
   color,
   type,
@@ -27,20 +27,18 @@ export default function DefaultButton({
   return (
     <Button
       variant="contained"
-      className=" default-button flex items-center justify-center rounded-[0.20rem]"
+      className={`default-button flex items-center justify-center rounded-[0.20rem] ${
+        backgroundColor ?? "bg-primary"
+      } ${color ?? "text-white"} h-${height ?? "12"} ${width ?? "w-full"}`}
       style={{
-        backgroundColor: backgroundColor ?? "#036E03",
         textTransform: "capitalize",
         fontWeight: "100",
-        color: color ?? "#fff",
-        height: heigth ?? "3rem",
-        width: width ?? "100%",
       }}
       type={type ? type : "submit"}
-      disabled={isDisabled}
+      disabled={isDisabled || isLoading} // Disable the button when isLoading is true
       onClick={() => handleSubmit && handleSubmit()}
     >
-      {isLoading ? <ClipLoader  /> : title}
+      {isLoading ? <ClipLoader size={16} color={"#ffffff"} /> : title}
     </Button>
   );
 }
