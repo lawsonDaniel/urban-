@@ -84,8 +84,8 @@ const MainTable: React.FC<MainTableProps> = ({
   };
   const renderFilteredMenu = () => {
     if (filterMenu) {
-      return filterMenu.map((item:any, index: number) => {
-        console.log(item,'item from table')
+      return filterMenu.map((item: any, index: number) => {
+        console.log(item, "item from table");
         return (
           <MenuItem key={index} value={item}>
             {capitalize(item?.item)}
@@ -105,33 +105,33 @@ const MainTable: React.FC<MainTableProps> = ({
     }
   };
   const renderTableHeaderCell = (headerColumns: any[]) => {
-    return headerColumns.map((column: any, index: number) => {
-      return index == 0 ? (
-        <TableCell key={column.key}>
-          <Checkbox
-            checked={selectedRows.length === paginatedData.length}
-            indeterminate={
-              selectedRows.length > 0 &&
-              selectedRows.length < paginatedData.length
-            }
-            sx={{
-              color: "#19733b",
-              "&.Mui-checked": {
-                color: "#19733b",
-              },
-              "&.MuiCheckbox-indeterminate": {
-                color: "#a3acbf",
-              },
-            }}
-            onChange={handleSelectAll}
-          />
-          {column.header}
+    return headerColumns.map((column, index) => {
+      return (
+        <TableCell
+          key={column.key}
+          className={index === 0 ? "flex items-center" : ""}
+        >
+          {index === 0 ? (
+            <div className="flex items-center">
+              <Checkbox
+                checked={selectedRows.length === paginatedData.length}
+                indeterminate={
+                  selectedRows.length > 0 &&
+                  selectedRows.length < paginatedData.length
+                }
+                onChange={handleSelectAll}
+                className="text-green-600 dark:text-green-500 rounded focus:ring focus:ring-green-200 focus:ring-opacity-50"
+              />
+              {column.header}
+            </div>
+          ) : (
+            column.header
+          )}
         </TableCell>
-      ) : (
-        <TableCell key={column.key}>{column.header}</TableCell>
       );
     });
   };
+
   const renderRowSpan = (row: any, column: any) => {
     if (row[column.key] !== undefined) {
       if (column.key == "status") {
@@ -159,7 +159,7 @@ const MainTable: React.FC<MainTableProps> = ({
   };
 
   const filteredData = data;
- 
+
   const paginatedData = filteredData?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
@@ -208,16 +208,16 @@ const MainTable: React.FC<MainTableProps> = ({
     return (
       <>
         <TableRow key={row.id} selected={isItemSelected}>
-          {columns.map((column: any, index: number) => {
+          {columns.map((column: any, index: any) => {
             if (actionObject && index === columns.length - 1) {
               return (
                 <TableCell key={column.key}>
                   <div
-                    className="d-flex align-items-center action_dropdown"
+                    className="flex items-center action_dropdown cursor-pointer"
                     onClick={handleClick}
                   >
                     Action
-                    <ArrowDropDownIcon />
+                    <ArrowDropDownIcon className="ml-1" />
                   </div>
                   <Menu
                     anchorEl={anchorEl}
@@ -230,10 +230,10 @@ const MainTable: React.FC<MainTableProps> = ({
               );
             } else if (index === 0) {
               return (
-                <TableCell key={column.key}>
+                <TableCell key={column.key} className="flex items-center">
                   <Checkbox
                     checked={selectedRows.includes(row)}
-                    onChange={(event:any) => handleSelectRow(event, row)}
+                    onChange={(event) => handleSelectRow(event, row)}
                     sx={{
                       color: "#223040",
                       "&.Mui-checked": {
@@ -259,8 +259,8 @@ const MainTable: React.FC<MainTableProps> = ({
   return (
     <div>
       <TableContainer className="tbl-wrap">
-        <div className="toolbar mb-5 adjust-wrap d-flex justify-content-between align-items-center mx-5">
-          <div className="d-flex align-items-center justify-content-start adjust-flex">
+        <div className="toolbar mb-5 adjust-wrap flex justify-between items-center mx-5">
+          <div className="flex items-center justify-start adjust-flex">
             <div className="search-input w-500 m-0 me-2">
               <span>
                 <SearchIcon />
@@ -278,6 +278,7 @@ const MainTable: React.FC<MainTableProps> = ({
                 value={optionValue}
                 onChange={handleFilterChange}
                 displayEmpty
+                className="flex align-center"
               >
                 <MenuItem value="" disabled>
                   Filter by status
@@ -286,7 +287,8 @@ const MainTable: React.FC<MainTableProps> = ({
                 {renderFilteredMenu()}
               </Select>
             </div>
-            <div className="d-flex align-items-center ms-5">
+
+            <div className="flex items-center ms-5">
               <DefaultButton
                 title="Apply"
                 handleSubmit={onSearch}
