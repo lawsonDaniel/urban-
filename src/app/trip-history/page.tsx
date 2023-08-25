@@ -48,25 +48,25 @@ export default function TripHistory() {
   // ]
   let assignedTrips: any = null;
   let completedTrips: any = null;
-  let userData =  useSelector((a:any)=> a?.authUser?.authUser)
+  let userData = useSelector((a: any) => a?.authUser?.authUser);
 
   const [trips, setTrips] = useState<any[]>([]);
   tripOBJs
-  .getByDispatchMainId(userData.id)
-  .then((res: any) => {
-    console.log(res, "records of park");
-    setTrips(res);
-  })
-  .catch((err) => {
-    console.log(err, "err");
-  });
+    .getByDispatchMainId(userData.id)
+    .then((res: any) => {
+      console.log(res, "records of park");
+      setTrips(res);
+    })
+    .catch((err) => {
+      console.log(err, "err");
+    });
 
   if (trips && trips.length >= 1) {
     trips.map((a) => {
       if (a.status === "completed") {
         completedTrips = [];
         completedTrips.push(a);
-      } else if (a.status !== "completed" && a.status !== "canceled" ) {
+      } else if (a.status !== "completed" && a.status !== "canceled") {
         assignedTrips = [];
         assignedTrips.push(a);
       }
@@ -79,7 +79,10 @@ export default function TripHistory() {
       <div className="mt-[53px]">
         <MyTabs
           headers={["Open tickets ", "Completed"]}
-          components={[<Completed key="1" data={completedTrips}/>, <OpenTickets key="2" data={assignedTrips}/>]}
+          components={[
+            <Completed key="1" data={completedTrips} />,
+            <OpenTickets key="2" data={assignedTrips} />,
+          ]}
         />
         {/* <Table
                     columns={columns}
