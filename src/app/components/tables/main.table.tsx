@@ -159,7 +159,7 @@ const MainTable: React.FC<MainTableProps> = ({
   };
 
   const filteredData = data;
-  console.log(filteredData,data,'filter data')
+ 
   const paginatedData = filteredData?.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage

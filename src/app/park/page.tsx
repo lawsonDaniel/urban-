@@ -54,6 +54,10 @@ export default function Park() {
       key: "cancelledTrip",
       header: "cancelled trips",
     },
+    {
+      key: "actions",
+      header: "Action",
+    },
   ];
   const disColumns = [
     {
@@ -68,8 +72,27 @@ export default function Park() {
       key: "phoneNumber",
       header: "Phone No",
     },
+    {
+      key: "actions",
+      header: "Action",
+    },
   ];
-
+  const actionObject = [
+    {
+      label: "Veiw Statement",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+      },
+    },
+    {
+      label: "Edit",
+      function: (row:any) => {
+        // Perform delete action using the 'row' data
+        console.log("Edit action clicked for row:", row);
+      },
+    },
+  ];
   const userType = useSelector((a:any)=> a?.authUser?.setAuthType)
   
   const [parks, setParks] = useState<any[]>([]);
@@ -168,6 +191,7 @@ export default function Park() {
              columns={columns}
              data={parks}
              identifier=""
+             actionObject={actionObject}
              searchBy="park name"
              handleSearch={(e:any)=> SearchPark(e)}
              handleFilter={()=>{}} 

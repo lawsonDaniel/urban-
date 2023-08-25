@@ -4,6 +4,7 @@ import SubHeader from "../components/headers/sub-header";
 import QuickAction from "../components/parkowner/quick-button";
 import Table from "../components/table";
 import { routes } from "@/common/routes";
+import { useRouter } from "next/navigation";
 import Button from "../components/button";
 // import { useRouter } from 'next/navigation'
 import Link from "next/link";
@@ -18,7 +19,7 @@ import MainTable from "@/app/components/tables/main.table";
 export default function ManageTrips() {
   // const router = useRouter()
   const userData = useUser();
-
+  const router = useRouter();
   const [Trip, setTrip] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
   const [tripData,setTripData] = useState<any[]>([])
@@ -69,6 +70,52 @@ const SearchManager = (e:any)=>{
     {
       key: "status",
       header: "Booking Status",
+    },
+    {
+      key: "actions",
+      header: "Action",
+    },
+  ];
+  const actionObject = [
+    {
+      label: "Veiw Details",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+      },
+    },
+    {
+      label: "Edit Details",
+      function: (row:any) => {
+        // Perform delete action using the 'row' data
+        console.log("Edit action clicked for row:", row);
+      },
+    },
+    {
+      label: "Request Driver",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+        let query ={
+          tripCode:row.tripCode
+        }
+        const queryString = new URLSearchParams(query).toString();
+        router.push(`/manage-trips/request-driver?${queryString}`)
+
+      },
+    },
+    {
+      label: "Assign Driver",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+        let query ={
+          tripCode:row.tripCode
+        }
+        const queryString = new URLSearchParams(query).toString();
+        router.push(`/manage-trips/assign?${queryString}`)
+
+      },
     },
   ];
 console.log(Trip,'trips  ss')
@@ -125,6 +172,7 @@ console.log(Trip,'trips  ss')
              columns={columns}
              data={Trip}
              identifier=""
+             actionObject={actionObject}
              searchBy="Booking Code"
              handleSearch={(e:any)=> {SearchManager(e)}}
              handleFilter={(e:any)=>{}} 

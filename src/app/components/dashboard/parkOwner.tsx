@@ -6,11 +6,6 @@ import CTA from "./comp/cta";
 import DataCard from "./comp/dataCard";
 import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
-import { getAll } from "@/common/hooks/fireStore";
-import { DocumentSnapshot } from "firebase/firestore";
-import { parseCookies } from "nookies";
-import { useUser } from "@/common/hooks/useUser";
-import { useAuth } from "@/common/hooks/useAuth";
 import parkOBJ from "@/common/classes/park.class";
 import {useSelector} from 'react-redux'
 // const inter = Inter({ subsets: ['latin'] })
@@ -50,8 +45,27 @@ export default function ParkOwner({ user }: any) {
       key: "cancelledTrip",
       header: "cancelled trips",
     },
+    {
+      key: "actions",
+      header: "Action",
+    }
   ];
-
+  const actionObject = [
+    {
+      label: "Veiw Statement",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+      },
+    },
+    {
+      label: "Edit",
+      function: (row:any) => {
+        // Perform delete action using the 'row' data
+        console.log("Edit action clicked for row:", row);
+      },
+    },
+  ];
   const options =
     mainParks &&
     mainParks?.parks?.map((park: { id: any; name: any; }) => {
@@ -145,6 +159,7 @@ const SearchPark = (e:any)=>{
              columns={columns}
              data={parks}
              identifier=""
+             actionObject={actionObject}
              filterMenu={options}
              searchBy="park name"
              handleSearch={(e:any)=> SearchPark(e)}
