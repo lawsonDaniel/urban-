@@ -7,7 +7,7 @@ import Completed from "./(comp)/completed";
 import OpenTickets from "./(comp)/openTickets";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
-import { GetUserData } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
 
 export default function TripHistory() {
   // const columns = [
@@ -48,10 +48,11 @@ export default function TripHistory() {
   // ]
   let assignedTrips: any = null;
   let completedTrips: any = null;
-console.log(GetUserData(),'get user data')
+  let userData =  useSelector((a:any)=> a?.authUser?.authUser)
+
   const [trips, setTrips] = useState<any[]>([]);
   tripOBJs
-  .getByDispatchMainId(GetUserData().id)
+  .getByDispatchMainId(userData.id)
   .then((res: any) => {
     console.log(res, "records of park");
     setTrips(res);
