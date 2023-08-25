@@ -2,41 +2,55 @@ import Table from "@/app/components/table";
 import React,{useState,useEffect} from "react";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
+import MainTable from "@/app/components/tables/main.table";
 
 export default function Cancelled({managerInfo}:any) {
   const[canceled,setCanceled] = useState<any>([])
-   const userType:string = GetUserType()
+   const userType:string =useSelector((a:any)=> a?.authUser?.setAuthType)
+   const [Data,setData] = useState<any[]>([])
 
 useEffect(()=>{
   tripOBJs.filter(userType,'canceled').then((res)=>{
     let com = res?.filter((a:any)=> a?.park?.parkManager?.id === managerInfo?.id)
     setCanceled(com)
+    setData(com)
   })
 },[managerInfo?.id, userType])
-
+const Search = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = Data?.filter((parkfiltername:any) =>
+    parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setCanceled(searchFilter)
+  } else {
+    setCanceled(Data)
+  }
+}
   const columns = [
     {
-      id: "startLocation",
+      key: "startLocation",
       header: "Departure Park",
     },
     {
-      id: "time",
+      key: "time",
       header: "Departure Time",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Trip Code",
     },
     {
-      id: "fare",
+      key: "fare",
       header: "Fare",
     },
     {
-      id: "typeOfVehicle",
+      key: "typeOfVehicle",
       header: "Type Of Vehicle",
     },
     {
-      id: "totalSeats",
+      key: "totalSeats",
       header: "Booking Status",
     },
   ];
@@ -45,7 +59,7 @@ useEffect(()=>{
   return (
     <>
       <div className="mt-[53px]">
-        {
+        {/* {
           canceled && canceled.length >=1 ?  <Table
           columns={columns}
           data={canceled}
@@ -62,7 +76,16 @@ useEffect(()=>{
               </div>
             </div>
           )
-        }
+        } */}
+        <MainTable 
+             columns={columns}
+             data={canceled}
+             identifier=""
+             searchBy="Booking code"
+             handleSearch={(e:any)=> {Search(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
        
       </div>
     </>

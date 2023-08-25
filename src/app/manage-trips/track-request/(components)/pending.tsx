@@ -4,7 +4,7 @@ import { DocumentSnapshot } from "firebase/firestore";
 import React, { useState, useEffect } from "react";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
-
+import { useSelector } from "react-redux";
 export default function Pending({inputField}:any) {
   const [pendingRequest, setPendingRequest] = useState<any[]>([]);
   const columns = [
@@ -34,7 +34,7 @@ export default function Pending({inputField}:any) {
     }
     
   ];
-  const userType:string = GetUserType()
+  const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   const getAllPendingRequest = async () => {
     tripOBJs.filter(userType,'in_progress').then((res)=>{
       let filteredTrips = res;

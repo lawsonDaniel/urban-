@@ -121,6 +121,17 @@ class tripOBJ {
       throw err;
     }
   }; 
+
+   //create trip
+   requestDriver = async (data: any) => {
+    try {
+      const response: any = await api.post("trip/request-driver", data);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };  
+
 }
 const tripOBJs = new tripOBJ()
 export default tripOBJs

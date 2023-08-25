@@ -4,11 +4,9 @@ class providerOBJ {
     //get all
     getAll = async () => {
         try {
-          const response: any = await api.get("providerRouter");
+          const response: any = await api.get("provider");
           console.log(response,'provider api')
           if (response?.data?.success) {
-            //store response in redux
-            
             return response.data.data;
           } else {
             throw new Error("something went wrong");

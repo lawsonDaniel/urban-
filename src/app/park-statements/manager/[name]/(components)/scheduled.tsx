@@ -2,49 +2,63 @@ import Table from "@/app/components/table";
 import React,{useState,useEffect} from "react";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
+import MainTable from "@/app/components/tables/main.table";
 
 export default function Scheduled({managerInfo}:any) {
   const columns = [
     {
-      id: "startLocation",
+      key: "startLocation",
       header: "Departure Park",
     },
     {
-      id: "time",
+      key: "time",
       header: "Departure Time",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Trip Code",
     },
     {
-      id: "fare",
+      key: "fare",
       header: "Fare",
     },
     {
-      id: "typeOfVehicle",
+      key: "typeOfVehicle",
       header: "Type Of Vehicle",
     },
     {
-      id: "totalSeats",
+      key: "totalSeats",
       header: "Booking Status",
     },
   ];   
    const[sheduled,setsheduled] = useState<any>([])
-  const userType:string = GetUserType()
+  const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
+  const [Data,setData] = useState<any[]>([])
 
   useEffect(()=>{
     tripOBJs.filter(userType,'scheduled').then((res)=>{
       let com = res?.filter((a:any)=> a?.park?.parkManager?.id === managerInfo?.id)
       setsheduled(com)
+      setData(com)
     })
   },[managerInfo?.id, userType])
 
-  
+  const Search = (e:any)=>{
+    if (e.trim().length >= 1) {
+      const searchFilter = Data?.filter((parkfiltername:any) =>
+      parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+      );
+      console.log(searchFilter,'swae')
+      setsheduled(searchFilter)
+    } else {
+      setsheduled(Data)
+    }
+  }
   return (
     <>
         <div className="mt-[53px]">
-        {
+        {/* {
           sheduled && sheduled.length >=1 ?  <Table
           columns={columns}
           data={sheduled}
@@ -61,8 +75,16 @@ export default function Scheduled({managerInfo}:any) {
               </div>
             </div>
           )
-        }
-       
+        } */}
+       <MainTable 
+             columns={columns}
+             data={sheduled}
+             identifier=""
+             searchBy="Booking code"
+             handleSearch={(e:any)=> {Search(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </>
   );

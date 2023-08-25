@@ -13,7 +13,6 @@ class AUTH {
       const response: any = await api.post("auth/login", data);
       //store jwt
       StoreAuthToken(response?.data?.data?.token);
-      SetUserType(data?.userType);
       return response;
     } catch (err) {
       throw err;
@@ -35,12 +34,11 @@ class AUTH {
     try {
       const response: any = await api.get("auth/me");
       if (response?.data?.success) {
-        SetUserData(JSON.stringify(response?.data?.data));
         return response?.data?.data
       }else{
         throw new Error('something went wrong')
       }
-      console.log(response?.data, "from currently stored user");
+    
     } catch (err) {
       throw err
     }

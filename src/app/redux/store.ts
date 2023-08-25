@@ -1,16 +1,29 @@
-"use client";
-import { configureStore } from "@reduxjs/toolkit";
-import userSliceReducer from "./reducers/userSlice";
-import persistedReducer from "./rootReducer";
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { useDispatch, TypedUseSelectorHook, useSelector } from "react-redux";
+import { persistReducer } from "redux-persist";
+// import storage from "redux-persist/lib/storage";
+import { authReducer } from "./reducers/userSlice";
+import storage from "./customStorage";
+import logger from 'redux-logger'
 
-export const store = configureStore({
-  reducer: persistedReducer,
-  devTools: process.env.NODE_ENV !== "production",
-  // Add any additional configuration options here
+const userPersistConfig = {
+  key: "auth",
+  storage: storage,
+  whitelist: ["authUser","setAuthType"],
+};
+
+const rootReducer = combineReducers({
+  authUser: persistReducer(userPersistConfig, authReducer),
 });
 
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }).concat(logger),
+});
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

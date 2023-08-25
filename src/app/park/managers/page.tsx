@@ -9,58 +9,64 @@ import { getAll } from "@/common/hooks/fireStore";
 import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
 import manager from "@/common/classes/manager.class";
+import MainTable from "@/app/components/tables/main.table";
+import {useSelector} from 'react-redux'
 
 export default function Managers() {
   const columns = [
     {
-      id: "firstName",
+      key: "firstName",
       header: "Manager Name",
     },
     {
-      id: "email",
+      key: "email",
       header: "Email",
     },
     {
-      id: "phone number",
+      key: "phone number",
       header: "Phone No",
     },
     {
-      id: "urbanId",
+      key: "urbanId",
       header: "Manger id",
     }
   ];
 
-  const userData = useUser();
+  const userData = useSelector((a:any)=> a?.authUser?.authUser);
   const [managerPark, setManagerPark] = useState<any[]>([]);
   const [inputField, setInputField] = useState<string>('');
+  const [managerData,setMangerData] = useState<any[]>([]);
   
   useEffect(() => {
     if (userData) {
       manager.getAll()
         .then((res) => {
-          let filteredParks = res;
-          if (inputField.trim().length >= 1) {
-            const searchFilter:any[] = filteredParks.filter((park: any) =>
-              park.urbanId.toLowerCase().includes(inputField.toLowerCase())
-            );
-            console.log(searchFilter,'filter data')
-            setManagerPark(searchFilter);
-          } else {
-            setManagerPark(filteredParks);
-          }
+          setMangerData(res)
+          setManagerPark(res)
+          
         })
         .catch((error) => {
           console.error("Error fetching manager data:", error);
         });
     }
     
-  }, [inputField, userData]);
+  }, [userData]);
   
-  // Rest of your component...
-
+  //handle search
+const SearchManager = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = managerData?.filter((parkfiltername:any) =>
+    parkfiltername?.urbanId.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setManagerPark(searchFilter)
+  } else {
+    setManagerPark(managerData)
+  }
+}
   return (
     <main>
-      <SubHeader header="Park Managers" inputText="Search Managers"  setInputField={setInputField}/>
+      <SubHeader header="Park Managers"/>
       {/* <div className='grid grid-cols-3 gap-4 mt-8'>
 				{routes.PARK.map((park: any, index: any) => (
 					<div key={index} className=''>
@@ -89,22 +95,27 @@ export default function Managers() {
 			</div> */}
       <div className="mt-[53px]">
         {
-          managerPark?.length >=1 ? <Table
-          columns={columns}
-          data={managerPark}
-          action={{
-            type: ["view", "delete"],
-            viewLabel: "View statememt",
-            deleteLabel: "Remove manager",
-          }}
-        />: <div className="mt-[10rem] text-center">
-        <p className="text-xl capitalize">
-          Sorry, No information yet, Add a Park Manager to start
-        </p>
-      </div>
+        //   managerPark?.length >=1 ? <Table
+        //   columns={columns}
+        //   data={managerPark}
+        //   action={{
+        //     type: ["view", "delete"],
+        //     viewLabel: "View statememt",
+        //     deleteLabel: "Remove manager",
+        //   }}
+        // />: 
         }
-        
+        <MainTable 
+             columns={columns}
+             data={managerPark}
+             identifier=""
+             searchBy="Urban id"
+             handleSearch={(e:any)=> {SearchManager(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </main>
   );
+      
 }

@@ -26,10 +26,24 @@ export default function Assign() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const getAllDriver = async () => {
     driverOBJs.getAll().then((res)=>{
-      console.log(res?.data,"driver")
-      setDriver(res?.data)
+      console.log(res,"driver")
+      setDriver(res)
     })
   };
+  useEffect(()=>{
+    const searchParams = new URLSearchParams(window.location.search);
+  
+  // Convert the searchParams to a plain object
+  const params:any = {};
+  searchParams.forEach((value, key) => {
+    params[key] = value;
+  });
+  if(params?.tripCode){
+    setSelectedPark(params?.tripCode)
+  }
+  console.log(params?.tripCode,'trip info from link')
+  
+   },[])
   const getAllTrips = async () => {
   tripOBJs.getAll().then((res)=>{
     console.log(res,"trips")
@@ -64,7 +78,7 @@ export default function Assign() {
       label: a?.tripCode ,
     }))
   }else{
-    DriverOption = [{
+    TripOption = [{
       value:null,
       label : 'no Trip found'
     }]
@@ -108,7 +122,8 @@ export default function Assign() {
       <SubHeader header="Assign Vehicle & Driver" hideRight />
       <form className="mt-10" onSubmit={formik.handleSubmit}>
         <div className=" w-[510px]">
-          <Dropdown
+        {
+            !selectedPark && <Dropdown
             options={TripOption}
             placeholder="Option"
             label="Select Trip"
@@ -116,6 +131,7 @@ export default function Assign() {
             className="w-[510px]"
             // error={formik.touched.departurePark && formik.errors.departurePark}
           />
+          }
 
           <Dropdown
             options={DriverOption}

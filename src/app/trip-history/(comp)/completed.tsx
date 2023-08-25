@@ -1,34 +1,51 @@
 import Table from "@/app/components/table";
-import React from "react";
+import React,{useEffect,useState} from "react";
+import MainTable from "@/app/components/tables/main.table";
 
 export default function CompletedTrips({ data }: any) {
   const columns = [
     {
-      id: "startLocation",
+      key: "startLocation",
       header: "Departure City",
     },
     {
-      id: "time",
+      key: "time",
       header: "Departure Time",
     },
     {
-      id: "endLocation",
+      key: "endLocation",
       header: "Destination City",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Trip Code",
     },
     {
-      id: "vehicleType",
+      key: "vehicleType",
       header: "Type Of Vehicle",
     },
   ];
-
+  const [Data,setData] = useState<any[]>([])
+  const [trip,setTrip] = useState<any[]>([])
+  useEffect(()=>{
+  setData(data)
+setTrip(data)
+},[data])
+const Search = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = Data?.filter((parkfiltername:any) =>
+    parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setTrip(searchFilter)
+  } else {
+    setTrip(Data)
+  }
+}
   return (
     <>
       <div className="mt-[53px]">
-      {
+      {/* {
           data && data.length >=1 ?  <Table
           columns={columns}
           data={data}
@@ -48,8 +65,18 @@ export default function CompletedTrips({ data }: any) {
               </div>
             </div>
           )
-        }
-      </div>
+        } */}
+        <MainTable 
+             columns={columns}
+             data={trip}
+             identifier=""
+             searchBy="Booking code"
+             handleSearch={(e:any)=> {Search(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
+      </div> 
+      
     </>
   );
 }

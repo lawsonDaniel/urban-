@@ -4,6 +4,7 @@ import SubHeader from "../components/headers/sub-header";
 import QuickAction from "../components/parkowner/quick-button";
 import Table from "../components/table";
 import { routes } from "@/common/routes";
+import { useRouter } from "next/navigation";
 import Button from "../components/button";
 // import { useRouter } from 'next/navigation'
 import Link from "next/link";
@@ -12,56 +13,109 @@ import { DocumentSnapshot } from "@firebase/firestore";
 import { useUser } from "@/common/hooks/useUser";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
+import {useSelector} from 'react-redux'
+import MainTable from "@/app/components/tables/main.table";
 
 export default function ManageTrips() {
   // const router = useRouter()
   const userData = useUser();
-
+  const router = useRouter();
   const [Trip, setTrip] = useState<any[]>([]);
   const [inputField,setInputField] = useState<any>('')
-  const userType:string = GetUserType()
+  const [tripData,setTripData] = useState<any[]>([])
+  const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   useEffect(() => {
     //getAllTrips
     tripOBJs.getAll(userType).then((res)=>{
       console.log(res,'from tripps')
       setTrip(res)
-      if (inputField.trim().length >= 1) {
-        const searchFilter = res?.filter((trip:any) =>
-          trip?.tripCode.toLowerCase().includes(inputField.toLowerCase())
-        );
-        setTrip(searchFilter)
-      } else {
-        setTrip(res);
-      }
+      setTripData(res)
     })
-  }, [inputField]);
- 
+  }, []);
+  //handle search
+const SearchManager = (e:any)=>{
+  if (e.trim().length >= 1) {
+    const searchFilter = tripData?.filter((parkfiltername:any) =>
+    parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+    );
+    console.log(searchFilter,'swae')
+    setTrip(searchFilter)
+  } else {
+    setTrip(tripData)
+  }
+}
   console.log(GetUserType(),'user type from trip')
   const columns = [
     {
-      id: "endLocation",
+      key: "endLocation",
       header: "Arival City",
     },
     {
-      id: "time",
+      key: "time",
       header: "Departure Time",
     },
     {
-      id: "startLocation",
+      key: "startLocation",
       header: "Departure City",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Booking Code",
     },
     {
-      id: "fare",
+      key: "fare",
       header: "Fare",
     },
     
     {
-      id: "status",
+      key: "status",
       header: "Booking Status",
+    },
+    {
+      key: "actions",
+      header: "Action",
+    },
+  ];
+  const actionObject = [
+    {
+      label: "Veiw Details",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+      },
+    },
+    {
+      label: "Edit Details",
+      function: (row:any) => {
+        // Perform delete action using the 'row' data
+        console.log("Edit action clicked for row:", row);
+      },
+    },
+    {
+      label: "Request Driver",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+        let query ={
+          tripCode:row.tripCode
+        }
+        const queryString = new URLSearchParams(query).toString();
+        router.push(`/manage-trips/request-driver?${queryString}`)
+
+      },
+    },
+    {
+      label: "Assign Driver",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+        console.log("Veiw Statement action clicked for row:", row);
+        let query ={
+          tripCode:row.tripCode
+        }
+        const queryString = new URLSearchParams(query).toString();
+        router.push(`/manage-trips/assign?${queryString}`)
+
+      },
     },
   ];
 console.log(Trip,'trips  ss')
@@ -70,10 +124,7 @@ console.log(Trip,'trips  ss')
       <SubHeader
         header="Manage Trips"
         hideBack
-        inputText="Search Trips"
-        allowFilter
-        inputField={inputField} 
-        setInputField={setInputField}
+        
       />
       <div className="grid grid-cols-3 gap-x-4 mt-8">
         {routes.TRIPS.map((trip: any, index: any) => (
@@ -100,23 +151,33 @@ console.log(Trip,'trips  ss')
       </div>
       <div className="mt-[53px]">
         {
-          Trip.length >=1 ?  <Table
-          columns={columns}
-          data={Trip}
-          action={{
-            editLabel: "Edit details",
-            type: ["edit","view","Request Driver"],
-            viewLabel:"Veiw Details",
-            label: "Assign Driver",
-          }}
-          type="booking"
-        /> : <div className="mt-[10rem] text-center">
-        <p className="text-xl capitalize">
-          Sorry, No information yet, Add a Trip to start
-        </p>
-      </div>
+      //     Trip.length >=1 ?  <Table
+      //     columns={columns}
+      //     data={Trip}
+      //     action={{
+      //       editLabel: "Edit details",
+      //       type: ["edit","view","Request Driver"],
+      //       viewLabel:"Veiw Details",
+      //       label: "Assign Driver",
+      //     }}
+      //     type="booking"
+      //   /> : <div className="mt-[10rem] text-center">
+      //   <p className="text-xl capitalize">
+      //     Sorry, No information yet, Add a Trip to start
+      //   </p>
+      // </div>
    
         }
+         <MainTable 
+             columns={columns}
+             data={Trip}
+             identifier=""
+             actionObject={actionObject}
+             searchBy="Booking Code"
+             handleSearch={(e:any)=> {SearchManager(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
         </div>
         
     </>

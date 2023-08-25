@@ -11,7 +11,7 @@ import { parseCookies, setCookie, destroyCookie } from "nookies";
 import { BiChevronDown } from "react-icons/bi";
 import { activeLink } from "@/common/utils";
 import { GetUserType } from "@/common/hooks/token";
-
+import { useSelector } from "react-redux";
 // import SidebarLinkGroup from './SidebarLinkGroup'
 
 function Sidebar() {
@@ -33,10 +33,10 @@ function Sidebar() {
   };
 
   // const activeRoutes: any =
-  const cookies = parseCookies();
-  const storedUser = cookies.user ? JSON.parse(cookies.user) : null;
+
+  const storedUser = useSelector((a:any)=> a?.authUser?.authUser);
   console.log("user::::", storedUser);
-  const userType = GetUserType();
+  const userType = useSelector((a:any)=> a?.authUser?.setAuthType);
 
   useEffect(() => {
     userType && setActiveRoutes(routes?.DASHBOARD[userType]);

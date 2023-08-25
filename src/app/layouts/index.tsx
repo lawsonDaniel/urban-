@@ -10,7 +10,6 @@ import { routes } from "@/common/routes";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const storedUser = useUserType();
   const router = useRouter();
 
   return activeLink("/auth", pathname) ? (

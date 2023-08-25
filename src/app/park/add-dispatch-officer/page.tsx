@@ -6,6 +6,8 @@ import OwnerForm from "./(comp)/ownerForm";
 import ManagerForm from "./(comp)/managerForm";
 import { parseCookies } from "nookies";
 import { GetUserType } from "@/common/hooks/token";
+import { useSelector } from "react-redux";
+
 export default function AddDispatchOfficer() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -18,7 +20,7 @@ export default function AddDispatchOfficer() {
   };
 
   const [selectedPark, setSelectedPark] = useState();
-  const userType = GetUserType();
+  const userType = useSelector((a:any)=> a?.authUser?.setAuthType);
    console.log(userType,'user type')
 
   return (

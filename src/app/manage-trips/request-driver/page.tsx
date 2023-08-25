@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import parkOBJ from "@/common/classes/park.class";
 import providerOBJs from "@/common/classes/provider";
 import { ClipLoader } from "react-spinners";
+import tripOBJs from "@/common/classes/trip.class";
 
 export default function RequestDriver() {
   const lugage = [
@@ -26,48 +27,62 @@ export default function RequestDriver() {
   const [ProviderAgency, setProviderAgency] = useState();
   const [selectedPark, setSelectedPark] = useState();
   const [selectedLuggage, setSelectedLuggage] = useState();
-  const [allPark, setAllPark] = useState<any>([]);
+  const [Trip, setTrip] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allProviderAgency, setAllProviderAgency] = useState<any>([]);
-  const getAllPark = async () => {
-    parkOBJ.getAllByUser().then((res) => {
-      console.log(res, "park from option");
-      setAllPark(res);
-    });
-  };
+
+  const getAllTrips = async () => {
+    tripOBJs.getAll().then((res)=>{
+      console.log(res,"trips")
+      setTrip(res)
+    })
+    };
   const getAllProviderAgency = async () => {
     providerOBJs.getAll().then((res)=>{
       console.log(res,'provider agency')
-      setAllProviderAgency(res)
+      setAllProviderAgency(res?.data)
     })
   };
   useEffect(() => {
-    getAllPark();
+    getAllTrips();;
     getAllProviderAgency();
   }, [getAll]);
 
+  useEffect(()=>{
+    const searchParams = new URLSearchParams(window.location.search);
+  
+  // Convert the searchParams to a plain object
+  const params:any = {};
+  searchParams.forEach((value, key) => {
+    params[key] = value;
+  });
+  if(params?.tripCode){
+    setSelectedPark(params?.tripCode)
+  }
+  console.log(params?.tripCode,'trip info from link')
+  
+   },[])
+  
   let parkOption: [{ value: any; label: string }];
 
-  if (allPark && allPark?.parks?.length >= 1) {
-    parkOption = allPark.parks?.map((a: any) => ({
-      value: a?.id,
-      label: a?.name,
-    }));
-  } else {
-    parkOption = [
-      {
-        value: null,
-        label: "no Park found",
-      },
-    ];
+  let TripOption:any = []
+  
+  if(Trip && Trip?.length >= 1){
+    TripOption = Trip?.map((a: any) => ({
+      value: a?.id ,
+      label: a?.tripCode ,
+    }))
+  }else{
+    TripOption = [{
+      value:null,
+      label : 'no Trip found'
+    }]
   }
-
   let providerAgencyOption: [{ value: any; label: string }];
-  console.log(allProviderAgency, "provider agency");
   if (allProviderAgency && allProviderAgency.length >= 1) {
     providerAgencyOption = allProviderAgency.map((a: any) => ({
       value: a?.id,
-      label: a?.data?.name,
+      label: a?.companyName      ,
     }));
   } else {
     providerAgencyOption = [
@@ -79,21 +94,12 @@ export default function RequestDriver() {
   }
 
   const validationSchema = Yup.object().shape({
-    parkPhone: Yup.string().required("Park phone is required"),
-    departureCity: Yup.string().required("Departure city is required"),
-    destinationCity: Yup.string().required("Destination city is required"),
-    departureDate: Yup.date().required("Departure date is required"),
-    departureTime: Yup.string().required("Departure time is required"),
-    additionalInfo: Yup.string(),
+    additionalInfo: Yup.string().required('Additional info is required')
   });
   const formik = useFormik({
     initialValues: {
-      parkPhone: "",
-      departureCity: "",
-      destinationCity: "",
-      departureDate: "",
-      departureTime: "",
       additionalInfo: "",
+      
     },
     validationSchema,
     onSubmit: async (values: any) => {
@@ -105,17 +111,28 @@ export default function RequestDriver() {
         ProviderAgency != null
       ) {
         values = {
-          providerAgency: ProviderAgency,
-          park: selectedPark,
-          requestStatus: "pending",
+          providerAgencyId: ProviderAgency,
+          tripCode: selectedPark,
           ...values,
         };
+        console.log(values,'values to be submitted')
+        tripOBJs.requestDriver(values).then((res)=>{
+          console.log(res,'this is the respones data')
+          toast.success(res.data?.message)
+          setIsLoading(false)
+          router.push('/manage-trips')
+        }).catch((err)=>{
+        console.error('an error occcured',err)
+         toast.error(err);
+        setIsLoading(false)
+        })
       } else {
+        setIsLoading(false)
         toast.error("fill all the form fields");
       }
     },
   });
-
+console.log(formik.errors,'formik values')
   const [isToggled, setIsToggled] = useState<boolean>(false);
 
   const handleToggle = (isChecked: boolean) => {
@@ -134,13 +151,17 @@ export default function RequestDriver() {
             onSelect={(e: any) => setProviderAgency(e)}
             className="w-[510px]"
           />
-          <Dropdown
-            options={parkOption}
+          {
+            !selectedPark && <Dropdown
+            options={TripOption}
             placeholder="Option"
-            label="Select Trip Code"
+            label="Select Trip"
             onSelect={(e: any) => setSelectedPark(e)}
             className="w-[510px]"
+            // error={formik.touched.departurePark && formik.errors.departurePark}
           />
+          }
+         
           <Textarea
             label="Additional Info"
             type="text"
@@ -157,8 +178,8 @@ export default function RequestDriver() {
             disabled={
               !selectedPark &&
               !ProviderAgency &&
-              selectedPark === null &&
-              ProviderAgency === null
+              selectedPark === null && 
+              ProviderAgency === null 
             }
             type="submit"
             className="w-full mt-20 text-white"
