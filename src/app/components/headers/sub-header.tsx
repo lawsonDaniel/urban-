@@ -21,7 +21,7 @@ export default function SubHeader({
   buttonText,
   setSelectedOption,
   inputField,
-  setInputField
+  setInputField,
 }: {
   header: string;
   inputContainerStyle?: string;
@@ -36,8 +36,8 @@ export default function SubHeader({
   boxType?: "input" | "dropdown";
   dropDownOptions?: any;
   setSelectedOption?: any;
-  setInputField?:any;
-  inputField?:any
+  setInputField?: any;
+  inputField?: any;
 }) {
   const [search, setSearch] = useState("");
 
@@ -55,43 +55,42 @@ export default function SubHeader({
       </div>
       {!hideRight && (
         <div className="flex">
-          {boxType == "input" ? (
-            <div className={`flex ${inputContainerStyle}`}>
-              <Input
-                containerStyle={`mt-0`}
-                inputStyle={`${inputStyle} bg-gray-100 border-0 pl-10 `}
-                placeholder={inputText}
-                type={"text"}
-                id="search"
-                name="search"
-                value={inputField}
-                onChange={(e) => setInputField(e.target.value)}
-                // onBlur={formik.handleBlur}
-                // error={formik.touched.password && formik.errors.password}
-              />
-              {showButton && (
-                <Button
-                  type="button"
-                  // onClick={() => router.push('/park/dispatch-officers')}
-                  className="w-full bg-primary text-primary bg-opacity-20 hover:bg-primary hover:text-white ml-3 h-full"
-                >
-                  {buttonText}
-                </Button>
+          {boxType == "input"
+            ? null
+            : // <div className={`flex ${inputContainerStyle}`}>
+              //   <Input
+              //     containerStyle={`mt-0`}
+              //     inputStyle={`${inputStyle} bg-gray-100 border-0 pl-10 `}
+              //     placeholder={inputText}
+              //     type={"text"}
+              //     id="search"
+              //     name="search"
+              //     value={inputField}
+              //     onChange={(e: any) => setInputField(e.target.value)}
+              //     // onBlur={formik.handleBlur}
+              //     // error={formik.touched.password && formik.errors.password}
+              //   />
+              //   {showButton && (
+              //     <Button
+              //       type="button"
+              //       // onClick={() => router.push('/park/dispatch-officers')}
+              //       className="w-full bg-primary text-primary bg-opacity-20 hover:bg-primary hover:text-white ml-3 h-full"
+              //     >
+              //       {buttonText}
+              //     </Button>
+              //   )}
+              // </div>
+              boxType == "dropdown" && (
+                <Dropdown
+                  options={dropDownOptions}
+                  placeholder="Select Park"
+                  label=""
+                  onSelect={(e: any) => {}}
+                  className="w-[285px]"
+                  containerStyle=""
+                  setSelectedOption={setSelectedOption}
+                />
               )}
-            </div>
-          ) : (
-            boxType == "dropdown" && (
-              <Dropdown
-                options={dropDownOptions}
-                placeholder="Select Park"
-                label=""
-                onSelect={(e: any) => {}}
-                className="w-[285px]"
-                containerStyle=""
-                setSelectedOption={setSelectedOption}
-              />
-            )
-          )}
           {allowFilter && (
             <div className="bg-gray-100 rounded-lg w-12 h-10 flex items-center justify-center ml-4">
               <GoSettings className="text-primary" size={24} />

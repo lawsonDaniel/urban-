@@ -35,21 +35,21 @@ export const SetUserData: any = (data: string) => {
 
 export const GetUserData = () => {
   const cookies = parseCookies();
-  const usetType: any = cookies.userData ? cookies.userData : null;
-  return JSON.parse(usetType);
+  const userType: any = cookies.userData ? cookies.userData : null;
+  return JSON.parse(userType);
 };
 
 export const GetUserType = () => {
   const cookies = parseCookies();
-  const usetType: any = cookies.userType ? cookies.userType : null;
-  return usetType;
+  const userType: any = cookies.userType ? cookies.userType : null;
+  return userType;
 };
 
 export const RemoveAllToken = () => {
   destroyCookie(null, "userToken", { path: "/" });
   destroyCookie(null, "userData", { path: "/" });
   destroyCookie(null, "userType", { path: "/" });
-  window.location.href = "/auth/login"
+  window.location.href = "/auth/login";
 };
 
 export const SetAllParkData: any = (data: string) => {

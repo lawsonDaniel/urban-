@@ -73,7 +73,7 @@ export type InputProps = {
   label?: string;
   type: string;
   value: string;
-  onChange: ChangeEventHandler<HTMLTextAreaElement>;
+  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   onBlur?: FocusEventHandler<HTMLInputElement>;
   containerStyle?: string;
   inputStyle?: string;
