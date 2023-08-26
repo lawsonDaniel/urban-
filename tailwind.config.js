@@ -29,7 +29,9 @@ module.exports = {
         // dark: '#212121',
         // light: '#F5F5F5',
       },
-      plugins: [],
+      plugins: [
+        
+      ],
       fontFamily: {
         sans: ["var(--font-creato)"],
       },
