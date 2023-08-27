@@ -48,7 +48,7 @@ export default function Records() {
   const router = useRouter();
 
   const [selectedPark, setSelectedPark] = useState<string>();
-  const [activeOption, setActiveOption] = useState<any>("Today");
+  const [activeOption, setActiveOption] = useState<any>("Current Month");
   const [selectedVehicle, setSelectedVehicle] = useState("");
   const [allTrips, setAllTrips] = useState<any[]>([]);
 
@@ -60,7 +60,9 @@ export default function Records() {
     day < 10 ? "0" : ""
   }${day}`;
   const [dateRange, setDateRange] = useState<any>({
-    start: formattedDate,
+    start: `${year}-${month < 10 ? "0" : ""}${month}-${
+      1 < 10 ? "0" : ""
+     }${1}`,
     end: formattedDate,
   });
 
@@ -68,7 +70,7 @@ export default function Records() {
     if (classifyDate(dateRange.start, dateRange.end)) {
       setActiveOption(classifyDate(dateRange.start, dateRange.end));
     } else {
-      setActiveOption("Today");
+      setActiveOption("Current Month");
       setDateRange({
         start: formattedDate,
         end: formattedDate,
