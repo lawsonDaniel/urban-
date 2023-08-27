@@ -21,6 +21,26 @@ class dispatchOBJ {
     }
   };
 
+  //get all driver
+  getAllCreated = async (pageNu?:Number) => {
+    let response:any
+    try {
+    if(pageNu){
+      response = await api.get(`dispatch-officer/created`);
+    }else{
+      response = await api.get(`dispatch-officer/created`);
+    }
+
+      if (response?.data?.success) {
+        //store response in redux
+        return response.data.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
    //get one driver
   getOne = async (id: string) => {
     try {

@@ -125,20 +125,13 @@ export default function Park() {
   }
 
   useEffect(()=>{
-    dispatch.getAll().then((res)=>{
-      setDispatchRider(res)
-      if (inputField.trim().length >= 1) {
-        const searchFilter = res?.filter((rider:any) =>
-          rider?.fullName.toLowerCase().includes(inputField.toLowerCase())
-        );
-        setDispatchRider(searchFilter)
-      } else {
-        setDispatchRider(res);
-      }
+    dispatch.getAllCreated().then((res)=>{
+        setDispatchRider(res)
+      setDispatchData(res)
     }).catch((err)=>{
       console.log(err,'err from dispatch')
     })
-  },[inputField, paginaton])
+  },[])
   //handle search
   const SearchDispatch = (e:any)=>{
     if (e.trim().length >= 1) {

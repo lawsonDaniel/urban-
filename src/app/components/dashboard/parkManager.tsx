@@ -14,13 +14,11 @@ import { IoMdClose } from "react-icons/io";
 // const inter = Inter({ subsets: ['latin'] })
 import { getUserById } from "@/common/hooks/fireStore";
 import { useEffect, useState } from "react";
-import { parseCookies } from "nookies";
-import { useUser } from "@/common/hooks/useUser";
-import { GetUserData } from "@/common/hooks/token";
+import {useSelector} from 'react-redux'
 
 export default function ParkManager({ user }: any) {
-  const userData = GetUserData();
-  const park = GetUserData();
+  const userData = useSelector((a:any)=> a?.authUser?.authUser);
+  const park = useSelector((a:any)=> a?.authUser?.authUser);;
   const [copySuccess, setCopySuccess] = useState(false);
   const handleCopyClick = () => {
     const textField = document.createElement("textarea");
