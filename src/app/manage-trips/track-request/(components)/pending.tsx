@@ -5,31 +5,36 @@ import React, { useState, useEffect } from "react";
 import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
 import { useSelector } from "react-redux";
+import MainTable from "@/app/components/tables/main.table";
+
+
 export default function Pending({inputField}:any) {
   const [pendingRequest, setPendingRequest] = useState<any[]>([]);
+  const [tripData,setTripData] =useState<any[]>([]);
+  
   const columns = [
     {
-      id: "providerAgency",
+      key: "providerAgency",
       header: "Provider Agency",
     },
     {
-      id: "tandf",
+      key: "tandf",
       header: "To and FRO",
     },
     {
-      id: "departureTime",
+      key: "departureTime",
       header: "Departure Time",
     },
     {
-      id: "status",
+      key: "status",
       header: "scheduled trips",
     },
     {
-      id: "date",
+      key: "date",
       header: "Date",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Trip Code",
     }
     
@@ -37,22 +42,25 @@ export default function Pending({inputField}:any) {
   const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   const getAllPendingRequest = async () => {
     tripOBJs.filter(userType,'in_progress').then((res)=>{
-      let filteredTrips = res;
-      if (inputField.trim().length >= 1) {
-            const searchFilter:any[] = filteredTrips.filter((trip: any) =>
-              trip.tripCode.toLowerCase().includes(inputField.toLowerCase())
-            );
-            console.log(searchFilter,'filter data')
-            setPendingRequest(searchFilter);
-          } else {
-            setPendingRequest(filteredTrips);
-          }
+      setPendingRequest(res);
+      setTripData(res)
     })
   };
+  const Search = (e:any)=>{
+    if (e.trim().length >= 1) {
+      const searchFilter = tripData?.filter((parkfiltername:any) =>
+      parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+      );
+      console.log(searchFilter,'swae')
+      setPendingRequest(searchFilter)
+    } else {
+      setPendingRequest(tripData)
+    }
+  }
   console.log(inputField,'search')
   useEffect(() => {
     getAllPendingRequest();
-  }, [getAll,inputField]);
+  }, [getAll]);
   console.log(pendingRequest, "request");
   const RequestOption = pendingRequest.map((a: any, i: any) => {
     return {
@@ -70,7 +78,7 @@ export default function Pending({inputField}:any) {
   return (
     <>
       <div className="mt-[53px]">
-      {
+      {/* {
         RequestOption.length >=1  ?  <Table
         columns={columns}
         data={RequestOption}
@@ -91,7 +99,17 @@ export default function Pending({inputField}:any) {
             </div>
           </div>
         )
-      }
+      } */}
+      <MainTable 
+             columns={columns}
+             data={RequestOption}
+             identifier=""
+            //  actionObject={}
+             searchBy="Booking Code"
+             handleSearch={(e:any)=> {Search(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </>
   );

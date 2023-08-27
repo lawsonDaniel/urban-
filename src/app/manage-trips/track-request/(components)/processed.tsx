@@ -6,53 +6,59 @@ import tripOBJs from "@/common/classes/trip.class";
 import { GetUserType } from "@/common/hooks/token";
 import { useSelector } from "react-redux";
 
+import MainTable from "@/app/components/tables/main.table";
+
 export default function Processed({inputField}:any) {
   const [processedRequest, setprocessedRequest] = useState<any[]>([]);
+  const [tripData,setTripData] =useState<any[]>([]);
+  
   const columns = [
     {
-      id: "providerAgency",
+      key: "providerAgency",
       header: "Provider Agency",
     },
     {
-      id: "tandf",
+      key: "tandf",
       header: "To and FRO",
     },
     {
-      id: "departureTime",
+      key: "departureTime",
       header: "Departure Time",
     },
     {
-      id: "status",
+      key: "status",
       header: "scheduled trips",
     },
     {
-      id: "date",
+      key: "date",
       header: "Date",
     },
     {
-      id: "tripCode",
+      key: "tripCode",
       header: "Trip Code",
     }
   ];
   const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   const getAllprocessedRequest = async () => {
     tripOBJs.filter(userType,'completed').then((res)=>{
-      let filteredTrips = res;
-      if (inputField.trim().length >= 1) {
-            const searchFilter:any[] = filteredTrips.filter((trip: any) =>
-              trip.tripCode.toLowerCase().includes(inputField.toLowerCase())
-            );
-            console.log(searchFilter,'filter data')
-            setprocessedRequest(searchFilter);
-          } else {
-            setprocessedRequest(filteredTrips);
-          }
-     
+      setprocessedRequest(res);
+      setTripData(res)
     })
   };
+  const Search = (e:any)=>{
+    if (e.trim().length >= 1) {
+      const searchFilter = tripData?.filter((parkfiltername:any) =>
+      parkfiltername?.tripCode.toLowerCase().includes(e.toLowerCase())
+      );
+      console.log(searchFilter,'swae')
+      setprocessedRequest(searchFilter)
+    } else {
+      setprocessedRequest(tripData)
+    }
+  }
   useEffect(() => {
     getAllprocessedRequest();
-  }, [getAll,inputField]);
+  }, [getAll]);
   console.log(processedRequest, "request");
   const RequestOption = processedRequest.map((a: any, i: any) => {
     return {
@@ -70,10 +76,10 @@ export default function Processed({inputField}:any) {
   return (
     <>
       <div className="mt-[53px]">
-      {
+      {/* {
         RequestOption.length >=1  ?  <Table
         columns={columns}
-        data={RequestOption}
+        data={processedRequest}
         action={{
           label: "See Details",
           type: ["view"],
@@ -91,8 +97,17 @@ export default function Processed({inputField}:any) {
             </div>
           </div>
         )
-      }
-       
+      } */}
+        <MainTable 
+             columns={columns}
+             data={RequestOption}
+             identifier=""
+            //  actionObject={}
+             searchBy="Booking Code"
+             handleSearch={(e:any)=> {Search(e)}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
     </>
   );
