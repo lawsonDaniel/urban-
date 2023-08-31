@@ -12,6 +12,7 @@ import authOBJ from "@/common/classes/auth.class";
 import Dropdown from "@/app/components/dropdown";
 import parkOBJ from "@/common/classes/park.class";
 import { ClipLoader } from "react-spinners";
+import * as Yup from 'yup';
 
 export default function ManagerForm({ openModal }: { openModal: () => void }) {
   const options = [
@@ -35,6 +36,16 @@ export default function ManagerForm({ openModal }: { openModal: () => void }) {
       password: "",
       confirmPassword: "",
     },
+    validationSchema: Yup.object({
+      dispatcherName: Yup.string().required('Required'),
+      email: Yup.string().email('Invalid email address').required('Required'),
+      phoneNumber: Yup.string().matches(/^\d{0,11}$/, 'Invalid phone number').required('Required'),
+      fullAddress: Yup.string().required('Required'),
+      password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required('Required'),
+    }),
     onSubmit: async (values: any) => {
       setIsLoading(true)
       const data = {

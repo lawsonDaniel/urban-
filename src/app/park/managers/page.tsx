@@ -11,8 +11,10 @@ import { useUser } from "@/common/hooks/useUser";
 import manager from "@/common/classes/manager.class";
 import MainTable from "@/app/components/tables/main.table";
 import {useSelector} from 'react-redux'
+import { useRouter } from "next/navigation";
 
 export default function Managers() {
+    const router = useRouter();
   const columns = [
     {
       key: "firstName",
@@ -23,15 +25,48 @@ export default function Managers() {
       header: "Email",
     },
     {
-      key: "phone number",
+      key: "phoneNumber",
       header: "Phone No",
     },
     {
       key: "urbanId",
       header: "Manger id",
+    },
+    {
+      key: "actions",
+      header: "Action",
     }
   ];
-
+  
+  const actionObject = [
+    {
+      label: "Profile",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+      },
+    },
+    {
+      label: "Veiw Statement",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+        const query = new URLSearchParams({
+          id:row.id
+        }).toString();
+        router.push(`/park-statements/manager?${query}`)
+        console.log("Veiw Statement action clicked for row:", row);
+      },
+    },
+     {
+      label: "Remove/archive",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+      
+      },
+    },
+  ];
   const userData = useSelector((a:any)=> a?.authUser?.authUser);
   const [managerPark, setManagerPark] = useState<any[]>([]);
   const [inputField, setInputField] = useState<string>('');
@@ -105,10 +140,16 @@ const SearchManager = (e:any)=>{
         //   }}
         // />: 
         }
+       { managerPark?.length <1 && <Button
+					type='button'
+					className='w-full text-primary mb-2 bg-primary bg-opacity-20 hover:bg-primary hover:text-white'>
+					 view all archived managers
+				</Button>}
         <MainTable 
              columns={columns}
              data={managerPark}
              identifier=""
+             actionObject={actionObject}
              searchBy="Urban id"
              handleSearch={(e:any)=> {SearchManager(e)}}
              handleFilter={(e:any)=>{}} 

@@ -54,14 +54,19 @@ export default function ParkOwner({ user }: any) {
     {
       label: "Veiw Statement",
       function: (row:any) => {
-        // Perform edit action using the 'row' data
-        console.log("Veiw Statement action clicked for row:", row);
+        const query = new URLSearchParams({
+          id:row.id
+        }).toString();
+        router.push(`/park-statements/manager?${query}`)
+        console.log("Veiw Statement action ", row);
       },
     },
     {
       label: "Edit",
       function: (row:any) => {
         // Perform delete action using the 'row' data
+       
+       
         console.log("Edit action clicked for row:", row);
       },
     },

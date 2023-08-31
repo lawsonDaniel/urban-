@@ -9,10 +9,11 @@ import parkOBJ from "@/common/classes/park.class";
 import manager from "@/common/classes/manager.class";
 
 export default function ManagerStatements() {
-  const [selectedPark, setSelectedPark] = useState();
+  const [selectedPark, setSelectedPark]:any = useState();
   const [Park, setPark] = useState<any[]>([]);
   const [Manager, setManager] = useState<any[]>([]);
   const [mangerId, setManageId] = useState<string>('')
+  const [paramMeter,setParameter] = useState<any>('')
   const router = useRouter();
   const options = [
     { value: "bus", label: "Bus" },
@@ -20,7 +21,18 @@ export default function ManagerStatements() {
     { value: "van", label: "Van" },
     { value: "others", label: "Others" },
   ];
+  useEffect(()=>{
+    const searchParams = new URLSearchParams(window.location.search);
+  // Convert the searchParams to a plain object
+  const params:any = {};
+  searchParams.forEach((value, key) => {
+    params[key] = value;
+  });
+  setParameter(params)
+  console.log(params.id,'this is the park')
+  setSelectedPark(params.id)
 
+   },[])
   useEffect(() => {
     parkOBJ.getAllByUser().then((res)=>{
       setPark(res?.parks)
@@ -35,7 +47,6 @@ useEffect(()=>{
         ...parkDetails[0],
         ...res
       }
-      console.log(query,'query')
     const queryString = new URLSearchParams(query).toString();
     setManageId(queryString)
       setManager([res])
@@ -56,18 +67,20 @@ useEffect(()=>{
       label : 'no Park found'
     }]
   }
-  console.log(mangerId,'manager id')
+ 
   return (
     <>
       <SubHeader header="Manager Statements" allowFilter hideBack hideRight />
       <div className="mt-6 w-[510px]">
-        <Dropdown
+        {
+          !paramMeter?.id && <Dropdown
           options={parkOption}
           placeholder="Select Park"
           label=""
           onSelect={(e: any) => setSelectedPark(e)}
           className="w-[510px]"
         />
+        }
       </div>
       <div className="mt-8 grid grid-col-1 gap-y-4">
         {Manager?.map((a: any) => {

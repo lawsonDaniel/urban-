@@ -30,6 +30,7 @@ export default function SetTrip() {
 
   const [selectedPark, setSelectedPark] = useState('');
   const [selectedLuggage, setSelectedLuggage] = useState(stored?.lugage || '');
+  const [depatureState,setDepatureState] = useState<any>()
   const [selectedCar, setSelectedCar] = useState();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [Park, setPark] = useState<any>([]);
@@ -46,9 +47,19 @@ export default function SetTrip() {
   useEffect(() => {
     getAllParks();
   }, []);
-  
+  useEffect(()=>{
+    let filter:any
+    if(Park && Park?.parks?.length >= 1){
+      filter = Park.parks.filter((a:any)=> a.id === selectedPark)
+      filter.length >=1 && setDepatureState(filter[0].state)
+    
+    }
+   
+  },[Park, setDepatureState, selectedPark, depatureState])
+
+console.log(depatureState,'this are the data for the depature state')
+
   let parkOption: [{ value: string; label: string; }]
-  
   if(Park && Park?.parks?.length >= 1){
     parkOption = Park?.parks?.map((a: any) => ({
       value: a?.id ,
@@ -64,10 +75,11 @@ export default function SetTrip() {
   const userData:any = useUserInfo()
   const validationSchema = Yup.object().shape({
     departureTime: Yup.string().required("Please enter the departure time."),
-    departureCity: Yup.string().required("Please enter the departure city."),
     arivalCity: Yup.string().required("Please enter the arival city."),
     // tripCode: Yup.string().required("Please enter the trip code."),
-    fare: Yup.string().required("Please enter the fare."),
+    fare: Yup.string()
+    .required("Please enter the fare.")
+    .test('minFare', 'Fare must be at least 1000', value => parseInt(value, 10) >= 1000),
     date: Yup.string().required("Please enter the date."),
     priceKg: Yup.string(),
   });
@@ -75,7 +87,7 @@ export default function SetTrip() {
   const formik = useFormik({
     initialValues: {
       departureTime: stored?.time || "",
-      departureCity: stored?.startLocation || "",
+      departureCity:  depatureState ,
       arivalCity: stored?.endLocation || "",
       // tripCode: stored?.tripCode || "",
       fare: stored?.fare || "",
@@ -88,7 +100,7 @@ export default function SetTrip() {
         const currentDate = new Date()
         const data = {
           parkId: selectedPark,
-          startLocation: values.departureCity,
+          startLocation: depatureState,
            endLocation: values.arivalCity,
            fare:values.fare,
            lugage:selectedLuggage,
@@ -161,8 +173,8 @@ export default function SetTrip() {
             type="text"
             id="departureCity"
             name="departureCity"
-            value={formik.values.departureCity}
-            onChange={formik.handleChange}
+            value={depatureState || formik.values.departureCity}
+            onChange={()=>{}}
             onBlur={formik.handleBlur}
             error={
               (formik.touched.departureCity &&
@@ -258,7 +270,7 @@ export default function SetTrip() {
         <div className=" w-[510px]">
           <div className="flex justify-between mt-10 w-[510px]">
             <p className="text-sm text-gray-500">Posting Type</p>
-            <Switch label="Public" checked={isPublic} setchecked={setIsPublic}/>
+            <Switch label={isPublic?"Public":"private"} checked={isPublic} setchecked={setIsPublic}/>
           </div>
           <ToastContainer />
           <Button

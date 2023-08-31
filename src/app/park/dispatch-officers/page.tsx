@@ -26,15 +26,56 @@ export default function DispatchOfficers() {
       header: "Dispatch Name",
     },
     {
-      key: "email_",
+      key: "email",
       header: "Email Address",
     },
     {
       key: "phoneNumber",
       header: "Phone No",
     },
+    {
+      key: "actions",
+      header: "Action",
+    }
   ]
-
+  //edit,view statement, reset password , delete
+  const actionObject = [
+    {
+      label: "Edit",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+      },
+    },
+    {
+      label: "Veiw Statement",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+        const query = new URLSearchParams({
+          id:row.id
+        }).toString();
+        // router.push(`/park-statements/manager?${query}`)
+        console.log("Veiw Statement action clicked for row:", row);
+      },
+    },
+    {
+      label: "Reset Password",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+      
+      },
+    },
+     {
+      label: "Delete",
+      function: (row:any) => {
+        // Perform edit action using the 'row' data
+       
+      
+      },
+    },
+  ];
   useEffect(()=>{
     dispatch.getAll().then((res)=>{
       setDispatchRider(res)
@@ -102,6 +143,7 @@ const SearchRider = (e:any)=>{
              columns={columns}
              data={DispactchRider}
              identifier=""
+             actionObject={actionObject}
              searchBy="Dispatch name"
              handleSearch={(e:any)=> {SearchRider(e)}}
              handleFilter={(e:any)=>{}} 

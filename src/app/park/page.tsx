@@ -65,7 +65,7 @@ export default function Park() {
       header: "Dispatch Name",
     },
     {
-      key: "email_",
+      key: "email",
       header: "Email Address",
     },
     {
@@ -82,6 +82,11 @@ export default function Park() {
       label: "Veiw Statement",
       function: (row:any) => {
         // Perform edit action using the 'row' data
+       
+        const query = new URLSearchParams({
+          id:row.id
+        }).toString();
+        router.push(`/park-statements/manager?${query}`)
         console.log("Veiw Statement action clicked for row:", row);
       },
     },

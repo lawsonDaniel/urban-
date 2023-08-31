@@ -30,6 +30,8 @@ export default function RequestDriver() {
   const [Trip, setTrip] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allProviderAgency, setAllProviderAgency] = useState<any>([]);
+  const [paramsData,setParamsData] = useState<any>()
+  const [selectedRegion,setSelectedRegion]=useState<any>('')
 
   const getAllTrips = async () => {
     tripOBJs.getAll().then((res)=>{
@@ -37,16 +39,17 @@ export default function RequestDriver() {
       setTrip(res)
     })
     };
-  const getAllProviderAgency = async () => {
-    providerOBJs.getAll().then((res)=>{
-      console.log(res,'provider agency')
-      setAllProviderAgency(res?.data)
-    })
-  };
+  
   useEffect(() => {
     getAllTrips();;
-    getAllProviderAgency();
-  }, [getAll]);
+    const getAllProviderAgency = async () => {
+      providerOBJs.getAll(selectedRegion).then((res)=>{
+        console.log(res,'provider agency')
+        setAllProviderAgency(res?.data)
+      })
+    };
+    getAllProviderAgency()
+  }, [getAll,selectedRegion]);
 
   useEffect(()=>{
     const searchParams = new URLSearchParams(window.location.search);
@@ -58,6 +61,7 @@ export default function RequestDriver() {
   });
   if(params?.tripCode){
     setSelectedPark(params?.tripCode)
+    setParamsData(params)
   }
   console.log(params?.tripCode,'trip info from link')
   
@@ -69,7 +73,7 @@ export default function RequestDriver() {
   
   if(Trip && Trip?.length >= 1){
     TripOption = Trip?.map((a: any) => ({
-      value: a?.id ,
+      value: a?.tripCode ,
       label: a?.tripCode ,
     }))
   }else{
@@ -79,7 +83,7 @@ export default function RequestDriver() {
     }]
   }
   let providerAgencyOption: [{ value: any; label: string }];
-  if (allProviderAgency && allProviderAgency.length >= 1) {
+  if (allProviderAgency && allProviderAgency.length >= 1 && selectedRegion) {
     providerAgencyOption = allProviderAgency.map((a: any) => ({
       value: a?.id,
       label: a?.companyName      ,
@@ -94,11 +98,11 @@ export default function RequestDriver() {
   }
 
   const validationSchema = Yup.object().shape({
-    additionalInfo: Yup.string().required('Additional info is required')
+   
   });
   const formik = useFormik({
     initialValues: {
-      additionalInfo: "",
+      
       
     },
     validationSchema,
@@ -113,7 +117,7 @@ export default function RequestDriver() {
         values = {
           providerAgencyId: ProviderAgency,
           tripCode: selectedPark,
-          ...values,
+        
         };
         console.log(values,'values to be submitted')
         tripOBJs.requestDriver(values).then((res)=>{
@@ -138,12 +142,26 @@ console.log(formik.errors,'formik values')
   const handleToggle = (isChecked: boolean) => {
     setIsToggled(isChecked);
   };
+  const parkRegion = [
+    { value: "NORTH_CENTRAL", label: "NORTH CENTRAL" },
+    { value: "NORTH_EAST", label: "NORTH EAST" },
+    { value: "SOUTH_EAST", label: "SOUTH EAST" },
+    { value: "SOUTH_WEST", label: "SOUTH WEST" },
+    { value: "SOUTH_SOUTH", label: "SOUTH SOUTH" },
+  ];
 
   return (
     <>
       <SubHeader header="Request Driver" hideRight />
       <form className="mt-10" onSubmit={formik.handleSubmit}>
         <div className=" w-[510px]">
+        <Dropdown
+            options={parkRegion}
+            placeholder="Option"
+            label="Select Provider Agency"
+            onSelect={(e: any) => setSelectedRegion(e)}
+            className="w-[510px]"
+          />
           <Dropdown
             options={providerAgencyOption}
             placeholder="Option"
@@ -152,7 +170,7 @@ console.log(formik.errors,'formik values')
             className="w-[510px]"
           />
           {
-            !selectedPark && <Dropdown
+            !paramsData && <Dropdown
             options={TripOption}
             placeholder="Option"
             label="Select Trip"
@@ -162,7 +180,7 @@ console.log(formik.errors,'formik values')
           />
           }
          
-          <Textarea
+          {/* <Textarea
             label="Additional Info"
             type="text"
             id="additionalInfo"
@@ -173,7 +191,7 @@ console.log(formik.errors,'formik values')
             error={
               formik.touched.additionalInfo && formik.errors.additionalInfo
             }
-          />
+          /> */}
           <Button
             disabled={
               !selectedPark &&
