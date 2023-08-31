@@ -15,6 +15,7 @@ import { parseCookies, setCookie } from "nookies";
 import parkOBJ from "@/common/classes/park.class";
 import { useUserInfo } from "@/common/hooks/getUserInfo";
 import { ClipLoader } from "react-spinners";
+import { cityFCT, cityLagos } from "@/common/data";
 export default function SetTrip() {
   const lugage = [
     { value: "normal", label: "Normal Luggage" },
@@ -35,7 +36,14 @@ export default function SetTrip() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [Park, setPark] = useState<any>([]);
   const [isPublic,setIsPublic] = useState<boolean>(false)
-
+  const [parkLocation, setParkLocation] = useState("");
+  const [parkCity, setParkCity] = useState("");
+  const [cityObj, setCityObj] = useState<any>([
+    {
+      label: "select state",
+      value: "",
+    },
+  ]);
   const router = useRouter();
   const getAllParks = async () => {
     parkOBJ.getAllByUser().then((res)=>{
@@ -43,7 +51,18 @@ export default function SetTrip() {
       setPark(res)
     })
   };
+  const options = [
+    { label: "Abuja", value: "abuja" },
+    { label: "Lagos", value: "lagos" },
+  ];
 
+  useEffect(() => {
+    if (parkLocation === "abuja") {
+      setCityObj(cityFCT);
+    } else {
+      setCityObj(cityLagos);
+    }
+  }, [parkLocation]);
   useEffect(() => {
     getAllParks();
   }, []);
@@ -56,7 +75,9 @@ export default function SetTrip() {
     }
    
   },[Park, setDepatureState, selectedPark, depatureState])
-
+  const setPArk = (e: any) => {
+    setParkLocation(e);
+  };
 console.log(depatureState,'this are the data for the depature state')
 
   let parkOption: [{ value: string; label: string; }]
@@ -75,7 +96,7 @@ console.log(depatureState,'this are the data for the depature state')
   const userData:any = useUserInfo()
   const validationSchema = Yup.object().shape({
     departureTime: Yup.string().required("Please enter the departure time."),
-    arivalCity: Yup.string().required("Please enter the arival city."),
+    //arivalCity: Yup.string().required("Please enter the arival city."),
     // tripCode: Yup.string().required("Please enter the trip code."),
     fare: Yup.string()
     .required("Please enter the fare.")
@@ -88,7 +109,7 @@ console.log(depatureState,'this are the data for the depature state')
     initialValues: {
       departureTime: stored?.time || "",
       departureCity:  depatureState ,
-      arivalCity: stored?.endLocation || "",
+      arivalCity: stored?.endLocation || parkCity,
       // tripCode: stored?.tripCode || "",
       fare: stored?.fare || "",
       date: stored?.date || "",
@@ -96,12 +117,12 @@ console.log(depatureState,'this are the data for the depature state')
     },
     validationSchema,
     onSubmit: async (values: any) => {
-      if (selectedLuggage && selectedPark) {
+      if (selectedLuggage && selectedPark && parkCity) {
         const currentDate = new Date()
         const data = {
           parkId: selectedPark,
           startLocation: depatureState,
-           endLocation: values.arivalCity,
+           endLocation: parkCity,
            fare:values.fare,
            lugage:selectedLuggage,
            isPublic:`${isPublic}`,
@@ -181,18 +202,20 @@ console.log(depatureState,'this are the data for the depature state')
                 formik.errors.departureCity) as boolean
             }
           />
-          <Input
-            label="Arival City"
-            type="text"
-            id="arivalCity"
-            name="arivalCity"
-            value={formik.values.arivalCity}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={
-              (formik.touched.arivalCity &&
-                formik.errors.arivalCity) as boolean
-            }
+         <Dropdown
+            options={options}
+            placeholder="State"
+            label="Arival State"
+            onSelect={(e) => setPArk(e)}
+            className="w-full"
+          />
+
+          <Dropdown
+            options={cityObj}
+            placeholder="park city"
+            label="Arival city"
+            onSelect={(e) => setParkCity(e)}
+            className="w-full"
           />
           {/* <Input
             label="Trip Code"

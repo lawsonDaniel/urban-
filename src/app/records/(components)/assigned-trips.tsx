@@ -23,16 +23,45 @@ export default function AssignedTrips({ data }: any) {
     {
       key: "vehicleType",
       header: "Type Of Vehicle",
+    },{
+      key: "actions",
+      header: "Action",
     },
   ];
 const [Data,setData] = useState<any[]>([])
 const [trip,setTrip] = useState<any[]>([])
+const actionObject = [
+  {
+    label: "Veiw Details",
+    function: (row:any) => {
+      // Perform edit action using the 'row' data
+      console.log("Veiw Statement action clicked for row:", row);
+    },
+  }
 
+];
+const options = [
+  { value: "bus", item: "Bus" },
+  { value: "sedan", item: "Sedan" },
+  { value: "van", item: "Van" },
+  { value: "others", item: "Others" },
+]
 useEffect(()=>{
   setData(data)
 setTrip(data)
 },[data])
+ //handle filter
+ const FilterPark = (e:any)=>{
 
+  if(e){
+    let filteredParks;
+  if(e.item ! == "All"){
+    setTrip(Data?.filter((a:any)=> a.vehicleType === e.value))
+  }
+  }else{
+    setTrip(Data)
+  }  
+}
 const Search = (e:any)=>{
   if (e.trim().length >= 1) {
     const searchFilter = Data?.filter((parkfiltername:any) =>
@@ -74,8 +103,10 @@ console.log(trip,'trips')
              data={trip}
              identifier=""
              searchBy="Booking code"
+             filterMenu={options}
+             handleFilter={(e:any)=>{FilterPark(e)}} 
+             actionObject={actionObject}
              handleSearch={(e:any)=> {Search(e)}}
-             handleFilter={(e:any)=>{}} 
              apiSearch={()=>{}}
              />
       </div>

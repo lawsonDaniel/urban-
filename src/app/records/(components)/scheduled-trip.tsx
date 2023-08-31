@@ -5,24 +5,32 @@ import MainTable from "@/app/components/tables/main.table";
 export default function ScheduledTrips({ data }: any) {
   const columns = [
     {
-      key: "startLocation",
-      header: "Departure City",
+      key: "endLocation",
+      header: "Arival City",
     },
     {
       key: "time",
       header: "Departure Time",
     },
     {
-      key: "endLocation",
-      header: "Destination City",
+      key: "startLocation",
+      header: "Departure City",
     },
     {
       key: "tripCode",
-      header: "Trip Code",
+      header: "Booking Code",
+    },
+    {
+      key: "fare",
+      header: "Fare",
     },
     {
       key: "vehicleType",
       header: "Type Of Vehicle",
+    },
+    {
+      key: "actions",
+      header: "Action",
     },
   ];
 const [Data,setData] = useState<any[]>([])
@@ -32,7 +40,12 @@ useEffect(()=>{
   setData(data)
 setTrip(data)
 },[data])
-
+const options = [
+  { value: "bus", item: "Bus" },
+  { value: "sedan", item: "Sedan" },
+  { value: "van", item: "Van" },
+  { value: "others", item: "Others" },
+]
 const Search = (e:any)=>{
   if (e.trim().length >= 1) {
     const searchFilter = Data?.filter((parkfiltername:any) =>
@@ -43,6 +56,21 @@ const Search = (e:any)=>{
   } else {
     setTrip(Data)
   }
+}
+//handle filter
+ const FilterPark = (e:any)=>{
+Data?.filter((a:any)=> {
+  console.log(a.vehicleType)
+  console.log(e.value,'ilter')
+})
+  if(e){
+    let filteredParks;
+  if(e.item ! == "All"){
+    setTrip(Data?.filter((a:any)=> a.vehicleType === e.value))
+  }
+  }else{
+    setTrip(Data)
+  }  
 }
 console.log(trip,'trips')
   return (
@@ -74,8 +102,9 @@ console.log(trip,'trips')
              data={trip}
              identifier=""
              searchBy="Booking code"
+             filterMenu={options}
              handleSearch={(e:any)=> {Search(e)}}
-             handleFilter={(e:any)=>{}} 
+             handleFilter={(e:any)=>{FilterPark(e)}} 
              apiSearch={()=>{}}
              />
       </div>

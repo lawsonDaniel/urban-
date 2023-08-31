@@ -76,6 +76,18 @@ const SearchManager = (e:any)=>{
       header: "Action",
     },
   ];
+  const TripTableContent = Trip.map((a:any)=>{
+    return({
+      endLocation:a.endLocation,
+      time:a.time,
+      startLocation:a.startLocation,
+      tripCode:a.tripCode,
+      fare:`N${a.fare}`,
+      status:a.status,
+    
+    })
+    
+  })
   const actionObject = [
     {
       label: "Veiw Details",
