@@ -58,7 +58,21 @@ const Search = (e:any)=>{
       header: "Time",
     },
   ];
-
+  let dataDispatch;
+if(dispatch){
+  dataDispatch = dispatch?.map((a:any,i:any)=>{
+    return(
+      {
+        id: i,
+        passegerName: "Isale Oko Sagamu",
+        tripCode:a.tripCode,
+        date: a.date.split("T")[0],
+        time: a.time,
+      }
+    )
+  })
+}
+console.log(dataDispatch,'dataDispatch')
   const data = [
     {
       id: 1,
@@ -106,7 +120,7 @@ const Search = (e:any)=>{
         } */}
        <MainTable 
              columns={columns}
-             data={dispatch}
+             data={dataDispatch}
              identifier=""
              searchBy="Booking code"
              handleSearch={(e:any)=> {Search(e)}}

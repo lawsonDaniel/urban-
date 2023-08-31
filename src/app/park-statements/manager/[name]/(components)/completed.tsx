@@ -55,7 +55,35 @@ export default function Completed({managerInfo}:any) {
       setCompleted(Data)
     }
   }
+  //handle filter
+const FilterPark = (e: any) => {
+  if (e) {
+    if (e.item !== "All") {
+      const filteredParks = Data.filter((a: any) => a.vehicleType === e.value);
+      setCompleted(filteredParks);
+    } else {
+      setCompleted(Data);
+    }
+  } else {
+    setCompleted(Data);
+  }
+};
+const actionObject = [
+  {
+    label: "Veiw Details",
+    function: (row:any) => {
+      // Perform edit action using the 'row' data
+      console.log("Veiw Statement action clicked for row:", row);
+    },
+  }
 
+];
+  const options = [
+    { value: "bus", item: "Bus" },
+    { value: "sedan", item: "Sedan" },
+    { value: "van", item: "Van" },
+    { value: "others", item: "Others" },
+  ]
   return (
     <>
         <div className="mt-[53px]">
@@ -83,8 +111,10 @@ export default function Completed({managerInfo}:any) {
              data={completed}
              identifier=""
              searchBy="Booking code"
+             filterMenu={options}
+             actionObject={actionObject}
              handleSearch={(e:any)=> {Search(e)}}
-             handleFilter={(e:any)=>{}} 
+             handleFilter={(e:any)=>{FilterPark(e)}} 
              apiSearch={()=>{}}
              />
 

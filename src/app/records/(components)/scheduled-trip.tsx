@@ -58,20 +58,28 @@ const Search = (e:any)=>{
   }
 }
 //handle filter
- const FilterPark = (e:any)=>{
-Data?.filter((a:any)=> {
-  console.log(a.vehicleType)
-  console.log(e.value,'ilter')
-})
-  if(e){
-    let filteredParks;
-  if(e.item ! == "All"){
-    setTrip(Data?.filter((a:any)=> a.vehicleType === e.value))
+const FilterPark = (e: any) => {
+  if (e) {
+    if (e.item !== "All") {
+      const filteredParks = Data.filter((a: any) => a.vehicleType === e.value);
+      setTrip(filteredParks);
+    } else {
+      setTrip(Data);
+    }
+  } else {
+    setTrip(Data);
   }
-  }else{
-    setTrip(Data)
-  }  
-}
+};
+const actionObject = [
+  {
+    label: "Veiw Details",
+    function: (row:any) => {
+      // Perform edit action using the 'row' data
+      console.log("Veiw Statement action clicked for row:", row);
+    },
+  }
+
+];
 console.log(trip,'trips')
   return (
     <>
@@ -103,6 +111,7 @@ console.log(trip,'trips')
              identifier=""
              searchBy="Booking code"
              filterMenu={options}
+             actionObject={actionObject}
              handleSearch={(e:any)=> {Search(e)}}
              handleFilter={(e:any)=>{FilterPark(e)}} 
              apiSearch={()=>{}}

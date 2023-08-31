@@ -63,17 +63,18 @@ const Search = (e:any)=>{
   }
 }
  //handle filter
- const FilterPark = (e:any)=>{
-
-  if(e){
-    let filteredParks;
-  if(e.item ! == "All"){
-    setTrip(Data?.filter((a:any)=> a.vehicleType === e.value))
+const FilterPark = (e: any) => {
+  if (e) {
+    if (e.item !== "All") {
+      const filteredParks = Data.filter((a: any) => a.vehicleType === e.value);
+      setTrip(filteredParks);
+    } else {
+      setTrip(Data);
+    }
+  } else {
+    setTrip(Data);
   }
-  }else{
-    setTrip(Data)
-  }  
-}
+};
   return (
     <>
       <div className="mt-10">

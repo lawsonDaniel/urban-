@@ -8,30 +8,34 @@ import MainTable from "@/app/components/tables/main.table";
 export default function Scheduled({managerInfo}:any) {
   const columns = [
     {
-      key: "startLocation",
-      header: "Departure Park",
+      key: "endLocation",
+      header: "Arival City",
     },
     {
       key: "time",
       header: "Departure Time",
     },
     {
+      key: "startLocation",
+      header: "Departure City",
+    },
+    {
       key: "tripCode",
-      header: "Trip Code",
+      header: "Booking Code",
     },
     {
       key: "fare",
       header: "Fare",
     },
     {
-      key: "typeOfVehicle",
+      key: "vehicleType",
       header: "Type Of Vehicle",
     },
     {
-      key: "totalSeats",
-      header: "Booking Status",
+      key: "actions",
+      header: "Action",
     },
-  ];   
+  ];  
    const[sheduled,setsheduled] = useState<any>([])
   const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
   const [Data,setData] = useState<any[]>([])
@@ -55,6 +59,34 @@ export default function Scheduled({managerInfo}:any) {
       setsheduled(Data)
     }
   }
+  //handle filter
+const FilterPark = (e: any) => {
+  if (e) {
+    if (e.item !== "All") {
+      const filteredParks = Data.filter((a: any) => a.vehicleType === e.value);
+      setsheduled(filteredParks);
+    } else {
+      setsheduled(Data);
+    }
+  } else {
+    setsheduled(Data);
+  }
+};
+const actionObject = [
+  {
+    label: "Veiw Details",
+    function: (row:any) => {
+      // Perform edit action using the 'row' data
+      console.log("Veiw Statement action clicked for row:", row);
+    },
+  }
+];
+const options = [
+  { value: "bus", item: "Bus" },
+  { value: "sedan", item: "Sedan" },
+  { value: "van", item: "Van" },
+  { value: "others", item: "Others" },
+]
   return (
     <>
         <div className="mt-[53px]">
@@ -80,9 +112,11 @@ export default function Scheduled({managerInfo}:any) {
              columns={columns}
              data={sheduled}
              identifier=""
+             filterMenu={options}
+             actionObject={actionObject}
              searchBy="Booking code"
              handleSearch={(e:any)=> {Search(e)}}
-             handleFilter={(e:any)=>{}} 
+             handleFilter={(e:any)=>{FilterPark(e)}} 
              apiSearch={()=>{}}
              />
       </div>

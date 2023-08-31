@@ -300,13 +300,13 @@ export default function Records() {
           />
         </div>
       </div>
-      <div className="w-[551px]">
+      <div className="w-[551px] flex items-center gap-1">
         <div>
           <Dropdown
             options={option}
             placeholder="Select Park"
             onSelect={(e) => setSelectedPark(e)}
-            className="w-[551px]"
+            className="w-[551px] h-[54px]"
           />
         </div>
         <div className="mt-10">

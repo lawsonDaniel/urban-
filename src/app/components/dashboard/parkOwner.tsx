@@ -41,10 +41,7 @@ export default function ParkOwner({ user }: any) {
       key: "scheduledTrip",
       header: "scheduled trips",
     },
-    {
-      key: "cancelledTrip",
-      header: "cancelled trips",
-    },
+    
     {
       key: "actions",
       header: "Action",

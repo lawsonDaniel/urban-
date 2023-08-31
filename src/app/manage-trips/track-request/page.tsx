@@ -15,11 +15,11 @@ export default function TrackReequest() {
       <SubHeader header="Track Request" inputText="Search Trips"  setInputField={setInputField} />
       <div>
         <MyTabs
-          headers={["Processed", "Pending", "Cancelled"]}
+          headers={["Processed", "Pending"]}
           components={[
             <Processed key="1" inputField={inputField}/>,
             <Pending key="2"  inputField={inputField}/>,
-            <Cancelled key="3" inputField={inputField}/>,
+            // <Cancelled key="3" inputField={inputField}/>,
           ]}
         />
       </div>

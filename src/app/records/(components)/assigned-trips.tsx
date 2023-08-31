@@ -51,17 +51,18 @@ useEffect(()=>{
 setTrip(data)
 },[data])
  //handle filter
- const FilterPark = (e:any)=>{
-
-  if(e){
-    let filteredParks;
-  if(e.item ! == "All"){
-    setTrip(Data?.filter((a:any)=> a.vehicleType === e.value))
+const FilterPark = (e: any) => {
+  if (e) {
+    if (e.item !== "All") {
+      const filteredParks = Data.filter((a: any) => a.vehicleType === e.value);
+      setTrip(filteredParks);
+    } else {
+      setTrip(Data);
+    }
+  } else {
+    setTrip(Data);
   }
-  }else{
-    setTrip(Data)
-  }  
-}
+};
 const Search = (e:any)=>{
   if (e.trim().length >= 1) {
     const searchFilter = Data?.filter((parkfiltername:any) =>

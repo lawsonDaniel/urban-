@@ -50,10 +50,10 @@ export default function Park() {
       key: "scheduledTrip",
       header: "scheduled trips",
     },
-    {
-      key: "cancelledTrip",
-      header: "cancelled trips",
-    },
+    // {
+    //   key: "cancelledTrip",
+    //   header: "cancelled trips",
+    // },
     {
       key: "actions",
       header: "Action",

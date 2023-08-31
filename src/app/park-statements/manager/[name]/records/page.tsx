@@ -18,7 +18,9 @@ import { useSelector } from "react-redux";
 
 export default function Records() {
   const [managerInfo,setManagerInfo] = useState<any>("")
-  
+  const [scheduledTrips,setScheduledTrips] = useState<any>()
+  const [completedTrips,setCompletedTrips] = useState<any>()
+  const [totalTrips,setTotalTrips] = useState<any>()
   const userType:string = useSelector((a:any)=> a?.authUser?.setAuthType)
  useEffect(()=>{
   const searchParams = new URLSearchParams(window.location.search);
@@ -32,15 +34,20 @@ setManagerInfo(params)
 
  },[])
 
-  useEffect(()=>{
-   
-
-
-  
-
+ useEffect(()=>{
+  tripOBJs.filter(userType,'scheduled').then((res)=>{
+    let com = res?.filter((a:any)=> a?.park?.parkManager?.id === managerInfo?.id)
+    setScheduledTrips(com.length)
+  })
+   tripOBJs.filter(userType,'completed').then((res)=>{
+      let com = res?.filter((a:any)=> a?.park?.parkManager?.id === managerInfo?.id)
+      setCompletedTrips(com.length)
+    })
+    tripOBJs.getAll(userType).then((res)=>{
+      let com = res?.filter((a:any)=> a?.park?.parkManager?.id === managerInfo?.id)
+      setTotalTrips(com.length)
+    })
 },[managerInfo?.id, userType])
-
-
 
   return (
     <>
@@ -49,31 +56,31 @@ setManagerInfo(params)
         <div className="my-[53px] grid grid-cols-4 gap-8">
           <InfoCard
             title="Total Trips Set"
-            num={managerInfo?.totalTrip}
+            num={totalTrips}
             icon={() => <CarSideIcon color="stroke-white" size={"16"} />}
           />
           <InfoCard
             title="Successful Trips"
-            num={managerInfo?.successfulTrip}
+            num={completedTrips}
             icon={() => <HiCheck color="white" />}
           />
-          <InfoCard
+          {/* <InfoCard
             title="Cancelled Trips"
             num={managerInfo?.cancelledTrip}
             icon={() => <IoMdClose color="white" />}
-          />
+          /> */}
           <InfoCard
             title="Scheduled Trips"
-            num={managerInfo?.scheduledTrip}
+            num={scheduledTrips}
             icon={() => <BiMoney color="white" />}
           />
         </div>
         <MyTabs
-          headers={["Scheduled ", "Completed Trips", "Cancelled"]}
+          headers={["Scheduled ", "Completed Trips"]}
           components={[
             <Scheduled key="1" managerInfo={managerInfo}/>,
             <Completed key="2" managerInfo={managerInfo} />,
-            <Cancelled key="2" managerInfo={managerInfo}/>,
+            // <Cancelled key="2" managerInfo={managerInfo}/>,
           ]}
         />
       </div>
