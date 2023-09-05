@@ -10,7 +10,7 @@ class tripOBJ {
       }else{
          response = await api.get(`/trip`);
       }
-     
+     console.log(response,'response from the trip data');
       if (response?.data?.success) {
         return response?.data?.data;
       } else {

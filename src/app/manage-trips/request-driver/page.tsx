@@ -17,6 +17,7 @@ import parkOBJ from "@/common/classes/park.class";
 import providerOBJs from "@/common/classes/provider";
 import { ClipLoader } from "react-spinners";
 import tripOBJs from "@/common/classes/trip.class";
+import BasicModal from "./modal";
 
 export default function RequestDriver() {
   const lugage = [
@@ -32,7 +33,9 @@ export default function RequestDriver() {
   const [allProviderAgency, setAllProviderAgency] = useState<any>([]);
   const [paramsData,setParamsData] = useState<any>()
   const [selectedRegion,setSelectedRegion]=useState<any>('')
-
+  const [open,setOpen] = useState<boolean>(false)
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const getAllTrips = async () => {
     tripOBJs.getAll().then((res)=>{
       console.log(res,"trips")
@@ -107,29 +110,12 @@ export default function RequestDriver() {
     },
     validationSchema,
     onSubmit: async (values: any) => {
-      setIsLoading(true);
       if (
-        selectedPark &&
         ProviderAgency &&
-        selectedPark != null &&
-        ProviderAgency != null
+        ProviderAgency != null && selectedPark && selectedPark !== null
       ) {
-        values = {
-          providerAgencyId: ProviderAgency,
-          tripCode: selectedPark,
+        handleOpen()
         
-        };
-        console.log(values,'values to be submitted')
-        tripOBJs.requestDriver(values).then((res)=>{
-          console.log(res,'this is the respones data')
-          toast.success(res.data?.message)
-          setIsLoading(false)
-          router.push('/manage-trips')
-        }).catch((err)=>{
-        console.error('an error occcured',err)
-         toast.error(err);
-        setIsLoading(false)
-        })
       } else {
         setIsLoading(false)
         toast.error("fill all the form fields");
@@ -150,10 +136,32 @@ console.log(formik.errors,'formik values')
     { value: "SOUTH_SOUTH", label: "SOUTH SOUTH" },
     {vlaue: "NORTH_WEST", label:"NORTH WEST" },
   ];
-
+const handleSubmitFromModal = ()=>{
+  let values = {
+    providerAgencyId: ProviderAgency,
+    tripCode: selectedPark,
+  
+  };
+  tripOBJs.requestDriver(values).then((res)=>{
+          console.log(res,'this is the respones data')
+          toast.success(res.data?.message)
+          setIsLoading(false)
+          handleClose()
+          router.push('/manage-trips')
+        }).catch((err)=>{
+        console.error('an error occcured',err)
+         toast.error(err);
+         handleClose()
+        setIsLoading(false)
+        })
+}
   return (
     <>
       <SubHeader header="Request Driver" hideRight />
+      <BasicModal header="" body={{
+        providerAgencyId: ProviderAgency,
+        tripCode: selectedPark,
+      }} handleClose={handleClose} open={open} handleOpen={handleOpen} handleSubmitFromModal={handleSubmitFromModal} isLoading={isLoading}/>
       <form className="mt-10" onSubmit={formik.handleSubmit}>
         <div className=" w-[510px]">
         <Dropdown
