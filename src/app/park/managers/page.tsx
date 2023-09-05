@@ -54,7 +54,8 @@ export default function Managers() {
         const query = new URLSearchParams({
           id:row.id
         }).toString();
-        router.push(`/park-statements/manager?${query}`)
+        console.log(row,'row ');
+        router.push(`/park-statements/manager/${row?.firstName}/records?${row?.id}`)
         console.log("Veiw Statement action clicked for row:", row);
       },
     },
