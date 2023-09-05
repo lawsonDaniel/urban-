@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import authOBJ from "@/common/classes/auth.class";
 import parkOBJ from "@/common/classes/park.class";
 import { ClipLoader } from "react-spinners";
+import * as Yup from 'yup';
 export default function OwnerForm({ openModal }: { openModal: () => void }) {
   const options = [
     { value: "bus", label: "Bus" },
@@ -38,6 +39,16 @@ export default function OwnerForm({ openModal }: { openModal: () => void }) {
       password: "",
       confirmPassword: "",
     },
+    validationSchema: Yup.object({
+      dispatcherName: Yup.string().required('Required'),
+      email: Yup.string().email('Invalid email address').required('Required'),
+      phoneNumber: Yup.string().matches(/^\d{11}$/, 'Invalid phone number').required('Required').max(11).min(10),
+      fullAddress: Yup.string().required('Required'),
+      password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required('Required'),
+    }),
     onSubmit: async (values: any) => {
       setIsLoading(true)
       const data = {

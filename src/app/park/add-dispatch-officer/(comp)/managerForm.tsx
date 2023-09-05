@@ -39,7 +39,7 @@ export default function ManagerForm({ openModal }: { openModal: () => void }) {
     validationSchema: Yup.object({
       dispatcherName: Yup.string().required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
-      phoneNumber: Yup.string().matches(/^\d{0,11}$/, 'Invalid phone number').required('Required'),
+      phoneNumber: Yup.string().matches(/^\d{11}$/, 'Invalid phone number').required('Required').max(11).min(10),
       fullAddress: Yup.string().required('Required'),
       password: Yup.string().required('Required').min(6, 'Password must be at least 6 characters'),
       confirmPassword: Yup.string()
