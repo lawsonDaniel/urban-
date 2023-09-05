@@ -1,6 +1,5 @@
-"use client";
 import { DropDownSelectProps, RadioOption } from "@/common/types";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect, useRef } from "react";
 import { BiChevronDown } from "react-icons/bi";
 
 function Dropdown({
@@ -14,6 +13,23 @@ function Dropdown({
 }: DropDownSelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<RadioOption>();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+
+    // Add event listener when the component mounts
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   function handleOptionClick(option: RadioOption) {
     setOption?.(option);
@@ -23,10 +39,10 @@ function Dropdown({
   }
 
   return (
-    <div className={`${containerStyle} w-full relative inline-block text-left`}>
+    <div className={`${containerStyle} w-full relative inline-block text-left`} ref={dropdownRef}>
       <label
         htmlFor={label}
-        className="block text-sm font-medium text-gray-700 mb-1 "
+        className="block text-sm font-medium text-gray-700 mb-1"
       >
         {label}
       </label>
