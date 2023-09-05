@@ -148,6 +148,7 @@ console.log(formik.errors,'formik values')
     { value: "SOUTH_EAST", label: "SOUTH EAST" },
     { value: "SOUTH_WEST", label: "SOUTH WEST" },
     { value: "SOUTH_SOUTH", label: "SOUTH SOUTH" },
+    {vlaue: "NORTH_WEST", label:"NORTH WEST" },
   ];
 
   return (
@@ -158,7 +159,7 @@ console.log(formik.errors,'formik values')
         <Dropdown
             options={parkRegion}
             placeholder="Option"
-            label="Select Provider Agency"
+            label="Select Region"
             onSelect={(e: any) => setSelectedRegion(e)}
             className="w-[510px]"
           />
@@ -168,7 +169,8 @@ console.log(formik.errors,'formik values')
             label="Select Provider Agency"
             onSelect={(e: any) => setProviderAgency(e)}
             className="w-[510px]"
-          />
+            />
+         
           {
             !paramsData && <Dropdown
             options={TripOption}
