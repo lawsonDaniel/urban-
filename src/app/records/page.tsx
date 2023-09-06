@@ -319,7 +319,7 @@ export default function Records() {
               !selectedPark
             }
             onClick={() => onSubmit()}
-            className="w-full bg-white text-primary bg-opacity-20 hover:bg-primary border border-2 border-primary hover:text-white"
+            className="w-full bg-white w-[250px] text-primary bg-opacity-20 hover:bg-primary border border-2 border-primary hover:text-white"
           >
             See Statement
           </Button>

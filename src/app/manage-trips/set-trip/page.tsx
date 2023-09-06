@@ -195,7 +195,9 @@ console.log(depatureState,'this are the data for the depature state')
             id="departureCity"
             name="departureCity"
             value={depatureState || formik.values.departureCity}
-            onChange={()=>{}}
+            onChange={(e)=>{
+              setDepatureState(e.target.value)
+            }}
             onBlur={formik.handleBlur}
             error={
               (formik.touched.departureCity &&
