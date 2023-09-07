@@ -70,29 +70,42 @@ export default function DispatcherStatements() {
         />
       </div>
       <div className="mt-8 grid grid-col-1 gap-y-4">
-        {Manager.map((a: any) => {
+        {Manager.length >=1 && selectedPark ? Manager?.map((a: any) => {
            const queryString = new URLSearchParams({
-           ...a
-           }).toString();
-     
+            ...a
+            }).toString();
+      
+          console.log(a, 'managers info fro first')
           return (
             <>
               <NotificationCard
                 hideRight
                 textBody={
                   <p>
-                    Dispatcher Name:{" "}
-                    <span className="text-primary">{a?.fullName}</span>
+                    Manager Name:{" "}
+                    <span className="text-primary">{a?.firstName.charAt(0).toUpperCase() + a?.firstName.slice(1)}</span>
                   </p>
                 }
-                left={<Avatar body="DK" />}
+                left={<Avatar body={a?.firstName.charAt(0).toUpperCase()+ a?.firstName.charAt(1).toUpperCase()} />}
                 onClick={() =>
                   router.push(`/park-statements/dispatcher/${a?.fullName}/records?${queryString}`)
                 }
               />
             </>
           );
-        })}
+        }) :
+        <>
+              <NotificationCard
+                hideRight
+                textBody={
+                  <p>
+                    <span className="text-primary">No Dispatcher Found</span>
+                  </p>
+                }
+                left={<Avatar body=""/>}
+              />
+            </>
+        }
       </div>
     </>
   );
