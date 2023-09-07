@@ -9,11 +9,11 @@ import parkOBJ from "@/common/classes/park.class";
 import manager from "@/common/classes/manager.class";
 
 export default function ManagerStatements() {
-  const [selectedPark, setSelectedPark]: any = useState();
+  const [selectedPark, setSelectedPark] = useState<string | null>(null);
   const [Park, setPark] = useState<any[]>([]);
   const [Manager, setManager] = useState<any[]>([]);
-  const [mangerId, setManageId] = useState<string>('')
-  const [paramMeter, setParameter] = useState<any>('')
+  const [mangerId, setManagerId] = useState<string>('');
+  const [paramMeter, setParameter] = useState<any>('');
   const router = useRouter();
   const options = [
     { value: "bus", label: "Bus" },
@@ -21,6 +21,7 @@ export default function ManagerStatements() {
     { value: "van", label: "Van" },
     { value: "others", label: "Others" },
   ];
+
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
     // Convert the searchParams to a plain object
@@ -28,93 +29,102 @@ export default function ManagerStatements() {
     searchParams.forEach((value, key) => {
       params[key] = value;
     });
-    setParameter(params)
-    setSelectedPark(params.id)
+    setParameter(params);
+    setSelectedPark(params.id);
+  }, []);
 
-  }, [])
   useEffect(() => {
     parkOBJ.getAllByUser().then((res) => {
-      setPark(res?.parks)
-    })
-  }, [Park]);
-  let parkDetails: any
+      setPark(res?.parks);
+    });
+  }, []);
+
   useEffect(() => {
     if (selectedPark) {
-      let parkDetails: any = Park.filter((a) => a?.id === selectedPark)
-      console.log(parkDetails,'park details....')
-      manager.getOne(parkDetails[0]?.parkManagerId).then((res: any) => {
-        let query = {
-          ...parkDetails[0],
-          ...res
-        }
-        const queryString = new URLSearchParams(query).toString();
-        setManageId(queryString)
-        setManager([res])
-      })
+      const parkDetails = Park.find((a) => a?.id === selectedPark);
+      console.log(parkDetails, 'park details....');
+      if (parkDetails) {
+        manager.getOne(parkDetails.parkManagerId).then((res: any) => {
+          let query = {
+            ...parkDetails,
+            ...res
+          };
+          const queryString = new URLSearchParams(query).toString();
+          setManagerId(queryString);
+          setManager([res]);
+        });
+      }
     }
-  }, [Park])
+  }, [selectedPark, Park]);
 
-  let parkOption: { value: any; label: any; }[]
-  if (Park && Park?.length >= 1) {
-    parkOption = Park?.map((park: any) => ({
+  let parkOption: { value: any; label: any; }[] = [];
+  if (Park && Park.length >= 1) {
+    parkOption = Park.map((park: any) => ({
       value: park.id,
       label: park.name,
-    }))
+    }));
   } else {
     parkOption = [{
       value: null,
-      label: 'no Park found'
-    }]
+      label: 'No Park found'
+    }];
   }
 
   return (
     <>
       <SubHeader header="Manager Statements" allowFilter hideBack hideRight />
       <div className="mt-6 w-[510px]">
-        {
-          !paramMeter?.id && <Dropdown
+        {!paramMeter?.id && (
+          <Dropdown
             options={parkOption}
             placeholder="Select Park"
             label=""
             onSelect={(e: any) => setSelectedPark(e)}
             className="w-[510px]"
           />
-        }
+        )}
       </div>
       <div className="mt-8 grid grid-col-1 gap-y-4">
-        {Manager.length >=1 && selectedPark ? Manager?.map((a: any) => {
-          console.log(a, 'managers info fro first')
-          return (
+     {   
+      Manager.length >=1? Manager.map((a: any, index: number) => {
+          return(
             <>
-              <NotificationCard
-                hideRight
-                textBody={
-                  <p>
-                    Manager Name:{" "}
-                    <span className="text-primary">{a?.firstName.charAt(0).toUpperCase() + a?.firstName.slice(1)}</span>
-                  </p>
-                }
-                left={<Avatar body={a?.firstName.charAt(0).toUpperCase()} />}
-                onClick={() =>
-                  router.push(`/park-statements/manager/${a?.firstName}/records?${mangerId}`)
-                }
-              />
+              {
+              a &&  a?.firstName ? <NotificationCard
+              key={index}
+              hideRight
+              textBody={
+                <p>
+                  Manager Name:{" "}
+                  <span className="text-primary">{a?.firstName.charAt(0).toUpperCase() + a?.firstName.slice(1)}</span>
+                </p>
+              }
+              left={<Avatar body={a?.firstName.charAt(0).toUpperCase()} />}
+              onClick={() =>
+                router.push(`/park-statements/manager/${a?.firstName}/records?${mangerId}`)
+              }
+            />: <NotificationCard
+            hideRight
+            textBody={
+              <p>
+                <span className="text-primary">No Manager Found</span>
+              </p>
+            }
+            left={<Avatar body="" />}
+          />
+            }
             </>
-          );
-        }) :
-        <>
-              <NotificationCard
-                hideRight
-                textBody={
-                  <p>
-                    <span className="text-primary">No Manger Found</span>
-                  </p>
-                }
-                left={<Avatar body=""/>}
-              />
-            </>
+          )
+        })  : <NotificationCard
+        hideRight
+        textBody={
+          <p>
+            <span className="text-primary">No Manager Found</span>
+          </p>
         }
-      
+        left={<Avatar body="" />}
+      />
+      }
       </div>
     </>
   );
