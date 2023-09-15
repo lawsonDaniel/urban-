@@ -131,6 +131,15 @@ class tripOBJ {
       throw err;
     }
   };  
+  //Book trip
+  book = async (data: any) => {
+    try {
+      const response: any = await api.post("book-ride/create", data);
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };  
 
 }
 const tripOBJs = new tripOBJ()

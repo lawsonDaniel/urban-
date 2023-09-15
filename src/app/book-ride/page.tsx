@@ -18,6 +18,10 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import { cityFCT,cityLagos } from "@/common/data";
 import parkOBJ from "@/common/classes/park.class";
+import tripOBJs from "@/common/classes/trip.class";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import MainTable from "../components/tables/main.table";
+import { ClipLoader } from "react-spinners";
 export default function BookRide() {
   const options = [
     { value: "bus", label: "Bus" },
@@ -35,9 +39,12 @@ export default function BookRide() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [step, setStep] = useState("selectSeat");
   const [parks, setParks] = useState<any[]>([]);
+  const [filtertripData, setFilterTripData] = useState<any>()
   const openModal = () => {
     setIsOpen(true);
   };
+  const userData = useSelector((a:any)=> a?.authUser?.authUser);
+ 
 
   const closeModal = () => {
     setIsOpen(false);
@@ -57,6 +64,7 @@ export default function BookRide() {
     getAllParks();
   }, []);
 
+  
   let option: { value: any; label: any }[];
 
   if (parks && parks?.length >= 1) {
@@ -73,70 +81,62 @@ export default function BookRide() {
     ];
   }
 
-  const columns = [
-    {
-      id: "tripCode",
-      header: "Trip Code",
-    },
-    {
-      id: "departureTime",
-      header: "Departure Time",
-    },
-    {
-      id: "availableSeats",
-      header: "Available Seats",
-    },
-    {
-      id: "pricePerSeats",
-      header: "Price per seats",
-    },
-  ];
 
-  const data = [
-    {
-      id: 1,
-      tripCode: "ABJSAG",
-      departureTime: "09:00 AM",
-      availableSeats: "20",
-      pricePerSeats: "N2000",
-    },
-  ];
   const validationSchema = Yup.object({
     passengerEmail: Yup.string()
       .email("Invalid email address")
       .required("Passenger email is required"),
+    passengerName: Yup.string().required("Passenger name is required"),
+    passengerNumber: Yup.string().required("Passenger phone is required").min(10).max(11),
     travelDate: Yup.date().required("Travel date is required"),
+    tripCode: Yup.string()
+    .required("Trip code is required")
+    .matches(/^TRIP\d{8}$/, "Trip code must start with 'TRIP' followed by an 8-digit number")
   });
 
   const formik = useFormik({
     initialValues: {
       passengerEmail: "",
       travelDate: "",
+      passengerName:"",
+      passengerNumber:"",
+      tripCode:""
     },
     validationSchema,
     onSubmit: async (values: any) => {
-      values = {
-        selectedPark: selectedPark,
-        depatureCity: DepatureCity,
-        destinationCity: DestinationCity,
-        selectedVehicle: selectedVehicle,
-        ...values,
-      };
 
+      values = {
+          passengerEmail: values.passengerEmail,
+          travelDate: values.travelDate,
+          passengerName: values.passengerName,
+          passengerNumber: values.passengerNumber,
+          tripCode: values.tripCode,
+          parkId:selectedPark,
+          DestinationCity:DestinationCity,
+          VehicleType:selectedVehicle
+      };
+    console.log(values,'values from the submitted');
       if (
         selectedVehicle &&
         DestinationCity &&
-        DepatureCity &&
         selectedVehicle &&
         selectedPark
       ) {
         try {
-          const res = await saveData(values, "rides");
-          console.log(res, "trip");
-          toast.success("Ride succesfully booked");
-          openModal();
-          router.push(routes.ADD_PARK.path);
-          setIsLoading(false);
+          // const res = await saveData(values, "rides");
+          // console.log(res, "trip");
+          console.log(values,'');
+          tripOBJs.book(values).then((res)=>{
+            console.log(res, "trip");
+            toast.success("Trip booked successfully");
+            openModal();
+            router.push("/");
+            setIsLoading(false);
+          }).catch((error)=>{
+            console.log(error);
+            toast.error("Something went wrong");
+            setIsLoading(false);
+          }) 
         } catch (error: any) {
           console.error(error, "trip");
           toast.error(error.message);
@@ -149,7 +149,77 @@ export default function BookRide() {
       }
     },
   });
-
+  useEffect(() => {
+    // Check if userData exists before making the API call
+    if (userData) {
+      tripOBJs.getByDispatchMainId(userData.id)
+        .then((res) => {
+          console.log(res, 'from getting all trips');
+          // Filter trips
+          try {
+            if (selectedPark && DestinationCity && formik.values.travelDate) {
+              const filteredTrips = res.filter((a: any) => {
+                const date = a.date.split('T')[0];
+                return a.parkId === selectedPark && a.endLocation === DestinationCity && date === formik.values.travelDate;
+              });
+              setFilterTripData(filteredTrips);
+            } else {
+              console.log('Missing selectedPark, DestinationCity, or travelDate');
+            }
+          } catch (error) {
+            console.error('An error occurred:', error);
+          }
+          
+        })
+        .catch((err) => {
+          console.error('Error from getting all trips:', err);
+        });
+    }
+  }, [DestinationCity, formik.values.travelDate, selectedPark, userData]);
+  
+  const columns = [
+    {
+      key: "startLocation",
+      header: "Departure City",
+    },
+    {
+      key: "time",
+      header: "Departure Time",
+    },
+    {
+      key: "endLocation",
+      header: "Destination City",
+    },
+    {
+      key: "tripCode",
+      header: "Trip Code",
+    },
+    {
+      key: "seatLeft",
+      header: "Avaliable Seat",
+    },
+    {
+      key: "fare",
+      header:"Fare"
+    },
+    {
+      key: "vehicleType",
+      header: "Type Of Vehicle",
+    },
+  ];
+  const dataFilter = Array.isArray(filtertripData) ? filtertripData.map((a:any) => {
+    return {
+      startLocation: a.startLocation,
+      time: a.time,
+      endLocation: a.endLocation,
+      tripCode: a.tripCode,
+      fare: `₦${a.fare}`,
+      seatLeft: `${Number(a.totalSeats) - Number(a.bookedSeats)}`,
+      vehicleType: a.vehicleType || "ferarri",
+    };
+  }) : [];
+  
+  console.log(dataFilter,'data filter');
   return (
     <div>
       <SubHeader header="Book Ride" hideRight hideBack />
@@ -161,10 +231,10 @@ export default function BookRide() {
           <div>
             <div className="flex">
               <Dropdown
-                options={[...cityFCT,...cityLagos]}
+                options={option}
                 placeholder="Option"
-                label="Select Departure City"
-                onSelect={(e: any) => setDepatureCity(e)}
+                label="Assigned Park"
+                onSelect={(e: any) => setSelectedPark(e)}
                 className="w-full"
                 containerStyle="mt-0"
               />
@@ -180,15 +250,7 @@ export default function BookRide() {
                 error={formik.touched.travelDate && formik.errors.travelDate}
               />
             </div>
-            <div className="w-1/2">
-              <Dropdown
-                options={option}
-                placeholder="Option"
-                label="Select Departure Park"
-                onSelect={(e: any) => setSelectedPark(e)}
-                className="w-full"
-              />
-            </div>
+            
             {/* </div> */}
 
             <Dropdown
@@ -200,7 +262,26 @@ export default function BookRide() {
             />
           </div>
         </div>
-
+        <Input
+          label="Passenger Name"
+          type="text"
+          id="passengerName"
+          name="passengerName"
+          value={formik.values.passengerName}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.passengerName && formik.errors.passengerName}
+        />
+         <Input
+          label="Passenger Phone Number"
+          type="tel"
+          id="passengerNumber"
+          name="passengerNumber"
+          value={formik.values.passengerNumber}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.passengerNumber && formik.errors.passengerNumber}
+        />
         <Input
           label="Passenger Email"
           type="email"
@@ -211,7 +292,16 @@ export default function BookRide() {
           onBlur={formik.handleBlur}
           error={formik.touched.passengerEmail && formik.errors.passengerEmail}
         />
-
+<Input
+          label="Trip Code"
+          type="text"
+          id="tripCode"
+          name="tripCode"
+          value={formik.values.tripCode}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.touched.tripCode && formik.errors.tripCode}
+        />
         <p className="mt-[53px] mb-2">Select Vehicle Type</p>
         <RadioButton
           name="selectedVehicle"
@@ -227,12 +317,12 @@ export default function BookRide() {
           className="w-full bg-primary_blue text-primary_blue bg-opacity-20 hover:bg-primary_blue hover:text-white"
           type="submit"
         >
-          Book ride
+          {isLoading ? <ClipLoader color="#ffffff" /> : "Book ride"}
         </Button>
       </form>
       <div className="mt-[53px] border-t-2 pt-6">
-        <p className="mb-4">Available Vehicle</p>
-        <Table
+        <p className="mb-4">Available Trips</p>
+        {/* <Table
           columns={columns}
           data={data}
           action={{ viewLabel: "Normal Luggage", type: ["view"] }}
@@ -247,9 +337,20 @@ export default function BookRide() {
               )}
             </>
           }
-        />
+        /> */}
+        <MainTable 
+             columns={columns}
+             data={dataFilter}
+             identifier=""
+             searchBy="Booking code"
+             handleSearch={(e:any)=> {}}
+             handleFilter={(e:any)=>{}} 
+             apiSearch={()=>{}}
+             />
       </div>
+      
       <ToastContainer />
+
     </div>
   );
 }
