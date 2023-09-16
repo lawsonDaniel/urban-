@@ -4,24 +4,21 @@ import SubHeader from "../components/headers/sub-header";
 import { useFormik } from "formik";
 import Input from "../components/input";
 import Dropdown from "@/app/components/dropdown";
-import Table from "../components/table";
 import Location from "../components/custom svg/location";
 import { RadioButton } from "../components/radio/auth.radio";
-import Manifest from "./(comp)/manifest";
-import SelectSeat from "./(comp)/seat";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-import { saveData } from "@/common/hooks/fireStore";
 import Button from "../components/button";
 import { useRouter } from "next/navigation";
-import { routes } from "@/common/routes";
 import { cityFCT,cityLagos } from "@/common/data";
 import parkOBJ from "@/common/classes/park.class";
 import tripOBJs from "@/common/classes/trip.class";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import MainTable from "../components/tables/main.table";
 import { ClipLoader } from "react-spinners";
+
+
 export default function BookRide() {
   const options = [
     { value: "bus", label: "Bus" },
@@ -38,17 +35,12 @@ export default function BookRide() {
   const [selectedVehicle, setSelectedVehicle] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [step, setStep] = useState("selectSeat");
-  const [parks, setParks] = useState<any[]>([]);
-  const [filtertripData, setFilterTripData] = useState<any>()
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  const [parks, setParks] = useState<any>([]);
+  const [filtertripData, setFilterTripData] = useState<any>([])
+  const [selectedSeat, setSelectedSeat] = useState(options[0].value)
   const userData = useSelector((a:any)=> a?.authUser?.authUser);
  
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
   const router = useRouter();
 
   useEffect(() => {
@@ -81,7 +73,18 @@ export default function BookRide() {
     ];
   }
 
-
+  const dataFilter = filtertripData?.length >= 1 ? filtertripData.map((a:any) => {
+    return {
+      startLocation: a?.startLocation,
+      time: a?.time,
+      endLocation: a?.endLocation,
+      tripCode: a?.tripCode,
+      fare: `₦${a?.fare}`,
+      seatLeft: `${Number(a?.totalSeats) - Number(a?.bookedSeats)}`,
+      vehicleType: a?.vehicleType 
+    };
+  }) : [];
+  
   const validationSchema = Yup.object({
     passengerEmail: Yup.string()
       .email("Invalid email address")
@@ -104,17 +107,7 @@ export default function BookRide() {
     },
     validationSchema,
     onSubmit: async (values: any) => {
-
-      values = {
-          passengerEmail: values.passengerEmail,
-          travelDate: values.travelDate,
-          passengerName: values.passengerName,
-          passengerNumber: values.passengerNumber,
-          tripCode: values.tripCode,
-          parkId:selectedPark,
-          DestinationCity:DestinationCity,
-          VehicleType:selectedVehicle
-      };
+let filterByTrips = filtertripData.filter((a:any)=> a?.tripCode === values?.tripCode)
     console.log(values,'values from the submitted');
       if (
         selectedVehicle &&
@@ -122,27 +115,45 @@ export default function BookRide() {
         selectedVehicle &&
         selectedPark
       ) {
-        try {
-          // const res = await saveData(values, "rides");
-          // console.log(res, "trip");
-          console.log(values,'');
-          tripOBJs.book(values).then((res)=>{
-            console.log(res, "trip");
-            toast.success("Trip booked successfully");
-            openModal();
-            router.push("/");
-            setIsLoading(false);
-          }).catch((error)=>{
-            console.log(error);
-            toast.error("Something went wrong");
-            setIsLoading(false);
-          }) 
-        } catch (error: any) {
-          console.error(error, "trip");
-          toast.error(error.message);
+        values = {
+          passengerEmail: values.passengerEmail,
+          travelDate: values.travelDate,
+          passengerName: values.passengerName,
+          passengerNumber: values.passengerNumber,
+          tripCode: values.tripCode,
+          parkId:selectedPark,
+          DestinationCity:DestinationCity,
+          VehicleType:selectedVehicle,
+          ...filterByTrips[0]
+      };
 
-          setIsLoading(false);
-        }
+        // try {
+        //   // const res = await saveData(values, "rides");
+        //   // console.log(res, "trip");
+      
+        //   // tripOBJs.book(values).then((res)=>{
+        //   //   console.log(res, "trip");
+        //   //   toast.success("Trip booked successfully");
+        //   //   openModal();
+        //   //   router.push("/");
+        //   //   setIsLoading(false);
+        //   // }).catch((error)=>{
+        //   //   console.log(error);
+        //   //   toast.error("Something went wrong");
+        //   //   setIsLoading(false);
+        //   // }) 
+        //   // Construct the URL with query parameters
+        // } catch (error: any) {
+        //   console.error(error, "trip");
+        //   toast.error(error.message);
+
+        //   setIsLoading(false);
+        // }
+
+        const queryParams = new URLSearchParams(values).toString();
+        const url = `/book-ride/preview?${queryParams}`;
+        // Push the data to the other page
+        router.push(url);
       } else {
         toast.error("Please fill all the fields");
         setIsLoading(false);
@@ -151,16 +162,15 @@ export default function BookRide() {
   });
   useEffect(() => {
     // Check if userData exists before making the API call
-    if (userData) {
-      tripOBJs.getByDispatchMainId(userData.id)
-        .then((res) => {
-          console.log(res, 'from getting all trips');
+    if (userData && userData?.id) {
+      tripOBJs.getByDispatchMainId(userData?.id)
+        .then((res:any) => {
           // Filter trips
           try {
             if (selectedPark && DestinationCity && formik.values.travelDate) {
               const filteredTrips = res.filter((a: any) => {
-                const date = a.date.split('T')[0];
-                return a.parkId === selectedPark && a.endLocation === DestinationCity && date === formik.values.travelDate;
+                const date = a?.date.split('T')[0];
+                return a?.parkId === selectedPark && a?.endLocation === DestinationCity && date === formik.values.travelDate;
               });
               setFilterTripData(filteredTrips);
             } else {
@@ -207,17 +217,6 @@ export default function BookRide() {
       header: "Type Of Vehicle",
     },
   ];
-  const dataFilter = Array.isArray(filtertripData) ? filtertripData.map((a:any) => {
-    return {
-      startLocation: a.startLocation,
-      time: a.time,
-      endLocation: a.endLocation,
-      tripCode: a.tripCode,
-      fare: `₦${a.fare}`,
-      seatLeft: `${Number(a.totalSeats) - Number(a.bookedSeats)}`,
-      vehicleType: a.vehicleType || "ferarri",
-    };
-  }) : [];
   
   console.log(dataFilter,'data filter');
   return (
@@ -260,6 +259,7 @@ export default function BookRide() {
               onSelect={(e: any) => setDestinationCity(e)}
               className="w-[516px]"
             />
+            
           </div>
         </div>
         <Input
@@ -312,7 +312,7 @@ export default function BookRide() {
           customInputWrapperStyle="bg-gray-100 w-32 h-[105px] flex items-center justify-center rounded-xl"
           customActiveStyle="border border-2 border-primary"
         />
-
+    
         <Button
           className="w-full bg-primary_blue text-primary_blue bg-opacity-20 hover:bg-primary_blue hover:text-white"
           type="submit"
@@ -343,10 +343,11 @@ export default function BookRide() {
              data={dataFilter}
              identifier=""
              searchBy="Booking code"
-             handleSearch={(e:any)=> {}}
-             handleFilter={(e:any)=>{}} 
+             handleSearch={()=> {}}
+             handleFilter={()=>{}} 
              apiSearch={()=>{}}
              />
+             
       </div>
       
       <ToastContainer />

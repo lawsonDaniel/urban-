@@ -7,17 +7,39 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/common/routes";
 import authOBJ from "@/common/classes/auth.class";
 // const inter = Inter({ subsets: ['latin'] })
+import tripOBJs from "@/common/classes/trip.class";
 import MainTable from "../tables/main.table";
+import { useEffect, useState } from "react";
 
 export default function DispatchOfficer({ user }: any) {
+  const [bookingInfo,setBookInfo] = useState<[]>([])
   const router = useRouter();
-  authOBJ.currentUser().then((res)=>{
-console.log(res,'resp for current users')
+  useEffect(()=>{
+    authOBJ.currentUser().then((res)=>{
+      tripOBJs.getBooking(res.id).then((res:any)=>{
+        setBookInfo(res)
+      })
+      })
+  },[])
+
+  const bookingData = bookingInfo && bookingInfo.map((a:any)=>{
+    console.log(a,'from the booking map function')
+    return({
+      passengerName:a.passenger.name,
+      passengerEmail:a.passenger.email,
+      bookingCode:a.bookingCode,
+      date:a.TravelDate.split('GMT')[0]
+    })
   })
+
   const columns = [
     {
       key: "passengerName",
       header: "Passenger Name",
+    },
+    {
+      key:"passengerEmail",
+      header:"Passenger Email",
     },
     {
       key: "bookingCode",
@@ -25,51 +47,12 @@ console.log(res,'resp for current users')
     },
     {
       key: "date",
-      header: "Date",
+      header: "Depature Date",
     },
-    {
-      key: "time",
-      header: "Time",
-    },
+    
   ];
 
-  const data = [
-    {
-      id: 1,
-      passengerName: "Ganiu Sonubi",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "20",
-    },
-    {
-      id: 2,
-      passengerName: "Ganiu Sonubi",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "20",
-    },
-    {
-      id: 3,
-      passengerName: "Ganiu Sonubi",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "20",
-    },
-    {
-      id: 4,
-      passengerName: "Ganiu Sonubi",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "20",
-    },
-    {
-      id: 5,
-      passengerName: "Ganiu Sonubi",
-      bookingCode: "ABJSAG",
-      date: "09/09/2023",
-      time: "20",
-    },
-  ];
+  
 
   return (
     <div className="">
@@ -101,7 +84,7 @@ console.log(res,'resp for current users')
         /> */}
         <MainTable 
              columns={columns}
-             data={data}
+             data={bookingData}
              identifier=""
              searchBy="park name"
              handleSearch={(e:any)=> {}}

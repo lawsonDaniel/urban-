@@ -21,7 +21,7 @@ import { useState } from "react";
 //     }
 // }
 
-export default function Channel({ params, searchParams }: any) {
+export default function Channel({ params }: any) {
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);

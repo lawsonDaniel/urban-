@@ -78,7 +78,7 @@ export type InputProps = {
   containerStyle?: string;
   inputStyle?: string;
   icon?: React.ReactNode;
-  error?: string | boolean | undefined;
+  error?: string | boolean | undefined | any;
   placeholder?: string;
 };
 

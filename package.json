@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"next dev --turbo\" \"tailwindcss -i styles/globals.css -o styles/dist.css -w\"",
-    "build": "tailwindcss -m -i src/app/globals.css -o src/app/dist.css && next build",
+    "build": "tailwindcss -m -i src/app/globals.css -o src/app/dist.css && next build && next",
     "start": "next start",
     "lint": "next lint",
-    "slow": "next dev"
+    "slow": "next dev",
+    "build-cache": "rimraf .next/build-cache"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

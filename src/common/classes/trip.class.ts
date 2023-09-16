@@ -111,16 +111,17 @@ class tripOBJ {
 
   getByDispatchMainId = async (id:string) => {
     try {
-      const response: any = await api.get(`trip/get-all-by-dispatchid/${id}`);
-      if (response?.data?.success) {
-        return response?.data?.data;
+      const response = await api.get(`trip/get-all-by-dispatchid/${id}`);
+      if (response.data.success) {
+        return response.data.data;
       } else {
-        throw new Error("something went wrong");
+        throw new Error("Something went wrong");
       }
-    } catch (err) {
-      throw err;
+    } catch (error:any) {
+      throw new Error(error);
     }
-  }; 
+  };
+  
 
    //create trip
    requestDriver = async (data: any) => {
@@ -140,6 +141,19 @@ class tripOBJ {
       throw err;
     }
   };  
+  //get booking
+  getBooking = async (id:string) => {
+    try {
+      const response: any = await api.get(`/book-ride/get-customer-booking?dispatchId=${id}`);
+      if (response?.data?.success) {
+        return response?.data?.data;
+      } else {
+        throw new Error("something went wrong");
+      }
+    } catch (err) {
+      throw err;
+    }
+  }; 
 
 }
 const tripOBJs = new tripOBJ()
